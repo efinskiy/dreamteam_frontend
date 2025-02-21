@@ -1,5 +1,20 @@
+:root{
+  --primary-background: #fff;
+  --secondary-background: #F4F4F4;
+  --third-background: #EEEEEE;
+  --red: #CA0E11;
+  --grey: #989898;
+  --dark-grey: #545454;
+  --black: #545454;
+  --popup-background: #58585869;
+}
+
 body {
-  background: var(--tg-theme-secondary-bg-color, white);
+  background: var(--secondary-background, white);
   padding: 0;
   margin: 0;
+  width: 100%;
+}
+*{
+  color: var(--black);
 }

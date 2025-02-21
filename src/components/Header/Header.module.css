@@ -1,0 +1,27 @@
+.logo{
+    width: 158px;
+    height: 16px;
+}
+
+.header{
+    display: flex;
+    height: 44px;
+    padding: 0 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rounded_button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-background);
+    border-radius: 1000px;
+    width: 44px;
+    height: 44px;
+}
+
+.buttons{
+    display: flex;
+    gap: 4px;
+}

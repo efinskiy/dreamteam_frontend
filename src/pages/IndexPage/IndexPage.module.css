@@ -1,0 +1,6 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-background);
+    padding-top: 20px;
+}
