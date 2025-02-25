@@ -1,4 +1,5 @@
 .swiper-wrapper {
-    gap: 8px;
-
+    /*gap: 8px;*/
+    /*-moz-column-gap: 8px;*/
+    /*-webkit-column-gap: 8px;*/
 }
