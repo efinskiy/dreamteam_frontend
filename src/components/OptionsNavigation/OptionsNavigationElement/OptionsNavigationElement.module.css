@@ -1,0 +1,25 @@
+.element {
+    width: 94px;
+    height: 74px;
+    background-color: var(--secondary-background);
+    border-radius: 16px;
+    padding: 8px;
+}
+
+.wrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.topIcon {
+
+}
+
+.bottomText {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Mont';
+}

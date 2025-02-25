@@ -1,28 +1,37 @@
-:root{
-  --primary-background: #fff;
-  --secondary-background: #F4F4F4;
-  --third-background: #EEEEEE;
-  --red: #CA0E11;
-  --grey: #989898;
-  --dark-grey: #545454;
-  --black: #000;
-  --popup-background: #58585869;
+:root {
+    --primary-background: #fff;
+    --secondary-background: #f4f4f4;
+    --third-background: #eeeeee;
+    --red: #ca0e11;
+    --grey: #989898;
+    --dark-grey: #545454;
+    --light-grey: #D0D0D0;
+    --black: #000;
+    --popup-background: #58585869;
 }
 
 body {
-  background: var(--secondary-background, white);
-  padding: 0;
-  margin: 0;
-  width: 100%;
+    background: var(--secondary-background, white);
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
-*{
-  color: var(--black);
+* {
+    color: var(--black);
+    text-decoration: none;
 }
 
 @font-face {
-  font-family: 'Almanach-Bold';
-  src: url('/fonts/Almanach/Almanach-Bold.woff2') format('woff2');
-  font-style: normal;
+    font-family: 'Almanach-Bold';
+    src: url('/fonts/Almanach/Almanach-Bold.woff2') format('woff2');
+    font-style: normal;
 }
+
+@font-face {
+    font-family: 'Mont';
+    src: url('/fonts/Mont-Bold.woff2') format('woff');
+    font-style: normal;
+}
+
 

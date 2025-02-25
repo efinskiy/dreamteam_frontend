@@ -1,0 +1,7 @@
+.optionsNavigation {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 42px;
+    margin-bottom: 42px;
+}
