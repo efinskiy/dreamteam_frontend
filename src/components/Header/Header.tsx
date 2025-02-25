@@ -6,7 +6,7 @@ import {IconlyLocation} from "@/components/Icons/Location.tsx";
 export const Header = () => {
     return (
         <div className={css.header}>
-            <img className={css.logo} src="/public/img/logoFull.png" alt="DreamTeam logo"/>
+            <img className={css.logo} src="/img/logoFull.png" alt="DreamTeam logo"/>
             <div className={css.buttons}>
                 <div className={css.rounded_button}>
                     <IconlySearch color={'var(--dark-grey)'}/>
