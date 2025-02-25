@@ -58,6 +58,10 @@ export const RestaurantPreview = () => {
                             backgroundImage: `url('/img/placeholder_5.png')`,
                         }}
                     ></div>
+                    <div className={css.chefInfo}>
+                        <span className={css.chefTitle}>Бренд-шеф</span>
+                        <span className={css.chefName}>Алексей Смирнов</span>
+                    </div>
                 </div>
             </div>
         </div>

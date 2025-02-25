@@ -36,7 +36,10 @@
     backdrop-filter: blur(10px);
     height: 66px;
     border-radius: 0 0 16px 16px;
-
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+    gap: 8px;
 }
 
 .chefPhoto {
@@ -45,6 +48,19 @@
     border-radius: 9999px;
 }
 
-.w-fit {
-    width: fit-content;
+.chefInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.chefTitle {
+    font-size: 12px;
+    font-family: 'Mont';
+    color: var(--light-grey);
+}
+
+.chefName {
+    font-size: 14px;
+    font-family: 'Mont';
+    color: var(--primary-background);
 }
