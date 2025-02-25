@@ -1,0 +1,8 @@
+.newsSlider {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 8px;
+}

@@ -5,7 +5,7 @@
   --red: #CA0E11;
   --grey: #989898;
   --dark-grey: #545454;
-  --black: #545454;
+  --black: #000;
   --popup-background: #58585869;
 }
 
@@ -15,6 +15,14 @@ body {
   margin: 0;
   width: 100%;
 }
+
 *{
   color: var(--black);
 }
+
+@font-face {
+  font-family: 'Almanach-Bold';
+  src: url('/fonts/Almanach/Almanach-Bold.woff2') format('woff2');
+  font-style: normal;
+}
+
