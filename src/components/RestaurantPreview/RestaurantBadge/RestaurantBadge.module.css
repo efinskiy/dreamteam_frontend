@@ -16,3 +16,9 @@
     background-size: cover;
     background-position: center;
 }
+
+.slogan {
+    font-size: 14px;
+    font-family: 'Mont';
+    color: var(--dark-grey);
+}

@@ -12,7 +12,7 @@ export const RestaurantBadge = ({ logo, slogan }: RestaurantBadgeProps) => {
                 style={{ backgroundImage: `url(${logo})` }}
                 className={css.img}
             ></div>
-            <span>{slogan}</span>
+            <span className={css.slogan}>{slogan}</span>
         </div>
     );
 };
