@@ -21,7 +21,7 @@ export const RestaurantPreview = () => {
                         slidesPerView={3}
                         modules={[FreeMode]}
                         freeMode={true}
-                        spaceBetween={'16px'}
+                        spaceBetween={'24px'}
                     >
                         <SwiperSlide>
                             <RestaurantBadge
