@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-right: 15px;
 }
 
 .bgImage {
@@ -51,6 +50,7 @@
 .chefInfo {
     display: flex;
     flex-direction: column;
+
 }
 
 .chefTitle {
@@ -63,4 +63,38 @@
     font-size: 14px;
     font-family: 'Mont';
     color: var(--primary-background);
+}
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.resInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.resTitleWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.resTitle {
+    font-family: 'Heading Pro Ultracompressed';
+    font-weight: 800;
+    font-size: 30px;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+}
+
+.resSlogan {
+    font-family: 'Mont';
+    font-size: 14px;
+    color: var(--grey);
 }

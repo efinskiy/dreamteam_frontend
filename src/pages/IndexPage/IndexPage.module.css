@@ -5,3 +5,11 @@
     padding-top: 20px;
     padding-left: 15px;
 }
+
+.restaurants {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-right: 15px;
+    margin-bottom: 24px;
+}

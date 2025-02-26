@@ -6,6 +6,7 @@
     --grey: #989898;
     --dark-grey: #545454;
     --light-grey: #D0D0D0;
+    --secondary-light-grey: #F9F9F9;
     --black: #000;
     --popup-background: #58585869;
 }
@@ -31,6 +32,13 @@ body {
 @font-face {
     font-family: 'Mont';
     src: url('/fonts/Mont-Bold.woff2') format('woff');
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heading Pro Ultracompressed';
+    font-weight: 800;
+    src: url('/fonts/Heading-Pro-UltraCompressed-ExtraBold-trial.ttf') format('truetype');
     font-style: normal;
 }
 

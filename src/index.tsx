@@ -7,6 +7,7 @@ import { init } from '@/init.ts';
 
 import '@telegram-apps/telegram-ui/dist/styles.css';
 import './index.css';
+// import './reset.css';
 
 // Mock the environment in case, we are outside Telegram.
 import './mockEnv.ts';

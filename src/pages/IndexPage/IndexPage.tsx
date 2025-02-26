@@ -14,8 +14,10 @@ export const IndexPage: FC = () => {
                 <Header />
                 <NewsStories />
                 <OptionsNavigation />
-                <RestaurantPreview />
-                <RestaurantPreview />
+                <div className={css.restaurants}>
+                    <RestaurantPreview />
+                    <RestaurantPreview />
+                </div>
             </div>
         </Page>
     );

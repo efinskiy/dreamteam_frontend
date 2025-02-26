@@ -4,10 +4,11 @@ import { RestaurantBadge } from '@/components/RestaurantPreview/RestaurantBadge/
 import { Swiper } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import './swipergap.css';
-import 'swiper/css';
+import 'swiper/css/bundle';
 import 'swiper/css/free-mode';
 import { SwiperSlide } from 'swiper/react';
 import { RestaurantBadgePhoto } from '@/components/RestaurantPreview/RestaurantBadgePhoto/RestaurantBadgePhoto.tsx';
+import { InfoTag } from '@/components/InfoTag/InfoTag.tsx';
 
 export const RestaurantPreview = () => {
     return (
@@ -18,10 +19,10 @@ export const RestaurantPreview = () => {
             >
                 <div className={css.floatingBadges}>
                     <Swiper
-                        slidesPerView={3}
+                        slidesPerView={2.8}
                         modules={[FreeMode]}
                         freeMode={true}
-                        spaceBetween={'24px'}
+                        spaceBetween={8}
                     >
                         <SwiperSlide>
                             <RestaurantBadge
@@ -62,6 +63,20 @@ export const RestaurantPreview = () => {
                         <span className={css.chefTitle}>Бренд-шеф</span>
                         <span className={css.chefName}>Алексей Смирнов</span>
                     </div>
+                </div>
+            </div>
+            <div className={css.resInfo}>
+                <div className={css.resTitleWrapper}>
+                    <h2 className={css.resTitle}>Smoke BBQ</h2>
+                    <span className={css.resSlogan}>
+                        Бар · гриль · коптильня
+                    </span>
+                </div>
+                <div className={css.tags}>
+                    <InfoTag text={'Открыто до 00:00'} />
+                    <InfoTag text={'Ср. чек 1500₽'} />
+                    <InfoTag text={'Ср. чек 1500₽'} />
+                    <InfoTag text={'Ср. чек 1500₽'} />
                 </div>
             </div>
         </div>
