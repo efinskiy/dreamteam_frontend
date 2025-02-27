@@ -46,10 +46,18 @@ export const Restaurant = () => {
                             >
                                 Бронь
                             </div>
-                            <div className={css.navigationLink}>Галерея</div>
-                            <div className={css.navigationLink}>Меню</div>
-                            <div className={css.navigationLink}>О месте</div>
-                            <div className={css.navigationLink}>О шефе</div>
+                            <div className={css.navigationLink}>
+                                <span>Галерея</span>
+                            </div>
+                            <div className={css.navigationLink}>
+                                <span>Меню</span>
+                            </div>
+                            <div className={css.navigationLink}>
+                                <span>О месте</span>
+                            </div>
+                            <div className={css.navigationLink}>
+                                <span>О шефе</span>
+                            </div>
                         </div>
                         <div className={css.bookingContaner}></div>
                     </div>
@@ -63,16 +71,16 @@ export const Restaurant = () => {
                                         css.photoSliderNavigationActive
                                     )}
                                 >
-                                    Все фото
+                                    <span>Все фото</span>
                                 </div>
                                 <div className={css.photoSliderNavigationItem}>
-                                    Интерьер
+                                    <span>Интерьер</span>
                                 </div>
                                 <div className={css.photoSliderNavigationItem}>
-                                    Блюда
+                                    <span>Блюда</span>
                                 </div>
                                 <div className={css.photoSliderNavigationItem}>
-                                    Напитки
+                                    <span>Напитки</span>
                                 </div>
                             </div>
                         </div>

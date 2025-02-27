@@ -66,18 +66,23 @@
     }
 
     .photoSliderNavigationItem {
-        display: flex;
+        padding: 11px 16px;
+        border-radius: 20px;
+    }
+
+    .photoSliderNavigationItem > span {
         font-family: "Mont", sans-serif;
         font-weight: 800;
         font-size: 14px;
-        padding: 11px 16px;
-        border-radius: 20px;
         color: var(--grey);
+    }
+
+    .photoSliderNavigationActive > span {
+        color: var(--black);
     }
 
     .photoSliderNavigationActive {
         background-color: var(--secondary-background);
-        color: var(--black);
     }
 
     .smallPhotoContainer {
@@ -126,7 +131,7 @@
     height: 26px;
 }
 
-.navigationLink {
+.navigationLink > span {
     color: var(--grey);
     font-size: 14px;
     font-family: 'Mont', sans-serif;
