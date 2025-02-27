@@ -2,6 +2,7 @@ import css from './Header.module.css';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { IconlySearch } from '@/components/Icons/Search.tsx';
 import { IconlyLocation } from '@/components/Icons/Location.tsx';
+import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 
 export const Header = () => {
     return (
@@ -12,15 +13,16 @@ export const Header = () => {
                 alt="DreamTeam logo"
             />
             <div className={css.buttons}>
-                <div className={css.rounded_button}>
-                    <IconlySearch color={'var(--dark-grey)'} />
-                </div>
-                <div className={css.rounded_button}>
-                    <IconlyLocation color={'var(--dark-grey)'} />
-                </div>
-                <div className={css.rounded_button}>
-                    <IconlyProfile color={'var(--dark-grey)'} />
-                </div>
+                <RoundedButton
+                    icon={<IconlySearch color={'var(--dark-grey)'} />}
+                />
+                <RoundedButton
+                    icon={<IconlyLocation color={'var(--dark-grey)'} />}
+                />
+                <RoundedButton
+                    icon={<IconlyProfile color={'var(--dark-grey)'} />}
+                    action={() => alert(1)}
+                />
             </div>
         </div>
     );
