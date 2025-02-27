@@ -20,33 +20,47 @@ export const RestaurantPreview = () => {
             >
                 <div className={css.floatingBadges}>
                     <Swiper
-                        slidesPerView={2.8}
+                        slidesPerView="auto"
                         modules={[FreeMode]}
                         freeMode={true}
-                        spaceBetween={8}
                     >
-                        <SwiperSlide>
+                        <SwiperSlide
+                            className={css.swiperSlide}
+                            style={{ width: '130px' }}
+                        >
                             <RestaurantBadge
                                 logo={'/img/placeholder_3.png'}
                                 slogan={'Бар · гриль · коптильня'}
                             />
                         </SwiperSlide>
-                        <SwiperSlide>
+                        <SwiperSlide
+                            className={css.swiperSlide}
+                            style={{ width: '130px' }}
+                        >
                             <RestaurantBadgePhoto
                                 url={'/img/placeholder_4.png'}
                             />
                         </SwiperSlide>
-                        <SwiperSlide>
+                        <SwiperSlide
+                            className={css.swiperSlide}
+                            style={{ width: '130px' }}
+                        >
                             <RestaurantBadgePhoto
                                 url={'/img/placeholder_6.png'}
                             />
                         </SwiperSlide>
-                        <SwiperSlide>
+                        <SwiperSlide
+                            className={css.swiperSlide}
+                            style={{ width: '130px' }}
+                        >
                             <RestaurantBadgePhoto
                                 url={'/img/placeholder_4.png'}
                             />
                         </SwiperSlide>
-                        <SwiperSlide>
+                        <SwiperSlide
+                            className={css.swiperSlide}
+                            style={{ width: '130px' }}
+                        >
                             <RestaurantBadgePhoto
                                 url={'/img/placeholder_6.png'}
                             />
@@ -54,7 +68,7 @@ export const RestaurantPreview = () => {
                         {/*
                             Пустой слайд для корректного отображения последнего слайда
                         */}
-                        <SwiperSlide></SwiperSlide>
+                        <SwiperSlide style={{ width: '130px' }}></SwiperSlide>
                     </Swiper>
                 </div>
                 <div className={css.imagedBottom}>

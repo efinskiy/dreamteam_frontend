@@ -80,7 +80,38 @@
         color: var(--black);
     }
 
+    .smallPhotoContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .photo {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border-radius: 16px;
+    }
+
+    .photoBig {
+        width: 243px;
+        height: 226px;
+    }
+
+    .photoSmall {
+        width: 135px;
+        height: 111px;
+    }
+
+    .smallPhotoSlideContainer {
+        width: 135px;
+    }
+
+    .photoSliderContainer {
+
+    }
 }
+
 
 .navSliderAndBookingContainer {
     display: flex;

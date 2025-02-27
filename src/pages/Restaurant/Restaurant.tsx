@@ -6,6 +6,10 @@ import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
 import { useNavigate } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css/bundle';
+import { FreeMode } from 'swiper/modules';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -71,6 +75,124 @@ export const Restaurant = () => {
                                     Напитки
                                 </div>
                             </div>
+                        </div>
+                        <div className={css.photoSliderContainer}>
+                            <Swiper
+                                slidesPerView="auto"
+                                modules={[FreeMode]}
+                                freeMode={true}
+                            >
+                                <SwiperSlide className={css.photoBig}>
+                                    <div
+                                        className={classNames(
+                                            css.photo,
+                                            css.photoBig
+                                        )}
+                                        style={{
+                                            backgroundImage: `url("/img/placeholder_7.png")`,
+                                        }}
+                                    ></div>
+                                </SwiperSlide>
+                                <SwiperSlide
+                                    className={css.smallPhotoSlideContainer}
+                                >
+                                    <div className={css.smallPhotoContainer}>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_6.png")`,
+                                            }}
+                                        ></div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide
+                                    className={css.smallPhotoSlideContainer}
+                                >
+                                    <div className={css.smallPhotoContainer}>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_6.png")`,
+                                            }}
+                                        ></div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide
+                                    className={css.smallPhotoSlideContainer}
+                                >
+                                    <div className={css.smallPhotoContainer}>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_6.png")`,
+                                            }}
+                                        ></div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide
+                                    className={css.smallPhotoSlideContainer}
+                                >
+                                    <div className={css.smallPhotoContainer}>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div
+                                            className={classNames(
+                                                css.photo,
+                                                css.photoSmall
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_6.png")`,
+                                            }}
+                                        ></div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide
+                                    className={css.smallPhotoSlideContainer}
+                                ></SwiperSlide>
+                            </Swiper>
                         </div>
                     </div>
                 </div>

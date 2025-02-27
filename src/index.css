@@ -23,6 +23,11 @@ body {
     text-decoration: none;
 }
 
+.swiper-wrapper {
+    gap: 8px;
+    -webkit-column-gap: 8px;
+}
+
 @font-face {
     font-family: 'Mont';
     src: url('/fonts/Mont-Bold.woff2') format('woff');

@@ -19,6 +19,6 @@
 
 .slogan {
     font-size: 14px;
-    font-family: 'Mont';
+    font-family: 'Mont', sans-serif;
     color: var(--dark-grey);
 }

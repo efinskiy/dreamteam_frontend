@@ -98,3 +98,8 @@
     font-size: 14px;
     color: var(--grey);
 }
+
+.swiperSlide {
+    width: 130px;
+    height: 130px;
+}
