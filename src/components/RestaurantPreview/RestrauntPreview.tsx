@@ -9,10 +9,11 @@ import 'swiper/css/free-mode';
 import { SwiperSlide } from 'swiper/react';
 import { RestaurantBadgePhoto } from '@/components/RestaurantPreview/RestaurantBadgePhoto/RestaurantBadgePhoto.tsx';
 import { InfoTag } from '@/components/InfoTag/InfoTag.tsx';
+import { Link } from 'react-router-dom';
 
 export const RestaurantPreview = () => {
     return (
-        <div className={css.restaurant}>
+        <Link className={css.restaurant} to={'/restaurant/1'}>
             <div
                 className={classNames(css.imaged, css.bgImage)}
                 style={{ backgroundImage: `url('/img/placeholder_2.png')` }}
@@ -50,6 +51,10 @@ export const RestaurantPreview = () => {
                                 url={'/img/placeholder_6.png'}
                             />
                         </SwiperSlide>
+                        {/*
+                            Пустой слайд для корректного отображения последнего слайда
+                        */}
+                        <SwiperSlide></SwiperSlide>
                     </Swiper>
                 </div>
                 <div className={css.imagedBottom}>
@@ -79,6 +84,6 @@ export const RestaurantPreview = () => {
                     <InfoTag text={'Ср. чек 1500₽'} />
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
