@@ -49,6 +49,30 @@ export const Restaurant = () => {
                         </div>
                         <div className={css.bookingContaner}></div>
                     </div>
+                    <div className={css.contentBlock}>
+                        <div className={css.headerContainer}>
+                            <h3 className={css.contentHeader}>Галерея</h3>
+                            <div className={css.photoSliderNavigationContainer}>
+                                <div
+                                    className={classNames(
+                                        css.photoSliderNavigationItem,
+                                        css.photoSliderNavigationActive
+                                    )}
+                                >
+                                    Все фото
+                                </div>
+                                <div className={css.photoSliderNavigationItem}>
+                                    Интерьер
+                                </div>
+                                <div className={css.photoSliderNavigationItem}>
+                                    Блюда
+                                </div>
+                                <div className={css.photoSliderNavigationItem}>
+                                    Напитки
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Page>

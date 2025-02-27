@@ -36,6 +36,52 @@
     gap: 26px;
 }
 
+.contentBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .headerContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contentHeader {
+        margin: 0;
+        padding: 0;
+        font-size: 30px;
+        font-family: "Heading Pro Ultracompressed", sans-serif;
+        font-weight: 800;
+        height: 36px;
+        line-height: 36px;
+        text-transform: uppercase;
+    }
+
+    .photoSliderNavigationContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        color: var(--secondary-background);
+    }
+
+    .photoSliderNavigationItem {
+        display: flex;
+        font-family: "Mont", sans-serif;
+        font-weight: 800;
+        font-size: 14px;
+        padding: 11px 16px;
+        border-radius: 20px;
+        color: var(--grey);
+    }
+
+    .photoSliderNavigationActive {
+        background-color: var(--secondary-background);
+        color: var(--black);
+    }
+
+}
+
 .navSliderAndBookingContainer {
     display: flex;
     flex-direction: column;
