@@ -5,6 +5,7 @@ import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
 import { useNavigate } from 'react-router-dom';
+import { classNames } from '@telegram-apps/sdk-react';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -29,6 +30,26 @@ export const Restaurant = () => {
             </div>
             <div className={css.pageContainer}>
                 <RestaurantTopPreview />
+
+                <div className={css.contentContainer}>
+                    <div className={css.navSliderAndBookingContainer}>
+                        <div className={css.navigationSlider}>
+                            <div
+                                className={classNames(
+                                    css.navigationLink,
+                                    css.navigationLinkActive
+                                )}
+                            >
+                                Бронь
+                            </div>
+                            <div className={css.navigationLink}>Галерея</div>
+                            <div className={css.navigationLink}>Меню</div>
+                            <div className={css.navigationLink}>О месте</div>
+                            <div className={css.navigationLink}>О шефе</div>
+                        </div>
+                        <div className={css.bookingContaner}></div>
+                    </div>
+                </div>
             </div>
         </Page>
     );

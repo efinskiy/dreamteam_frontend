@@ -1,5 +1,5 @@
 import { classNames } from '@telegram-apps/sdk-react';
-import css from '@/pages/Restaurant/Restaurant.module.css';
+import css from './RestaurantTopPreview.module.css';
 import { MoneyIcon } from '@/components/Icons/MoneyIcon.tsx';
 import { TimeCircleIcon } from '@/components/Icons/TimeCircleIcon.tsx';
 
