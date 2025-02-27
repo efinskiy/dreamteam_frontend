@@ -9,6 +9,7 @@ import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css/bundle';
+
 import { FreeMode } from 'swiper/modules';
 
 export const Restaurant = () => {
@@ -46,18 +47,10 @@ export const Restaurant = () => {
                             >
                                 Бронь
                             </div>
-                            <div className={css.navigationLink}>
-                                <span>Галерея</span>
-                            </div>
-                            <div className={css.navigationLink}>
-                                <span>Меню</span>
-                            </div>
-                            <div className={css.navigationLink}>
-                                <span>О месте</span>
-                            </div>
-                            <div className={css.navigationLink}>
-                                <span>О шефе</span>
-                            </div>
+                            <div className={css.navigationLink}>Галерея</div>
+                            <div className={css.navigationLink}>Меню</div>
+                            <div className={css.navigationLink}>О месте</div>
+                            <div className={css.navigationLink}>О шефе</div>
                         </div>
                         <div className={css.bookingContaner}></div>
                     </div>
@@ -65,23 +58,57 @@ export const Restaurant = () => {
                         <div className={css.headerContainer}>
                             <h3 className={css.contentHeader}>Галерея</h3>
                             <div className={css.photoSliderNavigationContainer}>
-                                <div
-                                    className={classNames(
-                                        css.photoSliderNavigationItem,
-                                        css.photoSliderNavigationActive
-                                    )}
+                                <Swiper
+                                    modules={[FreeMode]}
+                                    freeMode={true}
+                                    slidesPerView={'auto'}
                                 >
-                                    <span>Все фото</span>
-                                </div>
-                                <div className={css.photoSliderNavigationItem}>
-                                    <span>Интерьер</span>
-                                </div>
-                                <div className={css.photoSliderNavigationItem}>
-                                    <span>Блюда</span>
-                                </div>
-                                <div className={css.photoSliderNavigationItem}>
-                                    <span>Напитки</span>
-                                </div>
+                                    <SwiperSlide
+                                        style={{ width: 'max-content' }}
+                                    >
+                                        <div
+                                            className={classNames(
+                                                css.photoSliderNavigationItem,
+                                                css.photoSliderNavigationActive
+                                            )}
+                                        >
+                                            Все фото
+                                        </div>
+                                    </SwiperSlide>
+                                    <SwiperSlide
+                                        style={{ width: 'max-content' }}
+                                    >
+                                        <div
+                                            className={classNames(
+                                                css.photoSliderNavigationItem
+                                            )}
+                                        >
+                                            Интерьер
+                                        </div>
+                                    </SwiperSlide>
+                                    <SwiperSlide
+                                        style={{ width: 'max-content' }}
+                                    >
+                                        <div
+                                            className={
+                                                css.photoSliderNavigationItem
+                                            }
+                                        >
+                                            Блюда
+                                        </div>
+                                    </SwiperSlide>
+                                    <SwiperSlide
+                                        style={{ width: 'max-content' }}
+                                    >
+                                        <div
+                                            className={
+                                                css.photoSliderNavigationItem
+                                            }
+                                        >
+                                            Напитки
+                                        </div>
+                                    </SwiperSlide>
+                                </Swiper>
                             </div>
                         </div>
                         <div className={css.photoSliderContainer}>

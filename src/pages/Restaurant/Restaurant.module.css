@@ -59,25 +59,25 @@
     }
 
     .photoSliderNavigationContainer {
-        display: flex;
-        flex-direction: row;
-        gap: 0;
         color: var(--secondary-background);
+        width: 100%;
     }
 
     .photoSliderNavigationItem {
         padding: 11px 16px;
         border-radius: 20px;
+        height: 18px;
+        width: max-content;
     }
 
-    .photoSliderNavigationItem > span {
+    .photoSliderNavigationItem {
         font-family: "Mont", sans-serif;
         font-weight: 800;
         font-size: 14px;
         color: var(--grey);
     }
 
-    .photoSliderNavigationActive > span {
+    .photoSliderNavigationActive {
         color: var(--black);
     }
 
@@ -131,7 +131,7 @@
     height: 26px;
 }
 
-.navigationLink > span {
+.navigationLink {
     color: var(--grey);
     font-size: 14px;
     font-family: 'Mont', sans-serif;
