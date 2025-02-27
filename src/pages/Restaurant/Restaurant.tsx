@@ -3,9 +3,12 @@ import css from './Restaurant.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
-import { classNames } from '@telegram-apps/sdk-react';
+import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const Restaurant = () => {
+    const navigate = useNavigate();
+
     return (
         <Page back={true}>
             <div className={css.header}>
@@ -13,6 +16,7 @@ export const Restaurant = () => {
                     <div className={css.headerNavBlock}>
                         <RoundedButton
                             icon={<BackIcon color={'var(--dark-grey)'} />}
+                            action={() => navigate(-1)}
                         ></RoundedButton>
                     </div>
                     <div className={css.headerNavBlock}>
@@ -24,12 +28,7 @@ export const Restaurant = () => {
                 </div>
             </div>
             <div className={css.pageContainer}>
-                <div
-                    className={classNames(css.previewContainer, css.bgImage)}
-                    style={{ backgroundImage: `url('/img/placeholder_2.png')` }}
-                >
-                    <div className={css.halfBlackWrapper}></div>
-                </div>
+                <RestaurantTopPreview />
             </div>
         </Page>
     );

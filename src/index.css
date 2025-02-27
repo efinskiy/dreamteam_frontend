@@ -24,14 +24,16 @@ body {
 }
 
 @font-face {
-    font-family: 'Almanach-Bold';
-    src: url('/fonts/Almanach/Almanach-Bold.woff2') format('woff2');
+    font-family: 'Mont';
+    src: url('/fonts/Mont-Bold.woff2') format('woff');
+    font-weight: 700;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Mont';
-    src: url('/fonts/Mont-Bold.woff2') format('woff');
+    src: url('/fonts/Mont-Blanc-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
     font-style: normal;
 }
 
