@@ -44,7 +44,7 @@
     .headerContainer {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 0px;
     }
 
     .contentHeader {
@@ -58,7 +58,15 @@
         text-transform: uppercase;
     }
 
+    .headerSubText {
+        margin-top: 4px;
+        font-family: 'Mont', sans-serif;
+        font-size: 12px;
+        color: var(--dark-grey);
+    }
+
     .photoSliderNavigationContainer {
+        margin-top: 10px;
         color: var(--secondary-background);
         width: 100%;
     }

@@ -231,6 +231,16 @@ export const Restaurant = () => {
                         </div>
                     </div>
                 </div>
+                <div className={css.contentContainer}>
+                    <div className={css.contentBlock}>
+                        <div className={css.headerContainer}>
+                            <h3 className={css.contentHeader}>Меню</h3>
+                            <span className={css.headerSubText}>
+                                Рекомендуем
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </Page>
     );
