@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/bundle';
 
 import { FreeMode } from 'swiper/modules';
+import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -239,6 +240,82 @@ export const Restaurant = () => {
                                 Рекомендуем
                             </span>
                         </div>
+                        <div className={css.photoSliderContainer}>
+                            <Swiper
+                                slidesPerView="auto"
+                                modules={[FreeMode]}
+                                freeMode={true}
+                            >
+                                <SwiperSlide style={{ width: '162px' }}>
+                                    <div className={css.menuItem}>
+                                        <div
+                                            className={classNames(
+                                                css.menuItemPhoto,
+                                                css.bgImage
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div className={css.menuItemInfo}>
+                                            <span className={css.title}>
+                                                Крем - суп из пастернака
+                                            </span>
+                                            <span className={css.subtitle}>
+                                                1300 ₽
+                                            </span>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide style={{ width: '162px' }}>
+                                    <div className={css.menuItem}>
+                                        <div
+                                            className={classNames(
+                                                css.menuItemPhoto,
+                                                css.bgImage
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div className={css.menuItemInfo}>
+                                            <span className={css.title}>
+                                                Крем - суп из пастернака
+                                            </span>
+                                            <span className={css.subtitle}>
+                                                1300 ₽
+                                            </span>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                                <SwiperSlide style={{ width: '162px' }}>
+                                    <div className={css.menuItem}>
+                                        <div
+                                            className={classNames(
+                                                css.menuItemPhoto,
+                                                css.bgImage
+                                            )}
+                                            style={{
+                                                backgroundImage: `url("/img/placeholder_4.png")`,
+                                            }}
+                                        ></div>
+                                        <div className={css.menuItemInfo}>
+                                            <span className={css.title}>
+                                                Крем - суп из пастернака
+                                            </span>
+                                            <span className={css.subtitle}>
+                                                1300 ₽
+                                            </span>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                            </Swiper>
+                        </div>
+                        <UniversalButton
+                            title={'Посмотреть меню'}
+                            width={'full'}
+                            action={() => alert(1)}
+                        />
                     </div>
                 </div>
             </div>

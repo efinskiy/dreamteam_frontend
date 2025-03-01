@@ -106,6 +106,12 @@
         border-radius: 16px;
     }
 
+    .bgImage {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
     .photoBig {
         width: 243px;
         height: 226px;
@@ -121,8 +127,44 @@
     }
 
     .photoSliderContainer {
+        width: 100%;
+    }
+
+    .menuItem {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .menuItemPhoto {
+            width: 162px;
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+        }
+
+        .menuItemInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+
+            .title {
+                font-family: 'Mont', sans-serif;
+                font-weight: 800;
+                font-size: 12px;
+            }
+
+            .subtitle {
+                font-family: 'Mont', sans-serif;
+                font-weight: 700;
+                font-size: 12px;
+                color: var(--dark-grey);
+            }
+        }
 
     }
+
+
+
 }
 
 
