@@ -12,9 +12,12 @@ import 'swiper/css/bundle';
 
 import { FreeMode } from 'swiper/modules';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
+import { useState } from 'react';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
+
+    const [hideAbout, setHideAbout] = useState(true);
 
     return (
         <Page back={true}>
@@ -316,6 +319,47 @@ export const Restaurant = () => {
                             width={'full'}
                             action={() => alert(1)}
                         />
+                    </div>
+                </div>
+                <div className={css.contentContainer}>
+                    <div className={css.contentBlock}>
+                        <div className={css.headerContainer}>
+                            <h3 className={css.contentHeader}>О месте</h3>
+                        </div>
+                        <div className={css.aboutContainer}>
+                            <span
+                                className={classNames(
+                                    css.aboutText,
+                                    hideAbout ? css.trimLines : null
+                                )}
+                            >
+                                Ресторан с концепцией ultimate firewood cooking,
+                                где на огне готовится не только мясо, но и рыбу,
+                                овощи и морепродукты. Главный специалитет —
+                                брискет, говяжья грудинка, которую мы коптим в
+                                смокере в течение 14–16 часов до совершенного
+                                вкуса и текстуры. Технологию приготовления
+                                бренд-шеф Алексей Каневский привез из Остина,
+                                штат Техас.  Наша винная карта — отдельный
+                                предмет гордости. В ней — свыше 100 этикеток
+                                вина, которые любим и пьем сами: от культовой
+                                классики Европы и США до трендовых регионов и
+                                редких находок. Кроме того, внушительная
+                                коллекция бурбонов и линейка пива.  Каждый день
+                                готовим завтраки из печи: по будням с 09:00 до
+                                12:00, по субботам — с 09:00 до 14:00. По
+                                воскресеньям проводим бранчи для всей семьи,
+                                меню которых почти не повторяется.
+                            </span>
+                            <div
+                                className={css.trimLinesButton}
+                                onClick={() => setHideAbout((prev) => !prev)}
+                            >
+                                <span className={css.text}>
+                                    {hideAbout ? 'Читать больше' : 'Меньше'}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

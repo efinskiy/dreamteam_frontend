@@ -23,6 +23,7 @@
     flex-direction: column;
     background-color: var(--secondary-background);
     gap: 4px;
+    margin-bottom: 160px;
 }
 
 .contentContainer {
@@ -161,6 +162,35 @@
             }
         }
 
+    }
+
+    .aboutContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .aboutText {
+        font-family: 'Mont', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .trimLines {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .trimLinesButton {
+        .text {
+            font-size: 14px;
+            font-family: 'Mont', sans-serif;
+            font-weight: 800;
+            color: var(--red);
+        }
     }
 
 
