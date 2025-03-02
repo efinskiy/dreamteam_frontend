@@ -28,6 +28,10 @@ body {
     -webkit-column-gap: 8px;
 }
 
+.ReactCollapse--collapse {
+    transition: height 500ms;
+}
+
 @font-face {
     font-family: 'Mont';
     src: url('/fonts/Mont-Bold.woff2') format('woff');

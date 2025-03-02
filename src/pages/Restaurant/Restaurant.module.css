@@ -4,6 +4,7 @@
     width: 100%;
     height: 64px;
     background-color: transparent;
+    z-index: 1000;
 }
 
 .headerNav {
@@ -152,6 +153,7 @@
                 font-family: 'Mont', sans-serif;
                 font-weight: 800;
                 font-size: 12px;
+
             }
 
             .subtitle {
@@ -193,6 +195,73 @@
         }
     }
 
+    .infoBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .textRow {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+
+            .title {
+
+                color: var(--grey);
+                padding-right: 4px;
+            }
+
+            .value {
+                color: var(--black);
+            }
+
+        }
+
+        .collapse {
+            transition: height 500ms;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+
+            .title {
+                font-family: 'Mont', sans-serif;
+                font-weight: 800;
+                font-size: 16px;
+            }
+
+            .expandButton {
+                font-family: 'Mont', sans-serif;
+                font-weight: 700;
+                font-size: 14px;
+                color: var(--grey);
+            }
+
+            .right {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .closed {
+                transform: rotate(180deg);
+            }
+        }
+
+        .workHours {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .text {
+                font-family: 'Mont', sans-serif;
+                font-weight: 700;
+                font-size: 12px;
+                color: var(--grey);
+            }
+        }
+    }
 
 
 }

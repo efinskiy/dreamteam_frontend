@@ -7,17 +7,20 @@ import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/Restaura
 import { useNavigate } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { UnmountClosed } from 'react-collapse';
 
 import 'swiper/css/bundle';
 
 import { FreeMode } from 'swiper/modules';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
 import { useState } from 'react';
+import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
 
     const [hideAbout, setHideAbout] = useState(true);
+    const [hideWorkHours, setHideWorkHours] = useState(true);
 
     return (
         <Page back={true}>
@@ -361,7 +364,100 @@ export const Restaurant = () => {
                             </div>
                         </div>
                     </div>
+                    <div className={css.contentBlock}>
+                        <div className={css.infoBlock}>
+                            <div className={css.top}>
+                                <span className={css.title}>До 00:00</span>
+                                <div
+                                    className={css.right}
+                                    onClick={() =>
+                                        setHideWorkHours((prev) => !prev)
+                                    }
+                                >
+                                    <span className={css.expandButton}>
+                                        График
+                                    </span>
+                                    <div
+                                        className={classNames(css.right, {
+                                            [css.closed]: hideWorkHours,
+                                        })}
+                                    >
+                                        <DownArrow
+                                            size={20}
+                                            color={'var(--grey)'}
+                                        ></DownArrow>
+                                    </div>
+                                </div>
+                            </div>
+                            <UnmountClosed
+                                isOpened={!hideWorkHours}
+                                className={css.collapse}
+                            >
+                                <div className={css.workHours}>
+                                    <span className={css.text}>
+                                        Вс-чт: 09:00-23:00
+                                    </span>
+                                    <span className={css.text}>
+                                        Пт-сб: 09:00-00:00
+                                    </span>
+                                </div>
+                            </UnmountClosed>
+                        </div>
+                    </div>
+                    <div className={css.contentBlock}>
+                        <div className={css.infoBlock}>
+                            <div className={css.top}>
+                                <span className={css.title}>Детали</span>
+                            </div>
+                            <div className={css.infoBlock}>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>Блюда:</span>
+                                    <span className={css.value}>
+                                        Мясо, Рыба и морепродукты
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>Блюда:</span>
+                                    <span className={css.value}>
+                                        Мясо, Рыба и морепродукты
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>
+                                        Особенности:
+                                    </span>
+                                    <span className={css.value}>
+                                        Завтраки, Обеды, Бранчи, Веранда, Второй
+                                        этаж под мероприятия, Парковка
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>С детьми:</span>
+                                    <span className={css.value}>
+                                        Дети — всегда желанные гости! Предложим
+                                        детского меню, стульчик и раскраски
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>
+                                        С животными:
+                                    </span>
+                                    <span className={css.value}>
+                                        Мы рады гостям с воспитанными питомцами
+                                        и предложим миску с водой
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>
+                                        Средний чек:
+                                    </span>
+                                    <span className={css.value}>1500 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div className={css.contentContainer}></div>
             </div>
         </Page>
     );
