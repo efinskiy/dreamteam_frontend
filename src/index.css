@@ -18,6 +18,10 @@ body {
     width: 100%;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 * {
     color: var(--black);
     text-decoration: none;

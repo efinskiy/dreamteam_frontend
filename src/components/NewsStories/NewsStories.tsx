@@ -8,24 +8,24 @@ export const NewsStories = () => {
     return (
         <div className={css.newsSlider}>
             <Swiper
-                slidesPerView={3.8}
+                slidesPerView="auto"
                 modules={[FreeMode]}
                 freeMode={true}
                 spaceBetween={0}
             >
-                <SwiperSlide>
+                <SwiperSlide style={{ width: '100px' }}>
                     <NewsStoriesElement />
                 </SwiperSlide>
-                <SwiperSlide>
+                <SwiperSlide style={{ width: '100px' }}>
                     <NewsStoriesElement />
                 </SwiperSlide>
-                <SwiperSlide>
+                <SwiperSlide style={{ width: '100px' }}>
                     <NewsStoriesElement />
                 </SwiperSlide>
-                <SwiperSlide>
+                <SwiperSlide style={{ width: '100px' }}>
                     <NewsStoriesElement />
                 </SwiperSlide>
-                <SwiperSlide>
+                <SwiperSlide style={{ width: '100px' }}>
                     <NewsStoriesElement />
                 </SwiperSlide>
                 {/*

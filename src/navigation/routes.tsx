@@ -2,6 +2,7 @@ import type { ComponentType, JSX } from 'react';
 
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { Restaurant } from '@/pages/Restaurant/Restaurant.tsx';
+import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
 
 interface Route {
     path: string;
@@ -27,5 +28,9 @@ export const routes: Route[] = [
     {
         path: '/restaurant/:id',
         Component: Restaurant,
+    },
+    {
+        path: '/unsupported',
+        Component: EnvUnsupported,
     },
 ];

@@ -12,12 +12,10 @@ export const OptionsNavigationElement = (
     props: OptionsNavigationElementProps
 ) => {
     return (
-        <Link to={props.link}>
-            <div className={css.element}>
-                <div className={css.wrapper}>
-                    <div className={css.topIcon}>{props.icon}</div>
-                    <div className={css.bottomText}>{props.title}</div>
-                </div>
+        <Link to={props.link} className={css.element}>
+            <div className={css.wrapper}>
+                <div className={css.topIcon}>{props.icon}</div>
+                <div className={css.bottomText}>{props.title}</div>
             </div>
         </Link>
     );

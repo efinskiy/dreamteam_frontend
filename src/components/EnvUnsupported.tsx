@@ -33,7 +33,7 @@ export function EnvUnsupported() {
             >
                 <img
                     alt="Telegram sticker"
-                    src="https://xelene.me/telegram.gif"
+                    src="/icons/telegram.gif"
                     style={{
                         display: 'block',
                         width: '144px',

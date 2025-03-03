@@ -15,11 +15,13 @@ import { FreeMode } from 'swiper/modules';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
 import { useState } from 'react';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
+import { InstagramIcon } from '@/components/Icons/Instagram.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
 
     const [hideAbout, setHideAbout] = useState(true);
+    const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
 
     return (
@@ -407,6 +409,23 @@ export const Restaurant = () => {
                     <div className={css.contentBlock}>
                         <div className={css.infoBlock}>
                             <div className={css.top}>
+                                <span className={css.title}>
+                                    Социальные сети
+                                </span>
+                            </div>
+                            <div className={css.infoBlock}>
+                                <div className={css.socialRow}>
+                                    <InstagramIcon color={'black'} size={20} />
+                                    <span className={css.socialLink}>
+                                        poly.stpete
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={css.contentBlock}>
+                        <div className={css.infoBlock}>
+                            <div className={css.top}>
                                 <span className={css.title}>Детали</span>
                             </div>
                             <div className={css.infoBlock}>
@@ -457,7 +476,62 @@ export const Restaurant = () => {
                         </div>
                     </div>
                 </div>
-                <div className={css.contentContainer}></div>
+                <div className={css.contentContainer}>
+                    <div className={css.contentBlock}>
+                        <div className={css.headerContainer}>
+                            <h3 className={css.contentHeader}>О шефе</h3>
+                        </div>
+                        <div className={css.aboutContainer}>
+                            <span
+                                className={classNames(
+                                    css.aboutText,
+                                    hideChefAbout ? css.trimLines : null
+                                )}
+                            >
+                                Илья Бурнасов, шеф-повар с 17-летним опытом в
+                                ресторанной индустрии Петербурга, участник
+                                престижных гастрономических фестивалей и
+                                стажировок в Лондоне и Москве. Свои первые шаги
+                                в профессии он сделал в Ginza Project, где
+                                принимал участие в запуске новых ресторанов.
+                                Затем возглавил кухню SPA-курорта
+                                «Президент-Отель», а позже стал бренд-шефом
+                                таких известных проектов, как Hitch, Locale,
+                                «Ателье. Tapas & Bar» и концепт-шефом PioNero.
+                                Проходил стажировки в White Rabbit, а также в
+                                лондонских Beats, Zelman Meats, Burger &
+                                Lobster. Финалист всероссийского конкурса «На
+                                высоте» (2017), участник Madrid Fusion (2018).
+                                Преподавал в Novikov Space
+                            </span>
+                            <div
+                                className={css.trimLinesButton}
+                                onClick={() =>
+                                    setHideChefAbout((prev) => !prev)
+                                }
+                            >
+                                <span className={css.text}>
+                                    {hideChefAbout ? 'Читать больше' : 'Меньше'}
+                                </span>
+                            </div>
+                        </div>
+                        <div className={css.chefInfoContainer}>
+                            <div
+                                className={classNames(
+                                    css.chefImage,
+                                    css.bgImage
+                                )}
+                                style={{
+                                    backgroundImage: `url(/img/chef.png)`,
+                                }}
+                            ></div>
+                            <div className={css.chefInfo}>
+                                <span className={css.title}>Роман Клюквин</span>
+                                <span className={css.subTitle}>Бренд-шеф</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </Page>
     );

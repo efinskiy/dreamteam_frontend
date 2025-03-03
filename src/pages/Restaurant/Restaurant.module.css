@@ -172,6 +172,37 @@
         gap: 4px;
     }
 
+    .chefInfoContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .chefInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .title {
+            font-family: 'Mont', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .subTitle {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--grey);
+        }
+    }
+
+    .chefImage {
+        width: 100%;
+        aspect-ratio: 115/103;
+        border-radius: 12px;
+    }
+
     .aboutText {
         font-family: 'Mont', sans-serif;
         font-weight: 700;
@@ -199,6 +230,17 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
+
+        .socialRow {
+            display: flex;
+            gap: 8px;
+
+            .socialLink {
+                font-family: 'Mont', sans-serif;
+                font-weight: 700;
+                font-size: 14px;
+            }
+        }
 
         .textRow {
             font-family: 'Mont', sans-serif;
