@@ -13,9 +13,12 @@ import 'swiper/css/bundle';
 
 import { FreeMode } from 'swiper/modules';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { InstagramIcon } from '@/components/Icons/Instagram.tsx';
+import { GoToPathIcon } from '@/components/Icons/GoToPathIcon.tsx';
+import { PhoneCallIcon } from '@/components/Icons/PhoneCallIcon.tsx';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -24,46 +27,148 @@ export const Restaurant = () => {
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
 
+    const [headerScrolled, setHeaderScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setHeaderScrolled(window.scrollY > 190); // Если прокрутка больше 50px – меняем состояние
+            console.log(window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <Page back={true}>
-            <div className={css.header}>
+            <div
+                className={classNames(
+                    css.header,
+                    headerScrolled ? css.scrolled : null
+                )}
+            >
                 <div className={css.headerNav}>
-                    <div className={css.headerNavBlock}>
-                        <RoundedButton
-                            icon={<BackIcon color={'var(--dark-grey)'} />}
-                            action={() => navigate(-1)}
-                        ></RoundedButton>
+                    <div className={css.headerTop}>
+                        <div className={css.headerNavBlock}>
+                            <RoundedButton
+                                icon={<BackIcon color={'var(--dark-grey)'} />}
+                                action={() => navigate(-1)}
+                            ></RoundedButton>
+                        </div>
+                        {headerScrolled ? (
+                            <span className={css.headerTitle}>Smoke BBQ</span>
+                        ) : null}
+                        <div className={css.headerNavBlock}>
+                            <RoundedButton
+                                icon={
+                                    <IconlyProfile color={'var(--dark-grey)'} />
+                                }
+                                action={() => alert(1)}
+                            />
+                        </div>
                     </div>
-                    <div className={css.headerNavBlock}>
-                        <RoundedButton
-                            icon={<IconlyProfile color={'var(--dark-grey)'} />}
-                            action={() => alert(1)}
-                        />
+                    {headerScrolled ? (
+                        <div>
+                            <div className={css.navigationSlider}>
+                                <AnchorLink href="#booking" offset={64}>
+                                    <div
+                                        className={classNames(
+                                            css.navigationLink,
+                                            css.navigationLinkActive
+                                        )}
+                                    >
+                                        Бронь
+                                    </div>
+                                </AnchorLink>
+
+                                <AnchorLink href="#gallery" offset={128}>
+                                    <div className={css.navigationLink}>
+                                        Галерея
+                                    </div>
+                                </AnchorLink>
+                                <AnchorLink href="#menu" offset={128}>
+                                    <div className={css.navigationLink}>
+                                        Меню
+                                    </div>
+                                </AnchorLink>
+                                <AnchorLink href="#about" offset={128}>
+                                    <div className={css.navigationLink}>
+                                        О месте
+                                    </div>
+                                </AnchorLink>
+                                <AnchorLink href="#chef" offset={128}>
+                                    <div className={css.navigationLink}>
+                                        О шефе
+                                    </div>
+                                </AnchorLink>
+                            </div>
+                        </div>
+                    ) : null}
+                </div>
+            </div>
+            <div className={css.floatingFooter}>
+                <div className={css.floatingFooterWrapper}>
+                    <div className={css.bookingButton}>
+                        <span className={css.text}>Забронировать</span>
                     </div>
+                    <RoundedButton
+                        icon={
+                            <GoToPathIcon
+                                size={24}
+                                color={'var(--dark-grey)'}
+                            />
+                        }
+                    />
+                    <RoundedButton
+                        icon={
+                            <PhoneCallIcon
+                                size={24}
+                                color={'var(--dark-grey)'}
+                            />
+                        }
+                    />
                 </div>
             </div>
             <div className={css.pageContainer}>
                 <RestaurantTopPreview />
 
                 <div className={css.contentContainer}>
-                    <div className={css.navSliderAndBookingContainer}>
+                    <div
+                        id={'booking'}
+                        className={css.navSliderAndBookingContainer}
+                    >
                         <div className={css.navigationSlider}>
-                            <div
-                                className={classNames(
-                                    css.navigationLink,
-                                    css.navigationLinkActive
-                                )}
-                            >
-                                Бронь
-                            </div>
-                            <div className={css.navigationLink}>Галерея</div>
-                            <div className={css.navigationLink}>Меню</div>
-                            <div className={css.navigationLink}>О месте</div>
-                            <div className={css.navigationLink}>О шефе</div>
+                            <AnchorLink href="#booking">
+                                <div
+                                    className={classNames(
+                                        css.navigationLink,
+                                        css.navigationLinkActive
+                                    )}
+                                >
+                                    Бронь
+                                </div>
+                            </AnchorLink>
+
+                            <AnchorLink href="#gallery">
+                                <div className={css.navigationLink}>
+                                    Галерея
+                                </div>
+                            </AnchorLink>
+                            <AnchorLink href="#things">
+                                <div className={css.navigationLink}>Меню</div>
+                            </AnchorLink>
+                            <AnchorLink href="#things">
+                                <div className={css.navigationLink}>
+                                    О месте
+                                </div>
+                            </AnchorLink>
+                            <AnchorLink href="#things">
+                                <div className={css.navigationLink}>О шефе</div>
+                            </AnchorLink>
                         </div>
                         <div className={css.bookingContaner}></div>
                     </div>
-                    <div className={css.contentBlock}>
+                    <div className={css.contentBlock} id={'gallery'}>
                         <div className={css.headerContainer}>
                             <h3 className={css.contentHeader}>Галерея</h3>
                             <div className={css.photoSliderNavigationContainer}>
@@ -240,7 +345,7 @@ export const Restaurant = () => {
                         </div>
                     </div>
                 </div>
-                <div className={css.contentContainer}>
+                <div className={css.contentContainer} id={'menu'}>
                     <div className={css.contentBlock}>
                         <div className={css.headerContainer}>
                             <h3 className={css.contentHeader}>Меню</h3>
@@ -326,7 +431,7 @@ export const Restaurant = () => {
                         />
                     </div>
                 </div>
-                <div className={css.contentContainer}>
+                <div className={css.contentContainer} id={'about'}>
                     <div className={css.contentBlock}>
                         <div className={css.headerContainer}>
                             <h3 className={css.contentHeader}>О месте</h3>
@@ -476,7 +581,7 @@ export const Restaurant = () => {
                         </div>
                     </div>
                 </div>
-                <div className={css.contentContainer}>
+                <div className={css.contentContainer} id={'chef'}>
                     <div className={css.contentBlock}>
                         <div className={css.headerContainer}>
                             <h3 className={css.contentHeader}>О шефе</h3>
