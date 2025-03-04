@@ -24,6 +24,9 @@ import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/Heade
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { HeaderSubText } from '@/components/ContentBlock/HeaderContainer/HeaderSubText/HeaderContainer.tsx';
 import { MenuPopup } from '@/components/FullScreenPopup/MenuPopup.tsx';
+import { mockGallery } from '@/mockData.ts';
+import { mockMenu } from '@/mockData.ts';
+import { GalleryCollection } from '@/pages/Restaurant/Restaurant.types.ts';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -31,19 +34,60 @@ export const Restaurant = () => {
     const [hideAbout, setHideAbout] = useState(true);
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
-
     const [headerScrolled, setHeaderScrolled] = useState(false);
     const [menuPopupOpen, setMenuPopupOpen] = useState(false);
+    const [gallery] = useState<GalleryCollection[]>(mockGallery);
+    const [currentGalleryCategory, setCurrentGalleryCategory] =
+        useState('Все фото');
+    const [currentGalleryPhotos, setCurrentGalleryPhotos] = useState<
+        (string | string[])[]
+    >([]);
+
+    useEffect(() => {
+        setCurrentGalleryPhotos(getGalleryPhotos());
+    }, [currentGalleryCategory]);
 
     useEffect(() => {
         const handleScroll = () => {
             setHeaderScrolled(window.scrollY > 190); // Если прокрутка больше 50px – меняем состояние
-            console.log(window.scrollY);
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const getGalleryPhotos = () => {
+        let photoList: string[] = [];
+
+        if (currentGalleryCategory === 'Все фото') {
+            gallery.forEach((g) => {
+                g.photos.forEach((photo) => photoList.push(photo.link));
+            });
+            photoList = [...new Set(photoList)];
+        } else {
+            const searchedGallery = gallery.find(
+                (item) => item.title === currentGalleryCategory
+            );
+            searchedGallery?.photos.forEach((photo) =>
+                photoList.push(photo.link)
+            );
+        }
+
+        const groupedPhotos: (string | string[])[] = [];
+        let i = 0;
+
+        while (i < photoList.length) {
+            groupedPhotos.push(photoList[i]);
+            i++;
+
+            if (i < photoList.length - 1) {
+                groupedPhotos.push([photoList[i], photoList[i + 1]]);
+                i += 2;
+            }
+        }
+
+        return groupedPhotos;
+    };
 
     return (
         <Page back={true}>
@@ -132,49 +176,47 @@ export const Restaurant = () => {
                                 >
                                     <SwiperSlide
                                         style={{ width: 'max-content' }}
+                                        onClick={() =>
+                                            setCurrentGalleryCategory(
+                                                'Все фото'
+                                            )
+                                        }
                                     >
                                         <div
                                             className={classNames(
                                                 css.photoSliderNavigationItem,
-                                                css.photoSliderNavigationActive
+                                                currentGalleryCategory ==
+                                                    'Все фото'
+                                                    ? css.photoSliderNavigationActive
+                                                    : null
                                             )}
                                         >
                                             Все фото
                                         </div>
                                     </SwiperSlide>
-                                    <SwiperSlide
-                                        style={{ width: 'max-content' }}
-                                    >
-                                        <div
-                                            className={classNames(
-                                                css.photoSliderNavigationItem
-                                            )}
-                                        >
-                                            Интерьер
-                                        </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide
-                                        style={{ width: 'max-content' }}
-                                    >
-                                        <div
-                                            className={
-                                                css.photoSliderNavigationItem
+                                    {gallery.map((d) => (
+                                        <SwiperSlide
+                                            style={{ width: 'max-content' }}
+                                            key={d.title}
+                                            onClick={() =>
+                                                setCurrentGalleryCategory(
+                                                    d.title
+                                                )
                                             }
                                         >
-                                            Блюда
-                                        </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide
-                                        style={{ width: 'max-content' }}
-                                    >
-                                        <div
-                                            className={
-                                                css.photoSliderNavigationItem
-                                            }
-                                        >
-                                            Напитки
-                                        </div>
-                                    </SwiperSlide>
+                                            <div
+                                                className={classNames(
+                                                    css.photoSliderNavigationItem,
+                                                    currentGalleryCategory ==
+                                                        d.title
+                                                        ? css.photoSliderNavigationActive
+                                                        : null
+                                                )}
+                                            >
+                                                {d.title}
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
                                 </Swiper>
                             </div>
                         </HeaderContainer>
@@ -184,123 +226,57 @@ export const Restaurant = () => {
                                 modules={[FreeMode]}
                                 freeMode={true}
                             >
-                                <SwiperSlide className={css.photoBig}>
-                                    <div
-                                        className={classNames(
-                                            css.photo,
-                                            css.photoBig
+                                {currentGalleryPhotos.map((photo, index) => (
+                                    <SwiperSlide
+                                        key={index}
+                                        className={
+                                            Array.isArray(photo)
+                                                ? css.smallPhotoSlideContainer
+                                                : css.photoBig
+                                        }
+                                    >
+                                        {Array.isArray(photo) ? (
+                                            <div
+                                                className={
+                                                    css.smallPhotoContainer
+                                                }
+                                            >
+                                                {photo.map((smallPhoto, i) => (
+                                                    <div
+                                                        key={i}
+                                                        className={classNames(
+                                                            css.photo,
+                                                            css.photoSmall
+                                                        )}
+                                                        style={{
+                                                            backgroundImage: `url(${smallPhoto})`,
+                                                        }}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className={classNames(
+                                                    css.photo,
+                                                    css.photoBig
+                                                )}
+                                                style={{
+                                                    backgroundImage: `url(${photo})`,
+                                                }}
+                                            ></div>
                                         )}
-                                        style={{
-                                            backgroundImage: `url("/img/placeholder_7.png")`,
-                                        }}
-                                    ></div>
-                                </SwiperSlide>
+                                    </SwiperSlide>
+                                ))}
                                 <SwiperSlide
-                                    className={css.smallPhotoSlideContainer}
-                                >
-                                    <div className={css.smallPhotoContainer}>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_6.png")`,
-                                            }}
-                                        ></div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide
-                                    className={css.smallPhotoSlideContainer}
-                                >
-                                    <div className={css.smallPhotoContainer}>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_6.png")`,
-                                            }}
-                                        ></div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide
-                                    className={css.smallPhotoSlideContainer}
-                                >
-                                    <div className={css.smallPhotoContainer}>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_6.png")`,
-                                            }}
-                                        ></div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide
-                                    className={css.smallPhotoSlideContainer}
-                                >
-                                    <div className={css.smallPhotoContainer}>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div
-                                            className={classNames(
-                                                css.photo,
-                                                css.photoSmall
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_6.png")`,
-                                            }}
-                                        ></div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide
-                                    className={css.smallPhotoSlideContainer}
+                                    style={{ width: '50px' }}
                                 ></SwiperSlide>
                             </Swiper>
                         </div>
                     </ContentBlock>
                 </ContentContainer>
-                <ContentContainer id={'menu'}>
+                <ContentContainer>
                     <ContentBlock>
-                        <HeaderContainer>
+                        <HeaderContainer id={'menu'}>
                             <HeaderContent title={'Меню'} />
                             <HeaderSubText text={'Рекомендуем'} />
                         </HeaderContainer>
@@ -310,69 +286,29 @@ export const Restaurant = () => {
                                 modules={[FreeMode]}
                                 freeMode={true}
                             >
-                                <SwiperSlide style={{ width: '162px' }}>
-                                    <div className={css.menuItem}>
-                                        <div
-                                            className={classNames(
-                                                css.menuItemPhoto,
-                                                css.bgImage
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div className={css.menuItemInfo}>
-                                            <span className={css.title}>
-                                                Крем - суп из пастернака
-                                            </span>
-                                            <span className={css.subtitle}>
-                                                1300 ₽
-                                            </span>
+                                {mockMenu.map((menu) => (
+                                    <SwiperSlide style={{ width: '162px' }}>
+                                        <div className={css.menuItem}>
+                                            <div
+                                                className={classNames(
+                                                    css.menuItemPhoto,
+                                                    css.bgImage
+                                                )}
+                                                style={{
+                                                    backgroundImage: `url(${menu.photo})`,
+                                                }}
+                                            ></div>
+                                            <div className={css.menuItemInfo}>
+                                                <span className={css.title}>
+                                                    {menu.title}
+                                                </span>
+                                                <span className={css.subtitle}>
+                                                    {menu.price} ₽
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide style={{ width: '162px' }}>
-                                    <div className={css.menuItem}>
-                                        <div
-                                            className={classNames(
-                                                css.menuItemPhoto,
-                                                css.bgImage
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div className={css.menuItemInfo}>
-                                            <span className={css.title}>
-                                                Крем - суп из пастернака
-                                            </span>
-                                            <span className={css.subtitle}>
-                                                1300 ₽
-                                            </span>
-                                        </div>
-                                    </div>
-                                </SwiperSlide>
-                                <SwiperSlide style={{ width: '162px' }}>
-                                    <div className={css.menuItem}>
-                                        <div
-                                            className={classNames(
-                                                css.menuItemPhoto,
-                                                css.bgImage
-                                            )}
-                                            style={{
-                                                backgroundImage: `url("/img/placeholder_4.png")`,
-                                            }}
-                                        ></div>
-                                        <div className={css.menuItemInfo}>
-                                            <span className={css.title}>
-                                                Крем - суп из пастернака
-                                            </span>
-                                            <span className={css.subtitle}>
-                                                1300 ₽
-                                            </span>
-                                        </div>
-                                    </div>
-                                </SwiperSlide>
+                                    </SwiperSlide>
+                                ))}
                             </Swiper>
                         </div>
                         <UniversalButton
