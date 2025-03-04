@@ -8,6 +8,7 @@ type Props = {
     to?: string;
     is_action?: boolean;
     action?: () => void;
+    bgColor?: string;
 };
 
 export const RoundedButton: FC<Props> = (props) => {
@@ -15,6 +16,7 @@ export const RoundedButton: FC<Props> = (props) => {
         <div
             onClick={() => (props.action ? props.action() : null)}
             className={css.rounded_button}
+            style={{ backgroundColor: `${props.bgColor} ` }}
         >
             {props.icon}
         </div>

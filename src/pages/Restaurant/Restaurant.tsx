@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { UnmountClosed } from 'react-collapse';
-
 import 'swiper/css/bundle';
 
 import { FreeMode } from 'swiper/modules';
@@ -18,7 +17,13 @@ import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { InstagramIcon } from '@/components/Icons/Instagram.tsx';
 import { GoToPathIcon } from '@/components/Icons/GoToPathIcon.tsx';
 import { PhoneCallIcon } from '@/components/Icons/PhoneCallIcon.tsx';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
+import { RestaurantNavigation } from '@/components/RestaurantNavigation/RestaurantNavigation.tsx';
+import { ContentBlock } from '@/components/ContentBlock/ContentBlock.tsx';
+import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
+import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/HeaderContainer.tsx';
+import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
+import { HeaderSubText } from '@/components/ContentBlock/HeaderContainer/HeaderSubText/HeaderContainer.tsx';
+import { MenuPopup } from '@/components/FullScreenPopup/MenuPopup.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -28,6 +33,7 @@ export const Restaurant = () => {
     const [hideWorkHours, setHideWorkHours] = useState(true);
 
     const [headerScrolled, setHeaderScrolled] = useState(false);
+    const [menuPopupOpen, setMenuPopupOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,6 +47,17 @@ export const Restaurant = () => {
 
     return (
         <Page back={true}>
+            <MenuPopup
+                isOpen={menuPopupOpen}
+                setOpen={setMenuPopupOpen}
+                menuItems={[
+                    '/img/menu1.png',
+                    '/img/menu2.png',
+                    '/img/menu3.png',
+                    '/img/menu4.png',
+                    '/img/menu5.png',
+                ]}
+            ></MenuPopup>
             <div
                 className={classNames(
                     css.header,
@@ -63,47 +80,11 @@ export const Restaurant = () => {
                                 icon={
                                     <IconlyProfile color={'var(--dark-grey)'} />
                                 }
-                                action={() => alert(1)}
+                                action={() => navigate('/profile')}
                             />
                         </div>
                     </div>
-                    {headerScrolled ? (
-                        <div>
-                            <div className={css.navigationSlider}>
-                                <AnchorLink href="#booking" offset={64}>
-                                    <div
-                                        className={classNames(
-                                            css.navigationLink,
-                                            css.navigationLinkActive
-                                        )}
-                                    >
-                                        Бронь
-                                    </div>
-                                </AnchorLink>
-
-                                <AnchorLink href="#gallery" offset={128}>
-                                    <div className={css.navigationLink}>
-                                        Галерея
-                                    </div>
-                                </AnchorLink>
-                                <AnchorLink href="#menu" offset={128}>
-                                    <div className={css.navigationLink}>
-                                        Меню
-                                    </div>
-                                </AnchorLink>
-                                <AnchorLink href="#about" offset={128}>
-                                    <div className={css.navigationLink}>
-                                        О месте
-                                    </div>
-                                </AnchorLink>
-                                <AnchorLink href="#chef" offset={128}>
-                                    <div className={css.navigationLink}>
-                                        О шефе
-                                    </div>
-                                </AnchorLink>
-                            </div>
-                        </div>
-                    ) : null}
+                    {headerScrolled ? <RestaurantNavigation /> : null}
                 </div>
             </div>
             <div className={css.floatingFooter}>
@@ -132,45 +113,17 @@ export const Restaurant = () => {
             <div className={css.pageContainer}>
                 <RestaurantTopPreview />
 
-                <div className={css.contentContainer}>
+                <ContentContainer>
                     <div
                         id={'booking'}
                         className={css.navSliderAndBookingContainer}
                     >
-                        <div className={css.navigationSlider}>
-                            <AnchorLink href="#booking">
-                                <div
-                                    className={classNames(
-                                        css.navigationLink,
-                                        css.navigationLinkActive
-                                    )}
-                                >
-                                    Бронь
-                                </div>
-                            </AnchorLink>
-
-                            <AnchorLink href="#gallery">
-                                <div className={css.navigationLink}>
-                                    Галерея
-                                </div>
-                            </AnchorLink>
-                            <AnchorLink href="#things">
-                                <div className={css.navigationLink}>Меню</div>
-                            </AnchorLink>
-                            <AnchorLink href="#things">
-                                <div className={css.navigationLink}>
-                                    О месте
-                                </div>
-                            </AnchorLink>
-                            <AnchorLink href="#things">
-                                <div className={css.navigationLink}>О шефе</div>
-                            </AnchorLink>
-                        </div>
+                        <RestaurantNavigation />
                         <div className={css.bookingContaner}></div>
                     </div>
-                    <div className={css.contentBlock} id={'gallery'}>
-                        <div className={css.headerContainer}>
-                            <h3 className={css.contentHeader}>Галерея</h3>
+                    <ContentBlock id={'gallery'}>
+                        <HeaderContainer>
+                            <HeaderContent title={'Галерея'} />
                             <div className={css.photoSliderNavigationContainer}>
                                 <Swiper
                                     modules={[FreeMode]}
@@ -224,7 +177,7 @@ export const Restaurant = () => {
                                     </SwiperSlide>
                                 </Swiper>
                             </div>
-                        </div>
+                        </HeaderContainer>
                         <div className={css.photoSliderContainer}>
                             <Swiper
                                 slidesPerView="auto"
@@ -343,16 +296,14 @@ export const Restaurant = () => {
                                 ></SwiperSlide>
                             </Swiper>
                         </div>
-                    </div>
-                </div>
-                <div className={css.contentContainer} id={'menu'}>
-                    <div className={css.contentBlock}>
-                        <div className={css.headerContainer}>
-                            <h3 className={css.contentHeader}>Меню</h3>
-                            <span className={css.headerSubText}>
-                                Рекомендуем
-                            </span>
-                        </div>
+                    </ContentBlock>
+                </ContentContainer>
+                <ContentContainer id={'menu'}>
+                    <ContentBlock>
+                        <HeaderContainer>
+                            <HeaderContent title={'Меню'} />
+                            <HeaderSubText text={'Рекомендуем'} />
+                        </HeaderContainer>
                         <div className={css.photoSliderContainer}>
                             <Swiper
                                 slidesPerView="auto"
@@ -427,15 +378,15 @@ export const Restaurant = () => {
                         <UniversalButton
                             title={'Посмотреть меню'}
                             width={'full'}
-                            action={() => alert(1)}
+                            action={() => setMenuPopupOpen(true)}
                         />
-                    </div>
-                </div>
-                <div className={css.contentContainer} id={'about'}>
-                    <div className={css.contentBlock}>
-                        <div className={css.headerContainer}>
-                            <h3 className={css.contentHeader}>О месте</h3>
-                        </div>
+                    </ContentBlock>
+                </ContentContainer>
+                <ContentContainer>
+                    <ContentBlock>
+                        <HeaderContainer>
+                            <HeaderContent id={'about'} title={'О месте'} />
+                        </HeaderContainer>
                         <div className={css.aboutContainer}>
                             <span
                                 className={classNames(
@@ -450,12 +401,12 @@ export const Restaurant = () => {
                                 смокере в течение 14–16 часов до совершенного
                                 вкуса и текстуры. Технологию приготовления
                                 бренд-шеф Алексей Каневский привез из Остина,
-                                штат Техас.  Наша винная карта — отдельный
+                                штат Техас. Наша винная карта — отдельный
                                 предмет гордости. В ней — свыше 100 этикеток
                                 вина, которые любим и пьем сами: от культовой
                                 классики Европы и США до трендовых регионов и
                                 редких находок. Кроме того, внушительная
-                                коллекция бурбонов и линейка пива.  Каждый день
+                                коллекция бурбонов и линейка пива. Каждый день
                                 готовим завтраки из печи: по будням с 09:00 до
                                 12:00, по субботам — с 09:00 до 14:00. По
                                 воскресеньям проводим бранчи для всей семьи,
@@ -470,8 +421,8 @@ export const Restaurant = () => {
                                 </span>
                             </div>
                         </div>
-                    </div>
-                    <div className={css.contentBlock}>
+                    </ContentBlock>
+                    <ContentBlock>
                         <div className={css.infoBlock}>
                             <div className={css.top}>
                                 <span className={css.title}>До 00:00</span>
@@ -510,8 +461,8 @@ export const Restaurant = () => {
                                 </div>
                             </UnmountClosed>
                         </div>
-                    </div>
-                    <div className={css.contentBlock}>
+                    </ContentBlock>
+                    <ContentBlock>
                         <div className={css.infoBlock}>
                             <div className={css.top}>
                                 <span className={css.title}>
@@ -527,8 +478,8 @@ export const Restaurant = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={css.contentBlock}>
+                    </ContentBlock>
+                    <ContentBlock>
                         <div className={css.infoBlock}>
                             <div className={css.top}>
                                 <span className={css.title}>Детали</span>
@@ -579,13 +530,13 @@ export const Restaurant = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className={css.contentContainer} id={'chef'}>
-                    <div className={css.contentBlock}>
-                        <div className={css.headerContainer}>
-                            <h3 className={css.contentHeader}>О шефе</h3>
-                        </div>
+                    </ContentBlock>
+                </ContentContainer>
+                <ContentContainer>
+                    <ContentBlock>
+                        <HeaderContainer>
+                            <HeaderContent id={'chef'} title={'О шефе'} />
+                        </HeaderContainer>
                         <div className={css.aboutContainer}>
                             <span
                                 className={classNames(
@@ -635,8 +586,8 @@ export const Restaurant = () => {
                                 <span className={css.subTitle}>Бренд-шеф</span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </ContentBlock>
+                </ContentContainer>
             </div>
         </Page>
     );

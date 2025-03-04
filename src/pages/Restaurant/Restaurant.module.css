@@ -65,7 +65,14 @@
     background-color: var(--secondary-background);
     gap: 4px;
     margin-bottom: 160px;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
+
+.pageContainer::-webkit-scrollbar {
+    display: none;
+}
+
 
 .contentContainer {
     display: flex;
@@ -78,300 +85,11 @@
     gap: 26px;
 }
 
-.contentBlock {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    .headerContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 0px;
-    }
-
-    .contentHeader {
-        margin: 0;
-        padding: 0;
-        font-size: 30px;
-        font-family: "Heading Pro Ultracompressed", sans-serif;
-        font-weight: 800;
-        height: 36px;
-        line-height: 36px;
-        text-transform: uppercase;
-    }
-
-    .headerSubText {
-        margin-top: 4px;
-        font-family: 'Mont', sans-serif;
-        font-size: 12px;
-        color: var(--dark-grey);
-    }
-
-    .photoSliderNavigationContainer {
-        margin-top: 10px;
-        color: var(--secondary-background);
-        width: 100%;
-    }
-
-    .photoSliderNavigationItem {
-        padding: 11px 16px;
-        border-radius: 20px;
-        height: 18px;
-        width: max-content;
-    }
-
-    .photoSliderNavigationItem {
-        font-family: "Mont", sans-serif;
-        font-weight: 800;
-        font-size: 14px;
-        color: var(--grey);
-    }
-
-    .photoSliderNavigationActive {
-        color: var(--black);
-    }
-
-    .photoSliderNavigationActive {
-        background-color: var(--secondary-background);
-    }
-
-    .smallPhotoContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .photo {
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        border-radius: 16px;
-    }
-
-    .bgImage {
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
-
-    .photoBig {
-        width: 243px;
-        height: 226px;
-    }
-
-    .photoSmall {
-        width: 135px;
-        height: 111px;
-    }
-
-    .smallPhotoSlideContainer {
-        width: 135px;
-    }
-
-    .photoSliderContainer {
-        width: 100%;
-    }
-
-    .menuItem {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        .menuItemPhoto {
-            width: 162px;
-            aspect-ratio: 1/1;
-            border-radius: 12px;
-        }
-
-        .menuItemInfo {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-
-
-            .title {
-                font-family: 'Mont', sans-serif;
-                font-weight: 800;
-                font-size: 12px;
-
-            }
-
-            .subtitle {
-                font-family: 'Mont', sans-serif;
-                font-weight: 700;
-                font-size: 12px;
-                color: var(--dark-grey);
-            }
-        }
-
-    }
-
-    .aboutContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .chefInfoContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .chefInfo {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-
-        .title {
-            font-family: 'Mont', sans-serif;
-            font-weight: 800;
-            font-size: 14px;
-        }
-
-        .subTitle {
-            font-family: 'Mont', sans-serif;
-            font-weight: 700;
-            font-size: 12px;
-            color: var(--grey);
-        }
-    }
-
-    .chefImage {
-        width: 100%;
-        aspect-ratio: 115/103;
-        border-radius: 12px;
-    }
-
-    .aboutText {
-        font-family: 'Mont', sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    .trimLines {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-    }
-
-    .trimLinesButton {
-        .text {
-            font-size: 14px;
-            font-family: 'Mont', sans-serif;
-            font-weight: 800;
-            color: var(--red);
-        }
-    }
-
-    .infoBlock {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .socialRow {
-            display: flex;
-            gap: 8px;
-
-            .socialLink {
-                font-family: 'Mont', sans-serif;
-                font-weight: 700;
-                font-size: 14px;
-            }
-        }
-
-        .textRow {
-            font-family: 'Mont', sans-serif;
-            font-weight: 700;
-            font-size: 12px;
-
-            .title {
-
-                color: var(--grey);
-                padding-right: 4px;
-            }
-
-            .value {
-                color: var(--black);
-            }
-
-        }
-
-        .collapse {
-            transition: height 500ms;
-        }
-
-        .top {
-            display: flex;
-            justify-content: space-between;
-
-            .title {
-                font-family: 'Mont', sans-serif;
-                font-weight: 800;
-                font-size: 16px;
-            }
-
-            .expandButton {
-                font-family: 'Mont', sans-serif;
-                font-weight: 700;
-                font-size: 14px;
-                color: var(--grey);
-            }
-
-            .right {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .closed {
-                transform: rotate(180deg);
-            }
-        }
-
-        .workHours {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            .text {
-                font-family: 'Mont', sans-serif;
-                font-weight: 700;
-                font-size: 12px;
-                color: var(--grey);
-            }
-        }
-    }
-
-
-}
-
 
 .navSliderAndBookingContainer {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.navigationSlider {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    height: 26px;
-}
-
-.navigationLink {
-    color: var(--grey);
-    font-size: 14px;
-    font-family: 'Mont', sans-serif;
-    font-weight: 800;
-}
-
-.navigationLinkActive {
-    color: var(--black);
-    border-bottom: 1px var(--black) solid;
 }
 
 .bookingContaner {
@@ -395,5 +113,233 @@
         font-weight: 700;
         font-size: 16px;
         color: var(--primary-background);
+    }
+}
+
+/*===================================================*/
+
+.photoSliderNavigationContainer {
+    margin-top: 10px;
+    color: var(--secondary-background);
+    width: 100%;
+}
+
+.photoSliderNavigationItem {
+    padding: 11px 16px;
+    border-radius: 20px;
+    height: 18px;
+    width: max-content;
+    font-family: "Mont", sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--grey);
+}
+
+.photoSliderNavigationActive {
+    color: var(--black);
+    background-color: var(--secondary-background);
+}
+
+.photoSliderContainer {
+    width: 100%;
+}
+
+.photoBig {
+    width: 243px;
+    height: 226px;
+}
+
+.photoSmall {
+    width: 135px;
+    height: 111px;
+}
+
+.smallPhotoSlideContainer {
+    width: 135px;
+}
+
+.photo {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 16px;
+}
+
+.bgImage {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.menuItem {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .menuItemPhoto {
+        width: 162px;
+        aspect-ratio: 1/1;
+        border-radius: 12px;
+    }
+
+    .menuItemInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+
+        .title {
+            font-family: 'Mont', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+
+        }
+
+        .subtitle {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--dark-grey);
+        }
+    }
+
+}
+
+.aboutContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chefInfoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chefInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .title {
+        font-family: 'Mont', sans-serif;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    .subTitle {
+        font-family: 'Mont', sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+        color: var(--grey);
+    }
+}
+
+.chefImage {
+    width: 100%;
+    aspect-ratio: 115/103;
+    border-radius: 12px;
+}
+
+.aboutText {
+    font-family: 'Mont', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.trimLines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.trimLinesButton {
+    .text {
+        font-size: 14px;
+        font-family: 'Mont', sans-serif;
+        font-weight: 800;
+        color: var(--red);
+    }
+}
+
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .socialRow {
+        display: flex;
+        gap: 8px;
+
+        .socialLink {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+        }
+    }
+
+    .textRow {
+        font-family: 'Mont', sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+
+        .title {
+
+            color: var(--grey);
+            padding-right: 4px;
+        }
+
+        .value {
+            color: var(--black);
+        }
+
+    }
+
+    .collapse {
+        transition: height 500ms;
+    }
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+
+        .title {
+            font-family: 'Mont', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .expandButton {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--grey);
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .closed {
+            transform: rotate(180deg);
+        }
+    }
+
+    .workHours {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .text {
+            font-family: 'Mont', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--grey);
+        }
     }
 }

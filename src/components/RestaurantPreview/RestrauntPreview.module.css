@@ -55,13 +55,15 @@
 
 .chefTitle {
     font-size: 12px;
-    font-family: 'Mont';
+    font-family: 'Mont', sans-serif;
+    font-weight: 700;
     color: var(--light-grey);
 }
 
 .chefName {
     font-size: 14px;
-    font-family: 'Mont';
+    font-family: 'Mont', sans-serif;
+    font-weight: 800;
     color: var(--primary-background);
 }
 
@@ -85,7 +87,7 @@
 }
 
 .resTitle {
-    font-family: 'Heading Pro Ultracompressed';
+    font-family: 'Heading Pro Ultracompressed', sans-serif;
     font-weight: 800;
     font-size: 30px;
     text-transform: uppercase;
@@ -94,7 +96,8 @@
 }
 
 .resSlogan {
-    font-family: 'Mont';
+    font-family: 'Mont', sans-serif;
+    font-weight: 700;
     font-size: 14px;
     color: var(--grey);
 }

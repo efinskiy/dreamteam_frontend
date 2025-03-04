@@ -28,10 +28,7 @@ export const RestaurantPreview = () => {
                             className={css.swiperSlide}
                             style={{ width: '130px' }}
                         >
-                            <RestaurantBadge
-                                logo={'/img/placeholder_3.png'}
-                                slogan={'Бар · гриль · коптильня'}
-                            />
+                            <RestaurantBadge logo={'/img/placeholder_3.png'} />
                         </SwiperSlide>
                         <SwiperSlide
                             className={css.swiperSlide}
