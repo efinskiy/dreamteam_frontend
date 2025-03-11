@@ -7,6 +7,7 @@ import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
+import styled from 'styled-components';
 
 interface IFullScreenPopup {
     isOpen: boolean;
@@ -14,13 +15,24 @@ interface IFullScreenPopup {
     menuItems: string[];
 }
 
+const StyledPopup = styled(Popup)`
+    &-overlay {
+    }
+
+    &-content {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+    }
+`;
+
 export const MenuPopup: FC<IFullScreenPopup> = (p) => {
     const onClose = () => p.setOpen(false);
     const [menuItems] = useState<string[]>(p.menuItems);
     const [currentImage, setCurrentImage] = useState(menuItems[0]);
 
     return (
-        <Popup open={p.isOpen} onClose={onClose} position={'top center'}>
+        <StyledPopup open={p.isOpen} onClose={onClose} position={'top center'}>
             <div className={css.popup}>
                 <div className={css.content}>
                     <div className={css.header}>
@@ -78,6 +90,6 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
                     </div>
                 </div>
             </div>
-        </Popup>
+        </StyledPopup>
     );
 };

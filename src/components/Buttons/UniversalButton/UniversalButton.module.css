@@ -8,6 +8,18 @@
     cursor: pointer;
 }
 
+.redTheme {
+    background-color: #F52A2D;
+
+    span {
+        color: var(--primary-background);
+    }
+}
+
+.fullWidth {
+    width: 100%;
+}
+
 .text {
     font-family: 'Mont', sans-serif;
     font-size: 16px;

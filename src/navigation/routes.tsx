@@ -4,6 +4,7 @@ import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { Restaurant } from '@/pages/Restaurant/Restaurant.tsx';
 import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage.tsx';
+import { BookingPage } from '@/pages/BookingPage/BookingPage.tsx';
 
 interface Route {
     path: string;
@@ -33,6 +34,10 @@ export const routes: Route[] = [
     {
         path: '/restaurant/:id',
         Component: Restaurant,
+    },
+    {
+        path: '/booking/:id',
+        Component: BookingPage,
     },
     {
         path: '/unsupported',

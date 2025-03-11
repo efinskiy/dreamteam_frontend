@@ -23,19 +23,35 @@ import { ContentContainer } from '@/components/ContentContainer/ContentContainer
 import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/HeaderContainer.tsx';
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { HeaderSubText } from '@/components/ContentBlock/HeaderContainer/HeaderSubText/HeaderContainer.tsx';
-import { MenuPopup } from '@/components/FullScreenPopup/MenuPopup.tsx';
+import { MenuPopup } from '@/components/MenuPopup/MenuPopup.tsx';
 import { mockGallery } from '@/mockData.ts';
 import { mockMenu } from '@/mockData.ts';
 import { GalleryCollection } from '@/pages/Restaurant/Restaurant.types.ts';
+import { CallRestaurantPopup } from '@/components/CallRestaurantPopup/CallRestaurantPopup.tsx';
+import { useScript } from 'usehooks-ts';
+import {
+    reactify,
+    YMap,
+    YMapDefaultFeaturesLayer,
+    YMapDefaultSchemeLayer,
+    YMapMarker,
+} from '@/lib/ymaps.ts';
+import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
+    useScript('https://yastatic.net/taxi-widget/ya-taxi-widget-v2.js', {
+        removeOnUnmount: true,
+    });
 
     const [hideAbout, setHideAbout] = useState(true);
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
     const [headerScrolled, setHeaderScrolled] = useState(false);
+
     const [menuPopupOpen, setMenuPopupOpen] = useState(false);
+    const [callPopup, setCallPopup] = useState(false);
+
     const [gallery] = useState<GalleryCollection[]>(mockGallery);
     const [currentGalleryCategory, setCurrentGalleryCategory] =
         useState('Все фото');
@@ -101,7 +117,12 @@ export const Restaurant = () => {
                     '/img/menu4.png',
                     '/img/menu5.png',
                 ]}
-            ></MenuPopup>
+            />
+            <CallRestaurantPopup
+                isOpen={callPopup}
+                setOpen={setCallPopup}
+                phone={'+79094167269'}
+            />
             <div
                 className={classNames(
                     css.header,
@@ -133,7 +154,10 @@ export const Restaurant = () => {
             </div>
             <div className={css.floatingFooter}>
                 <div className={css.floatingFooterWrapper}>
-                    <div className={css.bookingButton}>
+                    <div
+                        className={css.bookingButton}
+                        onClick={() => navigate(`/booking/1`)}
+                    >
                         <span className={css.text}>Забронировать</span>
                     </div>
                     <RoundedButton
@@ -151,12 +175,31 @@ export const Restaurant = () => {
                                 color={'var(--dark-grey)'}
                             />
                         }
+                        action={() => setCallPopup(true)}
                     />
                 </div>
             </div>
             <div className={css.pageContainer}>
                 <RestaurantTopPreview />
-
+                <div className={css.yaTaxi}>
+                    <div
+                        key={'taxi1'}
+                        className="ya-taxi-widget"
+                        data-ref="https%3A%2F%2Fdemo.efinskiy.ru%2F"
+                        data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?start-lat={start-lat}&amp;start-lon={start-lon}&amp;end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
+                        data-tariff="econom"
+                        data-app="3"
+                        data-lang="ru"
+                        data-redirect="1178268795219780156"
+                        data-description="улица Льва Толстого, 19"
+                        data-size="s"
+                        data-theme="normal"
+                        data-title="Вызвать такси"
+                        data-use-location="true"
+                        data-point-a=""
+                        data-point-b="39.751934,47.227023"
+                    ></div>
+                </div>
                 <ContentContainer>
                     <div
                         id={'booking'}
@@ -228,7 +271,7 @@ export const Restaurant = () => {
                             >
                                 {currentGalleryPhotos.map((photo, index) => (
                                     <SwiperSlide
-                                        key={index}
+                                        key={`${index}${photo}`}
                                         className={
                                             Array.isArray(photo)
                                                 ? css.smallPhotoSlideContainer
@@ -243,7 +286,7 @@ export const Restaurant = () => {
                                             >
                                                 {photo.map((smallPhoto, i) => (
                                                     <div
-                                                        key={i}
+                                                        key={`${i}${smallPhoto}`}
                                                         className={classNames(
                                                             css.photo,
                                                             css.photoSmall
@@ -286,8 +329,11 @@ export const Restaurant = () => {
                                 modules={[FreeMode]}
                                 freeMode={true}
                             >
-                                {mockMenu.map((menu) => (
-                                    <SwiperSlide style={{ width: '162px' }}>
+                                {mockMenu.map((menu, index) => (
+                                    <SwiperSlide
+                                        style={{ width: '162px' }}
+                                        key={`${index}${menu.photo}`}
+                                    >
                                         <div className={css.menuItem}>
                                             <div
                                                 className={classNames(
@@ -524,6 +570,79 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
+                <ContentContainer>
+                    <ContentBlock>
+                        <HeaderContainer>
+                            <HeaderContent title={'Контакты'} />
+                        </HeaderContainer>
+                        <div className={css.mapContainer}>
+                            <div className={css.map}>
+                                <YMap
+                                    location={reactify.useDefault({
+                                        center: [39.752053, 47.227037 - 0.0005],
+                                        // 47.226539, 39.752190
+                                        zoom: 17,
+                                    })}
+                                >
+                                    <YMapDefaultSchemeLayer />
+                                    <YMapDefaultFeaturesLayer />
+
+                                    <YMapMarker
+                                        coordinates={reactify.useDefault([
+                                            39.752053, 47.227037,
+                                        ])}
+                                        draggable={false}
+                                        onClick={(e) => console.log(e)}
+                                    >
+                                        <LogoMapIcon size={26}></LogoMapIcon>
+                                    </YMapMarker>
+                                </YMap>
+                                <section>
+                                    <div className={css.relativeRestInfo}>
+                                        <div className={css.mapInfo}>
+                                            <div className={css.mapInfoMetro}>
+                                                <div
+                                                    className={
+                                                        css.mapInfoMetroCircle
+                                                    }
+                                                ></div>
+                                                <span
+                                                    className={
+                                                        css.mapInfoMetroText
+                                                    }
+                                                >
+                                                    м. Достоевская
+                                                </span>
+                                            </div>
+                                            <div className={css.mapInfoAddress}>
+                                                Санкт-Петербург, Рубинштейна, 11
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </ContentBlock>
+                </ContentContainer>
+                <div className={css.yaTaxi}>
+                    <div
+                        key={'taxi2'}
+                        className="ya-taxi-widget"
+                        data-ref="https%3A%2F%2Fdemo.efinskiy.ru%2F"
+                        data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?start-lat={start-lat}&amp;start-lon={start-lon}&amp;end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
+                        data-tariff="econom"
+                        data-app="3"
+                        data-lang="ru"
+                        data-redirect="1178268795219780156"
+                        data-description="улица Льва Толстого, 19"
+                        data-size="s"
+                        data-theme="normal"
+                        data-title="Вызвать такси"
+                        data-use-location="true"
+                        data-point-a=""
+                        data-point-b="39.751934,47.227023"
+                    ></div>
+                </div>
             </div>
         </Page>
     );

@@ -36,6 +36,15 @@ body::-webkit-scrollbar {
     transition: height 500ms;
 }
 
+.ya-taxi-widget_size_s {
+    width: 100%;
+    max-width: none !important;
+}
+
+.ya-taxi-widget__info-icon {
+    display: none;
+}
+
 @font-face {
     font-family: 'Mont';
     src: url('/fonts/mont/Mont-Black.eot');

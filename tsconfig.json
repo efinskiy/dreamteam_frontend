@@ -3,6 +3,10 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@yandex/ymaps3-types"
+    ],
     "lib": [
       "ES2020",
       "DOM",
@@ -15,6 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
+      "ymaps3": [
+        "./node_modules/@yandex/ymaps3-types"
+      ],
       "@/*": [
         "./src/*"
       ]

@@ -7,5 +7,9 @@ interface IProps {
 }
 
 export const HeaderContainer: FC<IProps> = (p) => {
-    return <div className={css.headerContainer}>{p.children}</div>;
+    return (
+        <div className={css.headerContainer} id={p.id}>
+            {p.children}
+        </div>
+    );
 };

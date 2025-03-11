@@ -29,9 +29,12 @@
     "react-collapse": "^5.1.1",
     "react-css-collapse": "^4.1.0",
     "react-dom": "^18.2.0",
+    "react-mobile-picker": "^1.0.1",
     "react-router-dom": "^6.23.0",
     "reactjs-popup": "^2.0.6",
+    "styled-components": "^6.1.15",
     "swiper": "^11.2.4",
+    "usehooks-ts": "^3.1.1",
     "wrangler": "^3.109.3"
   },
   "devDependencies": {
@@ -45,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
+    "@yandex/ymaps3-types": "^1.0.16029232",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",

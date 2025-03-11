@@ -9,18 +9,30 @@ interface UniversalButtonProps {
     color?: string;
     link?: string;
     action?: () => void;
+    theme?: string;
 }
 
 export const UniversalButton: FC<UniversalButtonProps> = (p) => {
     return (
         <>
             {p.link ? (
-                <Link to={p.link} className={css.universalButton}>
+                <Link
+                    to={p.link}
+                    className={classNames(
+                        css.universalButton,
+                        p.theme == 'red' ? css.redTheme : null,
+                        p.width == 'full' ? css.fullWidth : null
+                    )}
+                >
                     <span className={css.text}>{p.title}</span>
                 </Link>
             ) : (
                 <div
-                    className={classNames(css.universalButton)}
+                    className={classNames(
+                        css.universalButton,
+                        p.theme == 'red' ? css.redTheme : null,
+                        p.width == 'full' ? css.fullWidth : null
+                    )}
                     onClick={() => (p.action !== undefined ? p.action() : null)}
                 >
                     <span className={css.text}>{p.title}</span>

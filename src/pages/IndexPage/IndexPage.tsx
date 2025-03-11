@@ -3,10 +3,10 @@ import css from './IndexPage.module.css';
 
 import { Page } from '@/components/Page.tsx';
 import { Header } from '@/components/Header/Header.tsx';
-import { NewsStories } from '@/components/NewsStories/NewsStories.tsx';
 import { OptionsNavigation } from '@/components/OptionsNavigation/OptionsNavigation.tsx';
 import { RestaurantPreview } from '@/components/RestaurantPreview/RestrauntPreview.tsx';
 import { BookingReminder } from '@/components/BookingReminder/BookingReminder.tsx';
+import { mockBookingDate } from '@/mockData.ts';
 
 export const IndexPage: FC = () => {
     return (
@@ -14,11 +14,12 @@ export const IndexPage: FC = () => {
             <div className={css.pageContainer}>
                 <Header />
                 <BookingReminder
-                    date={'14 февраля'}
+                    title={'Smoke BBQ'}
+                    address={''}
+                    date={mockBookingDate}
                     persons={2}
-                    time={'17:00'}
                 />
-                <NewsStories />
+                {/*<NewsStories />*/}
                 <OptionsNavigation />
                 <div className={css.restaurants}>
                     <RestaurantPreview />

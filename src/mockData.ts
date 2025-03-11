@@ -68,3 +68,5 @@ export const mockMenu: IMenuItem[] = [
         price: 1300,
     },
 ];
+
+export const mockBookingDate = new Date();
