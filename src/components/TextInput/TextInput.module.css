@@ -1,0 +1,15 @@
+.text_input {
+    padding: 0 0 8px 0;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid var(--medium-grey, #B9B9B9);
+    outline: none;
+
+    font-family: 'Mont', 'sans-serif';
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.text_input::placeholder {
+    color: var(--grey);
+}

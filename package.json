@@ -22,6 +22,7 @@
     "@telegram-apps/telegram-ui": "^2.1.8",
     "@tonconnect/ui-react": "^2.0.5",
     "eruda": "^3.0.1",
+    "jotai": "^2.12.2",
     "prettier": "^3.5.2",
     "react": "^18.2.0",
     "react-anchor-link-smooth-scroll": "^1.0.12",
@@ -35,7 +36,8 @@
     "styled-components": "^6.1.15",
     "swiper": "^11.2.4",
     "usehooks-ts": "^3.1.1",
-    "wrangler": "^3.109.3"
+    "wrangler": "^3.109.3",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
