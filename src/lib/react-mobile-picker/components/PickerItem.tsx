@@ -6,7 +6,7 @@ import {
     useMemo,
     useRef,
 } from 'react';
-import { usePickerActions, usePickerData } from './Picker';
+import { PickerValueData, usePickerActions, usePickerData } from './Picker';
 import { useColumnData } from './PickerColumn';
 
 interface PickerItemRenderProps {
@@ -16,7 +16,7 @@ interface PickerItemRenderProps {
 export interface PickerItemProps
     extends Omit<HTMLProps<HTMLDivElement>, 'value' | 'children'> {
     children: ReactNode | ((renderProps: PickerItemRenderProps) => ReactNode);
-    value: string | number;
+    value: PickerValueData;
 }
 
 // eslint-disable-next-line
@@ -30,10 +30,15 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
     const pickerActions = usePickerActions('Picker.Item');
     const { key } = useColumnData('Picker.Item');
 
-    useEffect(
-        () => pickerActions.registerOption(key, { value, element: optionRef }),
-        [key, pickerActions, value]
-    );
+    useEffect(() => {
+        console.log('pickerActions.registerOption');
+        const isSimple = typeof value === 'string' || typeof value === 'number';
+
+        return pickerActions.registerOption(key, {
+            value: isSimple ? value : value.value,
+            element: optionRef,
+        });
+    }, [key, pickerActions, value]);
 
     const itemStyle = useMemo(
         () => ({
@@ -49,6 +54,8 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
         pickerActions.change(key, value);
     }, [pickerActions, key, value]);
 
+    const isSimple = typeof value === 'string' || typeof value === 'number';
+
     return (
         <div
             style={{
@@ -60,7 +67,12 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
             {...restProps}
         >
             {isFunction(children)
-                ? children({ selected: pickerValue[key] === value })
+                ? children({
+                      selected: isSimple
+                          ? pickerValue[key] === value
+                          : pickerValue[key] === value.title ||
+                            pickerValue[key] === value.value,
+                  })
                 : children}
         </div>
     );

@@ -13,8 +13,15 @@ interface Props {
     setGuestCount: (value: PickerValue) => void;
 }
 
+// const values = {
+//     value: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+// };
+
 const values = {
-    value: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    value: [
+        { title: 'string', value: 'string' },
+        { title: 'string 1', value: 'string 2' },
+    ],
 };
 const StyledPopup = styled(Popup)`
     &-overlay {
@@ -34,14 +41,14 @@ const StyledPopup = styled(Popup)`
 export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
     const onClose = () => p.setOpen(false);
 
-    useEffect(() => {
-        console.log(p.guestCount.value);
-        if (p.isOpen && p.guestCount.value == 'Гости') {
-            p.setGuestCount({
-                value: '1',
-            });
-        }
-    }, [p.isOpen]);
+    // useEffect(() => {
+    //     console.log(p.guestCount.value);
+    //     if (p.isOpen && p.guestCount.value == 'Гости') {
+    //         p.setGuestCount({
+    //             value: '1',
+    //         });
+    //     }
+    // }, [p.isOpen]);
 
     return (
         <StyledPopup open={p.isOpen} onClose={onClose} modal>
@@ -60,7 +67,7 @@ export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
                     >
                         <Picker.Column name={'value'}>
                             {values.value.map((option) => (
-                                <Picker.Item key={option} value={option}>
+                                <Picker.Item key={option.value} value={option}>
                                     {({ selected }) => (
                                         <div className={css.selectorItem}>
                                             <span
@@ -71,7 +78,7 @@ export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
                                                         : null
                                                 )}
                                             >
-                                                {option}
+                                                {option.title} {option.value}
                                             </span>
                                         </div>
                                     )}

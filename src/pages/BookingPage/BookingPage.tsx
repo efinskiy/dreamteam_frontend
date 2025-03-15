@@ -47,7 +47,8 @@ export const BookingPage: FC = () => {
     const navigate = useNavigate();
 
     const [guestCount, setGuestCount] = useState<PickerValue>({
-        value: 'Гости',
+        title: 'string',
+        value: 'string',
     });
     const [guestCountPopup, setGuestCountPopup] = useState(false);
 
@@ -58,6 +59,10 @@ export const BookingPage: FC = () => {
         id: 'telegram',
         text: 'В Telegram',
     });
+
+    useEffect(() => {
+        console.log(guestCount, 'guestCount');
+    }, [guestCount]);
     //
     // const [bookingDate, setBookingDate] = useState<Date | null>(null);
     // const [bookingDatePopup, setBookingDatePopup] = useState(false);
@@ -119,6 +124,7 @@ export const BookingPage: FC = () => {
         <Page back={true}>
             <BookingGuestCountSelectorPopup
                 guestCount={guestCount}
+                // @ts-ignore
                 setGuestCount={setGuestCount}
                 isOpen={guestCountPopup}
                 setOpen={setGuestCountPopup}

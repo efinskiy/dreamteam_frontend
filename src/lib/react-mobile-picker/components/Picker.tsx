@@ -13,13 +13,22 @@ const DEFAULT_HEIGHT = 216;
 const DEFAULT_ITEM_HEIGHT = 36;
 const DEFAULT_WHEEL_MODE = 'off';
 
+export type PickerValueData =
+    | string
+    | number
+    | { title: string; value: string };
+
 interface Option {
-    value: string | number;
+    value: PickerValueData;
     element: MutableRefObject<HTMLElement | null>;
 }
 
+// export interface PickerValue {
+//     [key: string]: string | number;
+// }
+
 export interface PickerValue {
-    [key: string]: string | number;
+    [key: string]: PickerValueData;
 }
 
 export interface PickerRootProps<TType extends PickerValue>
@@ -56,7 +65,7 @@ export function usePickerData(componentName: string) {
 
 const PickerActionsContext = createContext<{
     registerOption(key: string, option: Option): () => void;
-    change(key: string, value: string | number): boolean;
+    change(key: string, value: PickerValueData): boolean;
 } | null>(null);
 PickerActionsContext.displayName = 'PickerActionsContext';
 
