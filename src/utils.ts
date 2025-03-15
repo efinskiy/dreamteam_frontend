@@ -3,8 +3,20 @@ export const callPhone = (tel: string) => {
     window.open(`tel:${tel}`, '_blank');
 };
 
-export const getGuestsString = (num: number): string => {
-    const n = num % 100;
+export const getGuestsString = (num: string | number): string => {
+    let parsedNum;
+
+    if (typeof num === 'number') {
+        parsedNum = num;
+    } else {
+        parsedNum = Number.parseInt(num);
+    }
+
+    if (isNaN(parsedNum)) {
+        return 'Гости';
+    }
+
+    const n = parsedNum % 100;
     if (n >= 11 && n <= 14) {
         return `${num} гостей`;
     }

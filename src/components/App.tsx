@@ -5,7 +5,8 @@ import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { routes } from '@/navigation/routes.tsx';
 import { ScrollToTop } from '@/navigation/utills.tsx';
 import { useEffect } from 'react';
-import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
+
+// import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
 
 export function App() {
     const lp = useLaunchParams();
@@ -18,7 +19,7 @@ export function App() {
             appearance={'light'}
             platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
         >
-            <RequestPermissions />
+            {/*<RequestPermissions />*/}
             <BrowserRouter>
                 <ScrollToTop />
                 <Routes>

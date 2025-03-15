@@ -3,7 +3,7 @@ import css from './TextInput.module.css';
 
 interface ITextInput {
     placeholder?: string;
-    value: string;
+    value: string | undefined;
     onChange: (value: string) => void;
 }
 

@@ -2,7 +2,7 @@ import Popup from 'reactjs-popup';
 import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
-import css from './BookingGuestCountSelector.module.css';
+import css from './BookingDateSelector.module.css';
 import { classNames } from '@telegram-apps/sdk-react';
 import Picker, { PickerValue } from '@/lib/react-mobile-picker';
 
@@ -23,7 +23,9 @@ const StyledPopup = styled(Popup)`
         flex-direction: column-reverse;
         overscroll-behavior: contain;
     }
+
     // use your custom style for ".popup-content"
+
     &-content {
         width: 100vw;
         margin: 0 !important;
@@ -31,7 +33,7 @@ const StyledPopup = styled(Popup)`
     }
 `;
 
-export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
+export const BookingDateSelectorPopup: FC<Props> = (p) => {
     const onClose = () => p.setOpen(false);
 
     useEffect(() => {
@@ -60,7 +62,11 @@ export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
                     >
                         <Picker.Column name={'value'}>
                             {values.value.map((option) => (
-                                <Picker.Item key={option} value={option}>
+                                <Picker.Item
+                                    key={option}
+                                    value={option}
+                                    title={'dasdas'}
+                                >
                                     {({ selected }) => (
                                         <div className={css.selectorItem}>
                                             <span
