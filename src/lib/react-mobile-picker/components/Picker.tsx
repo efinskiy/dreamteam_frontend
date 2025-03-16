@@ -18,14 +18,12 @@ export type PickerValueData =
     | number
     | { title: string; value: string };
 
+export type PickerValueObj = { title: string; value: string };
+
 interface Option {
     value: PickerValueData;
     element: MutableRefObject<HTMLElement | null>;
 }
-
-// export interface PickerValue {
-//     [key: string]: string | number;
-// }
 
 export interface PickerValue {
     [key: string]: PickerValueData;

@@ -11,7 +11,7 @@ import { classNames } from '@telegram-apps/sdk-react';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
-import { getGuestsString } from '@/utils.ts';
+import { formatDateShort, getGuestsString } from '@/utils.ts';
 import { BookingGuestCountSelectorPopup } from '@/components/BookingGuestCountSelectorPopup/BookingGuestCountSelectorPopup.tsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
@@ -19,14 +19,19 @@ import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/Heade
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { TextInput } from '@/components/TextInput/TextInput.tsx';
 import { CommentaryOptionButton } from '@/components/CommentaryOptionButton/CommentaryOptionButton.tsx';
-import { BOOKINGCOMMENTMOCK, MockTimeSlots } from '@/mockData.ts';
+import {
+    BOOKING_DATE_VALUES,
+    BOOKINGCOMMENTMOCK,
+    MockTimeSlots,
+} from '@/mockData.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { ConfirmationSelect } from '@/components/ConfirmationSelect/ConfirmationSelect.tsx';
 import {
     IBookingForm,
     ITimeSlot,
 } from '@/pages/BookingPage/BookingPage.types.ts';
-import { PickerValue } from 'react-mobile-picker';
+import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
+import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
 
 const confirmationList: IConfirmationType[] = [
     {
@@ -46,11 +51,16 @@ const confirmationList: IConfirmationType[] = [
 export const BookingPage: FC = () => {
     const navigate = useNavigate();
 
-    const [guestCount, setGuestCount] = useState<PickerValue>({
-        title: 'string',
-        value: 'string',
+    const [guestCount, setGuestCount] = useState<PickerValueObj>({
+        title: 'unset',
+        value: 'unset',
+    });
+    const [bookingDate, setBookingDate] = useState<PickerValueObj>({
+        title: 'unset',
+        value: 'unset',
     });
     const [guestCountPopup, setGuestCountPopup] = useState(false);
+    const [bookingDatePopup, setBookingDatePopup] = useState(false);
 
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
@@ -64,8 +74,6 @@ export const BookingPage: FC = () => {
         console.log(guestCount, 'guestCount');
     }, [guestCount]);
     //
-    // const [bookingDate, setBookingDate] = useState<Date | null>(null);
-    // const [bookingDatePopup, setBookingDatePopup] = useState(false);
 
     const [availableTimeslots, setAvailableTimeslots] = useState<ITimeSlot[]>(
         []
@@ -124,10 +132,16 @@ export const BookingPage: FC = () => {
         <Page back={true}>
             <BookingGuestCountSelectorPopup
                 guestCount={guestCount}
-                // @ts-ignore
                 setGuestCount={setGuestCount}
                 isOpen={guestCountPopup}
                 setOpen={setGuestCountPopup}
+            />
+            <BookingDateSelectorPopup
+                isOpen={bookingDatePopup}
+                setOpen={setBookingDatePopup}
+                bookingDate={bookingDate}
+                setBookingDate={setBookingDate}
+                values={BOOKING_DATE_VALUES}
             />
             <div className={css.page}>
                 <PageContainer>
@@ -156,6 +170,9 @@ export const BookingPage: FC = () => {
                                         className={classNames(
                                             css.header__select
                                         )}
+                                        onClick={() =>
+                                            setBookingDatePopup(true)
+                                        }
                                     >
                                         <div
                                             className={css.header__select__left}
@@ -168,7 +185,11 @@ export const BookingPage: FC = () => {
                                                     css.header__select__left_text
                                                 }
                                             >
-                                                24 мар
+                                                {bookingDate.value !== 'unset'
+                                                    ? formatDateShort(
+                                                          bookingDate.value
+                                                      )
+                                                    : 'Дата'}
                                             </span>
                                         </div>
                                         <div

@@ -43,6 +43,8 @@
 .headerNav {
     display: flex;
     gap: 22px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .headerInfo {
@@ -50,7 +52,7 @@
     flex-direction: column;
     gap: 4px;
     align-items: center;
-    width: 100%;
+    /*width: 100%;*/
 
     h3, p {
         padding: 0;

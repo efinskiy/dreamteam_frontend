@@ -1,16 +1,20 @@
 import Popup from 'reactjs-popup';
-import { FC, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
 import css from './BookingGuestCountSelector.module.css';
 import { classNames } from '@telegram-apps/sdk-react';
-import Picker, { PickerValue } from '@/lib/react-mobile-picker';
+import Picker from '@/lib/react-mobile-picker';
+import {
+    PickerValueData,
+    PickerValueObj,
+} from '@/lib/react-mobile-picker/components/Picker.tsx';
 
 interface Props {
     isOpen: boolean;
     setOpen: (x: boolean) => void;
-    guestCount: PickerValue;
-    setGuestCount: (value: PickerValue) => void;
+    guestCount: PickerValueData;
+    setGuestCount: Dispatch<SetStateAction<PickerValueObj>>;
 }
 
 // const values = {
@@ -19,8 +23,15 @@ interface Props {
 
 const values = {
     value: [
-        { title: 'string', value: 'string' },
-        { title: 'string 1', value: 'string 2' },
+        { title: '1', value: '1' },
+        { title: '2', value: '2' },
+        { title: '3', value: '3' },
+        { title: '4', value: '4' },
+        { title: '5', value: '5' },
+        { title: '6', value: '6' },
+        { title: '7', value: '7' },
+        { title: '8', value: '8' },
+        { title: '9', value: '9' },
     ],
 };
 const StyledPopup = styled(Popup)`
@@ -39,16 +50,19 @@ const StyledPopup = styled(Popup)`
 `;
 
 export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
+    if (typeof p.guestCount !== 'object') {
+        return;
+    }
+
     const onClose = () => p.setOpen(false);
 
-    // useEffect(() => {
-    //     console.log(p.guestCount.value);
-    //     if (p.isOpen && p.guestCount.value == 'Гости') {
-    //         p.setGuestCount({
-    //             value: '1',
-    //         });
-    //     }
-    // }, [p.isOpen]);
+    useEffect(() => {
+        if (typeof p.guestCount === 'object') {
+            if (p.isOpen && p.guestCount.value == 'unset') {
+                p.setGuestCount({ title: '1', value: '1' });
+            }
+        }
+    }, [p.isOpen]);
 
     return (
         <StyledPopup open={p.isOpen} onClose={onClose} modal>
@@ -59,6 +73,7 @@ export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
                         Для бронирования на 10+ гостей свяжитесь с рестораном по
                         телефону <span>+7 (926) 041 53 72</span>
                     </h5>
+
                     <Picker
                         value={p.guestCount}
                         onChange={p.setGuestCount}
@@ -78,7 +93,7 @@ export const BookingGuestCountSelectorPopup: FC<Props> = (p) => {
                                                         : null
                                                 )}
                                             >
-                                                {option.title} {option.value}
+                                                {option.title}
                                             </span>
                                         </div>
                                     )}

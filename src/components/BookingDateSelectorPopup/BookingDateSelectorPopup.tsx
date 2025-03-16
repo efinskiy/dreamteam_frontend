@@ -1,21 +1,21 @@
 import Popup from 'reactjs-popup';
-import { FC, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
 import css from './BookingDateSelector.module.css';
 import { classNames } from '@telegram-apps/sdk-react';
 import Picker, { PickerValue } from '@/lib/react-mobile-picker';
+import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
+import { formatDate } from '@/utils.ts';
 
 interface Props {
     isOpen: boolean;
     setOpen: (x: boolean) => void;
-    guestCount: PickerValue;
-    setGuestCount: (value: PickerValue) => void;
+    bookingDate: PickerValue;
+    setBookingDate: Dispatch<SetStateAction<PickerValueObj>>;
+    values: PickerValueObj[];
 }
 
-const values = {
-    value: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-};
 const StyledPopup = styled(Popup)`
     &-overlay {
         background: #58585869;
@@ -33,40 +33,37 @@ const StyledPopup = styled(Popup)`
     }
 `;
 
-export const BookingDateSelectorPopup: FC<Props> = (p) => {
-    const onClose = () => p.setOpen(false);
+export const BookingDateSelectorPopup: FC<Props> = ({
+    isOpen,
+    setOpen,
+    bookingDate,
+    setBookingDate,
+    values,
+}) => {
+    const onClose = () => setOpen(false);
 
     useEffect(() => {
-        console.log(p.guestCount.value);
-        if (p.isOpen && p.guestCount.value == 'Гости') {
-            p.setGuestCount({
-                value: '1',
-            });
+        if (isOpen && bookingDate.value == 'unset') {
+            setBookingDate(values[0]);
         }
-    }, [p.isOpen]);
+    }, [isOpen]);
 
     return (
-        <StyledPopup open={p.isOpen} onClose={onClose} modal>
+        <StyledPopup open={isOpen} onClose={onClose} modal>
             <ContentContainer>
                 <div className={css.content}>
-                    <h3>Количество гостей</h3>
-                    <h5>
-                        Для бронирования на 10+ гостей свяжитесь с рестораном по
-                        телефону <span>+7 (926) 041 53 72</span>
-                    </h5>
+                    <h3>Выберите дату</h3>
+
                     <Picker
-                        value={p.guestCount}
-                        onChange={p.setGuestCount}
+                        value={bookingDate}
+                        // @ts-expect-error broken-lib
+                        onChange={setBookingDate}
                         wheelMode="natural"
                         height={120}
                     >
                         <Picker.Column name={'value'}>
-                            {values.value.map((option) => (
-                                <Picker.Item
-                                    key={option}
-                                    value={option}
-                                    title={'dasdas'}
-                                >
+                            {values.map((option) => (
+                                <Picker.Item key={option.value} value={option}>
                                     {({ selected }) => (
                                         <div className={css.selectorItem}>
                                             <span
@@ -77,7 +74,7 @@ export const BookingDateSelectorPopup: FC<Props> = (p) => {
                                                         : null
                                                 )}
                                             >
-                                                {option}
+                                                {formatDate(option.value)}
                                             </span>
                                         </div>
                                     )}

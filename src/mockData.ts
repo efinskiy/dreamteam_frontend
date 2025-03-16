@@ -3,6 +3,7 @@ import {
     IMenuItem,
 } from '@/pages/Restaurant/Restaurant.types.ts';
 import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
+import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
 
 export const mockGallery: GalleryCollection[] = [
     {
@@ -329,5 +330,40 @@ export const BOOKINGCOMMENTMOCK = [
     {
         text: 'Деловая встреча 3',
         emoji: '☕️',
+    },
+];
+
+export const BOOKING_DATE_VALUES = <PickerValueObj[]>[
+    {
+        title: 'Сегодня, 16 марта',
+        value: '2025-03-16',
+    },
+    {
+        title: 'Завтра, 17 марта',
+        value: '2025-03-17',
+    },
+    {
+        title: '19 марта',
+        value: '2025-03-19',
+    },
+    {
+        title: '20 марта',
+        value: '2025-03-20',
+    },
+    {
+        title: '21 марта',
+        value: '2025-03-21',
+    },
+    {
+        title: '22 марта',
+        value: '2025-03-22',
+    },
+    {
+        title: '23 марта',
+        value: '2025-03-23',
+    },
+    {
+        title: '24 марта',
+        value: '2025-03-24',
     },
 ];
