@@ -39,7 +39,7 @@ export const ProfilePage = () => {
                         />
                     </div>
                     <div className={css.navLinks}>
-                        <Link to={'/booking'} className={css.navLink}>
+                        <Link to={'/myBookings'} className={css.navLink}>
                             <BookIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>
                                 Мои бронирования

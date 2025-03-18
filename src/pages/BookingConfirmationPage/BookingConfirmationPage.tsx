@@ -2,7 +2,7 @@ import { Page } from '@/components/Page.tsx';
 import css from './BookingConfirmationPage.module.css';
 import { useAtom } from 'jotai';
 import { bookingAtom } from '@/atoms/bookingInfoAtom.ts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -12,9 +12,12 @@ import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
 import { ChatIcon } from '@/components/Icons/ChatIcon.tsx';
 import { useScript } from 'usehooks-ts';
+import { BookingCreatedPopup } from '@/pages/BookingConfirmationPage/BookingCreatedPopup/BookingCreatedPopup.tsx';
 
 export const BookingConfirmationPage = () => {
     const bookingInfo = useAtom(bookingAtom);
+
+    const [bookingCreatedPopup, setBookingCreatedPopup] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,11 +31,21 @@ export const BookingConfirmationPage = () => {
 
     return (
         <Page back={true}>
+            <BookingCreatedPopup
+                isOpen={bookingCreatedPopup}
+                rest_title={'Smoke BBQ'}
+                rest_address={'Москва, Трубная, 8'}
+                booking_date={'14 февраля'}
+                booking_time={'19:00'}
+            />
             <div className={css.absolute_footer}>
                 <div
                     className={classNames(css.fr, css.absolute_footer_wrapper)}
                 >
-                    <div className={css.redButton}>
+                    <div
+                        className={css.redButton}
+                        onClick={() => setBookingCreatedPopup(true)}
+                    >
                         <span className={css.text}>Забронировать</span>
                     </div>
                 </div>
@@ -40,10 +53,10 @@ export const BookingConfirmationPage = () => {
             <div className={classNames(css.fc, css.page)}>
                 <div className={classNames(css.main, css.border__bottom)}>
                     <div className={css.header}>
-                        <div>
-                            <RoundedButton
-                                icon={<CrossIcon size={44} color={'black'} />}
-                            />
+                        <div className={css.wh44}>
+                            {/*<RoundedButton*/}
+                            {/*    icon={<CrossIcon size={44} color={'black'} />}*/}
+                            {/*/>*/}
                         </div>
                         <div className={classNames(css.fc, css.headerContent)}>
                             <h3 className={css.headerContent__title}>

@@ -6,6 +6,7 @@ import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage.tsx';
 import { BookingPage } from '@/pages/BookingPage/BookingPage.tsx';
 import { BookingConfirmationPage } from '@/pages/BookingConfirmationPage/BookingConfirmationPage.tsx';
+import { MyBookingsPage } from '@/pages/MyBookingsPage/MyBookingsPage.tsx';
 
 interface Route {
     path: string;
@@ -31,6 +32,10 @@ export const routes: Route[] = [
     {
         path: '/review',
         Component: PlaceHolder,
+    },
+    {
+        path: '/myBookings',
+        Component: MyBookingsPage,
     },
     {
         path: '/restaurant/:id',
