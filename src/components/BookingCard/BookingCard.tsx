@@ -35,7 +35,7 @@ export const BookingCard: FC<BookingCardProps> = ({
                     !active ? css.card_date__notActive : null
                 )}
             >
-                12.03.2025 в 12:00
+                12.03.2025 в 12:00 {date}
             </span>
             <div className={css.footer}>
                 <span className={css.footer__title}>{title}</span>
