@@ -25,7 +25,7 @@ export const ProfilePage = () => {
                                     color={'var(--dark-grey)'}
                                 />
                             }
-                            action={() => navigate(-1)}
+                            action={() => navigate('/')}
                         />
                         <span className={css.headerTitle}>Профиль</span>
                         <RoundedButton
@@ -35,7 +35,11 @@ export const ProfilePage = () => {
                                     color={'var(--dark-grey)'}
                                 />
                             }
-                            action={() => navigate(-1)}
+                            action={() =>
+                                window.open(
+                                    'https://maps.yandex.ru/?ll=37.62,55.75&z=12'
+                                )
+                            }
                         />
                     </div>
                     <div className={css.navLinks}>

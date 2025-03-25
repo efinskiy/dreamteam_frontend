@@ -183,3 +183,9 @@
 .commentary_options {
     width: 100%;
 }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

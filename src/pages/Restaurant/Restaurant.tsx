@@ -4,7 +4,7 @@ import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { UnmountClosed } from 'react-collapse';
@@ -37,9 +37,12 @@ import {
     YMapMarker,
 } from '@/lib/ymaps.ts';
 import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
+import { EventCard } from '@/components/EventCard/EventCard.tsx';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
     useScript('https://yastatic.net/taxi-widget/ya-taxi-widget-v2.js', {
         removeOnUnmount: true,
     });
@@ -49,7 +52,9 @@ export const Restaurant = () => {
     const [hideWorkHours, setHideWorkHours] = useState(true);
     const [headerScrolled, setHeaderScrolled] = useState(false);
 
-    const [menuPopupOpen, setMenuPopupOpen] = useState(false);
+    const [menuPopupOpen, setMenuPopupOpen] = useState(
+        Boolean(searchParams.get('menuOpen')) || false
+    );
     const [callPopup, setCallPopup] = useState(false);
 
     const [gallery] = useState<GalleryCollection[]>(mockGallery);
@@ -166,6 +171,12 @@ export const Restaurant = () => {
                                 size={24}
                                 color={'var(--dark-grey)'}
                             />
+                        }
+                        action={() =>
+                            // ,
+                            window.open(
+                                'https://maps.yandex.ru/?ll=37.625285,55.769541&text=Smoke BBQ&z=17'
+                            )
                         }
                     />
                     <RoundedButton
@@ -642,6 +653,20 @@ export const Restaurant = () => {
                         data-point-a=""
                         data-point-b="39.751934,47.227023"
                     ></div>
+                </div>
+                <div className={css.events}>
+                    <EventCard
+                        event_id={1}
+                        event_name={
+                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
+                        }
+                        event_datetime={'13.02.2025'}
+                        event_price={1500}
+                        restaurant_title={'Poly'}
+                        restaurant_img={
+                            'https://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
+                        }
+                    />
                 </div>
             </div>
         </Page>

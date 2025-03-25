@@ -2,7 +2,7 @@ import { Page } from '@/components/Page.tsx';
 import css from './BookingConfirmationPage.module.css';
 import { useAtom } from 'jotai';
 import { bookingAtom } from '@/atoms/bookingInfoAtom.ts';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -12,12 +12,13 @@ import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
 import { ChatIcon } from '@/components/Icons/ChatIcon.tsx';
 import { useScript } from 'usehooks-ts';
-import { BookingCreatedPopup } from '@/pages/BookingConfirmationPage/BookingCreatedPopup/BookingCreatedPopup.tsx';
+// import { BookingCreatedPopup } from '@/pages/BookingConfirmationPage/BookingCreatedPopup/BookingCreatedPopup.tsx';
+import { GoToPathIcon } from '@/components/Icons/GoToPathIcon.tsx';
 
 export const BookingConfirmationPage = () => {
     const bookingInfo = useAtom(bookingAtom);
 
-    const [bookingCreatedPopup, setBookingCreatedPopup] = useState(false);
+    // const [bookingCreatedPopup, setBookingCreatedPopup] = useState(false);
 
     const navigate = useNavigate();
 
@@ -31,24 +32,17 @@ export const BookingConfirmationPage = () => {
 
     return (
         <Page back={true}>
-            <BookingCreatedPopup
-                isOpen={bookingCreatedPopup}
-                rest_title={'Smoke BBQ'}
-                rest_address={'Москва, Трубная, 8'}
-                booking_date={'14 февраля'}
-                booking_time={'19:00'}
-            />
+            {/*<BookingCreatedPopup*/}
+            {/*    isOpen={bookingCreatedPopup}*/}
+            {/*    rest_title={'Smoke BBQ'}*/}
+            {/*    rest_address={'Москва, Трубная, 8'}*/}
+            {/*    booking_date={'14 февраля'}*/}
+            {/*    booking_time={'19:00'}*/}
+            {/*/>*/}
             <div className={css.absolute_footer}>
                 <div
                     className={classNames(css.fr, css.absolute_footer_wrapper)}
-                >
-                    <div
-                        className={css.redButton}
-                        onClick={() => setBookingCreatedPopup(true)}
-                    >
-                        <span className={css.text}>Забронировать</span>
-                    </div>
-                </div>
+                ></div>
             </div>
             <div className={classNames(css.fc, css.page)}>
                 <div className={classNames(css.main, css.border__bottom)}>
@@ -234,23 +228,45 @@ export const BookingConfirmationPage = () => {
                             ></div>
                         </div>
                     </div>
+                    <div className={classNames(css.fr, css.page)}>
+                        <div
+                            className={css.redButton}
+                            onClick={() =>
+                                navigate('/restaurant/1?menuOpen=true')
+                            }
+                        >
+                            <span className={css.text}>Смотреть меню</span>
+                        </div>
+                        <RoundedButton
+                            radius={'50px'}
+                            action={() =>
+                                window.open('https://maps.yandex.ru/')
+                            }
+                            icon={
+                                <GoToPathIcon
+                                    size={24}
+                                    color={'var(--dark-grey)'}
+                                />
+                            }
+                        />
+                    </div>
                 </div>
 
-                <div
-                    className={classNames(
-                        css.main,
-                        css.border__top,
-                        css.border__bottom
-                    )}
-                >
-                    <span className={classNames(css.about__text)}>
-                        Нажимая «Забронировать», вы принимаете условия{' '}
-                        <span className={css.underline}>
-                            Пользовательского соглашения
-                        </span>{' '}
-                        и даете согласие на обработку персональных данных.
-                    </span>
-                </div>
+                {/*<div*/}
+                {/*    className={classNames(*/}
+                {/*        css.main,*/}
+                {/*        css.border__top,*/}
+                {/*        css.border__bottom*/}
+                {/*    )}*/}
+                {/*>*/}
+                {/*    <span className={classNames(css.about__text)}>*/}
+                {/*        Нажимая «Забронировать», вы принимаете условия{' '}*/}
+                {/*        <span className={css.underline}>*/}
+                {/*            Пользовательского соглашения*/}
+                {/*        </span>{' '}*/}
+                {/*        и даете согласие на обработку персональных данных.*/}
+                {/*    </span>*/}
+                {/*</div>*/}
             </div>
         </Page>
     );

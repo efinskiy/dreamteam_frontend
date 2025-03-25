@@ -9,6 +9,7 @@ type Props = {
     is_action?: boolean;
     action?: () => void;
     bgColor?: string;
+    radius?: string;
 };
 
 export const RoundedButton: FC<Props> = (props) => {
@@ -16,7 +17,11 @@ export const RoundedButton: FC<Props> = (props) => {
         <div
             onClick={() => (props.action ? props.action() : null)}
             className={css.rounded_button}
-            style={{ backgroundColor: `${props.bgColor} ` }}
+            style={{
+                backgroundColor: `${props.bgColor} `,
+                minWidth: `${props.radius ? `${props.radius}` : null}`,
+                height: `${props.radius ? `${props.radius}` : null}`,
+            }}
         >
             {props.icon}
         </div>

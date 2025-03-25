@@ -374,16 +374,18 @@ export const BookingPage: FC = () => {
                         <HeaderContainer>
                             <HeaderContent title={'Контакты'} />
                         </HeaderContainer>
-                        <TextInput
-                            value={userName}
-                            onChange={setUserName}
-                            placeholder={'Имя'}
-                        />
-                        <TextInput
-                            value={userPhone}
-                            onChange={setUserPhone}
-                            placeholder={'Телефон'}
-                        />
+                        <div className={css.form}>
+                            <TextInput
+                                value={userName}
+                                onChange={setUserName}
+                                placeholder={'Имя'}
+                            />
+                            <TextInput
+                                value={userPhone}
+                                onChange={setUserPhone}
+                                placeholder={'Телефон'}
+                            />
+                        </div>
                     </ContentContainer>
                     <ContentContainer>
                         <HeaderContainer>

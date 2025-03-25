@@ -7,6 +7,9 @@ import { ProfilePage } from '@/pages/ProfilePage/ProfilePage.tsx';
 import { BookingPage } from '@/pages/BookingPage/BookingPage.tsx';
 import { BookingConfirmationPage } from '@/pages/BookingConfirmationPage/BookingConfirmationPage.tsx';
 import { MyBookingsPage } from '@/pages/MyBookingsPage/MyBookingsPage.tsx';
+import { EventsPage } from '@/pages/EventsPage/EventsPage.tsx';
+import { EventPage } from '@/pages/EventPage/EventPage.tsx';
+import { EventBookingPage } from '@/pages/EventBookingPage/EventBookingPage.tsx';
 
 interface Route {
     path: string;
@@ -27,7 +30,15 @@ export const routes: Route[] = [
     },
     {
         path: '/events',
-        Component: PlaceHolder,
+        Component: EventsPage,
+    },
+    {
+        path: '/event/:id',
+        Component: EventPage,
+    },
+    {
+        path: '/eventBookingScreen',
+        Component: EventBookingPage,
     },
     {
         path: '/review',

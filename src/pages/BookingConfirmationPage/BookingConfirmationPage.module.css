@@ -201,7 +201,7 @@
     padding: 15px 0;
     background-color: var(--red);
     border-radius: 15px;
-    width: 100%;
+    width: -webkit-fill-available;
     justify-content: center;
     align-items: center;
 

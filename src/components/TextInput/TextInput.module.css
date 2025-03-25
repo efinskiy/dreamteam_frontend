@@ -1,10 +1,10 @@
 .text_input {
-    padding: 0 0 8px 0;
+    padding: 13px 20px;
     margin: 0;
     border: none;
-    border-bottom: 1px solid var(--medium-grey, #B9B9B9);
+    border-radius: 12px;
     outline: none;
-
+    background-color: var(--secondary-background);
     font-family: 'Mont', 'sans-serif';
     font-size: 14px;
     font-weight: 700;
