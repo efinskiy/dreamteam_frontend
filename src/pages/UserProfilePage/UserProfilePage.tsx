@@ -45,17 +45,21 @@ export const UserProfilePage = () => {
                     width={'full'}
                     title={'Сохранить'}
                     theme={'red'}
-                    action={() =>
-                        APIUpdateUserInfo(
-                            {
-                                ...userInfo,
-                                date_of_birth: dob?.toISOString().split('T')[0],
-                            },
-                            authInfo?.access_token
-                        ).then((res) => {
-                            setUser(res.data);
-                        })
-                    }
+                    action={() => {
+                        authInfo?.access_token
+                            ? APIUpdateUserInfo(
+                                  {
+                                      ...userInfo,
+                                      date_of_birth: dob
+                                          ?.toISOString()
+                                          .split('T')[0],
+                                  },
+                                  authInfo?.access_token
+                              ).then((res) => {
+                                  setUser(res.data);
+                              })
+                            : null;
+                    }}
                 />
             </div>
             <div className={css.page}>
