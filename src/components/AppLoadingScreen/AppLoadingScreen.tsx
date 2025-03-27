@@ -14,7 +14,7 @@ export const AppLoadingScreen = () => {
     useEffect(() => {
         APIUserAuth(lp.initDataRaw)
             .then((res) => {
-                setAuth(res);
+                setAuth(res.data);
                 return res.data.access_token;
             })
             .then((token) => {
