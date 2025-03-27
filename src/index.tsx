@@ -18,7 +18,6 @@ try {
     // Configure all application dependencies.
     init(retrieveLaunchParams().startParam === 'debug' || import.meta.env.DEV);
     const { initDataRaw } = retrieveLaunchParams();
-    console.log(initDataRaw);
 
     root.render(<Root />);
 } catch (e) {
