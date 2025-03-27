@@ -54,7 +54,7 @@ export const UserProfilePage = () => {
                                           ?.toISOString()
                                           .split('T')[0],
                                   },
-                                  authInfo?.access_token
+                                  authInfo.access_token
                               ).then((res) => {
                                   setUser(res.data);
                               })
