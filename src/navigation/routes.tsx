@@ -10,6 +10,7 @@ import { MyBookingsPage } from '@/pages/MyBookingsPage/MyBookingsPage.tsx';
 import { EventsPage } from '@/pages/EventsPage/EventsPage.tsx';
 import { EventPage } from '@/pages/EventPage/EventPage.tsx';
 import { EventBookingPage } from '@/pages/EventBookingPage/EventBookingPage.tsx';
+import { UserProfilePage } from '@/pages/UserProfilePage/UserProfilePage.tsx';
 
 interface Route {
     path: string;
@@ -18,15 +19,15 @@ interface Route {
     icon?: JSX.Element;
 }
 
-const PlaceHolder = () => {
-    return <h1>Placeholder page</h1>;
-};
-
 export const routes: Route[] = [
     { path: '/', Component: IndexPage },
     {
         path: '/profile',
         Component: ProfilePage,
+    },
+    {
+        path: '/me',
+        Component: UserProfilePage,
     },
     {
         path: '/events',
@@ -42,7 +43,7 @@ export const routes: Route[] = [
     },
     {
         path: '/review',
-        Component: PlaceHolder,
+        Component: UserProfilePage,
     },
     {
         path: '/myBookings',

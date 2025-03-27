@@ -13,3 +13,7 @@
 .text_input::placeholder {
     color: var(--grey);
 }
+
+.failed {
+    border-bottom: 1px solid var(--red);
+}

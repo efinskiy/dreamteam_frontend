@@ -5,10 +5,13 @@ import { useAtom } from 'jotai';
 import { APIUserAuth, APIUserInfo } from '@/api/auth.ts';
 import { useLaunchParams } from '@telegram-apps/sdk-react';
 
+const Loader = () => {
+    return <div className={css.loader}></div>;
+};
+
 export const AppLoadingScreen = () => {
-    const [user, setUser] = useAtom(userAtom);
+    const [, setUser] = useAtom(userAtom);
     const [, setAuth] = useAtom(authAtom);
-    // const
     const lp = useLaunchParams();
 
     useEffect(() => {
@@ -22,17 +25,9 @@ export const AppLoadingScreen = () => {
             });
     }, []);
 
-    useEffect(() => {
-        if (!user) {
-            return;
-        }
-        if (!user.early_access) {
-        }
-    }, [user]);
-
     return (
         <div className={css.screen}>
-            <div className={css.loader}></div>
+            <Loader />
         </div>
     );
 };
