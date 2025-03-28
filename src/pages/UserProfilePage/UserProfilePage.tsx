@@ -9,15 +9,23 @@ import { useEffect, useState } from 'react';
 import { CalendarPopup } from '@/pages/UserProfilePage/CalendarPopup/CalendarPopup.tsx';
 import { useAtom } from 'jotai';
 import { authAtom, userAtom } from '@/atoms/userAtom.ts';
-import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
 import { APIUpdateUserInfo } from '@/api/user.ts';
+import { mainButton } from '@telegram-apps/sdk-react';
+
+interface IUserInfo {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone_number?: string;
+    allergies?: string;
+}
 
 export const UserProfilePage = () => {
     const navigate = useNavigate();
     const [user, setUser] = useAtom(userAtom);
     const [authInfo] = useAtom(authAtom);
 
-    const [userInfo, setUserInfo] = useState({
+    const [userInfo, setUserInfo] = useState<IUserInfo>({
         first_name: user?.first_name,
         last_name: user?.last_name,
         phone_number: user?.phone_number,
@@ -35,33 +43,65 @@ export const UserProfilePage = () => {
     );
 
     useEffect(() => {
-        console.log(dob?.toISOString().split('T')[0]);
-    }, [dob]);
+        if (mainButton.mount.isAvailable()) {
+            mainButton.mount();
+            mainButton.setParams({
+                backgroundColor: '#F52A2D',
+                hasShineEffect: false,
+                isEnabled: true,
+                isLoaderVisible: false,
+                isVisible: true,
+                text: 'Сохранить',
+                textColor: '#ffffff',
+            });
+        }
+
+        const removeListener = mainButton.onClick(() => updateUser());
+
+        return () => {
+            removeListener();
+        };
+    }, [userInfo, dob]);
+
+    useEffect(() => {
+        return () => {
+            mainButton.setParams({ isVisible: false });
+            mainButton.unmount();
+        };
+    }, []);
+
+    const setMainButtonLoader = (value: boolean) => {
+        mainButton.setParams({
+            isLoaderVisible: value,
+        });
+    };
+
+    const updateUser = () => {
+        console.log(userInfo);
+        if (!authInfo?.access_token) {
+            return;
+        }
+        setMainButtonLoader(true);
+        APIUpdateUserInfo(
+            {
+                ...userInfo,
+                date_of_birth: dob?.toISOString().split('T')[0],
+            },
+            authInfo.access_token
+        )
+            .then((res) => {
+                setUser(res.data);
+                setMainButtonLoader(false);
+            })
+            .catch((err) => {
+                if (err.response) {
+                    alert(err.response.data);
+                }
+            });
+    };
 
     return (
         <Page back={true}>
-            <div className={css.floatingButton}>
-                <UniversalButton
-                    width={'full'}
-                    title={'Сохранить'}
-                    theme={'red'}
-                    action={() => {
-                        authInfo?.access_token
-                            ? APIUpdateUserInfo(
-                                  {
-                                      ...userInfo,
-                                      date_of_birth: dob
-                                          ?.toISOString()
-                                          .split('T')[0],
-                                  },
-                                  authInfo.access_token
-                              ).then((res) => {
-                                  setUser(res.data);
-                              })
-                            : null;
-                    }}
-                />
-            </div>
             <div className={css.page}>
                 <CalendarPopup
                     isOpen={calendarOpen}

@@ -7,7 +7,7 @@ import { TicketsIcon } from '@/components/Icons/TicketsIcon.tsx';
 import { BookIcon } from '@/components/Icons/BookIcon.tsx';
 import { PenIcon } from '@/components/Icons/PenIcon.tsx';
 import { UserProfileIcon } from '@/components/Icons/UserProfileIcon.tsx';
-import { SupportIcon } from '@/components/Icons/SupportIcon.tsx';
+// import { SupportIcon } from '@/components/Icons/SupportIcon.tsx';
 import { QRCodeIcon } from '@/components/Icons/QRCodeIcon.tsx';
 
 export const ProfilePage = () => {
@@ -65,10 +65,10 @@ export const ProfilePage = () => {
                                 Личные данные
                             </span>
                         </Link>
-                        <Link to={'/support'} className={css.navLink}>
-                            <SupportIcon size={24} color={'black'} />
-                            <span className={css.navLinkTitle}>Поддержка</span>
-                        </Link>
+                        {/*<Link to={'/support'} className={css.navLink}>*/}
+                        {/*    <SupportIcon size={24} color={'black'} />*/}
+                        {/*    <span className={css.navLinkTitle}>Поддержка</span>*/}
+                        {/*</Link>*/}
                     </div>
                 </div>
             </div>

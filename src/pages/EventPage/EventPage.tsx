@@ -14,10 +14,10 @@ export const EventPage = () => {
     const [, setSelectedEvent] = useAtom(selectedEventAtom);
 
     const incCounter = () => {
-        setGuestCount((prev) => (prev < 9 ? prev + 1 : prev));
+        setGuestCount((prev: number) => (prev < 9 ? prev + 1 : prev));
     };
     const decCounter = () => {
-        setGuestCount((prev) => (prev - 1 >= 1 ? prev - 1 : prev));
+        setGuestCount((prev: number) => (prev - 1 >= 1 ? prev - 1 : prev));
     };
 
     const continueButton = () => {

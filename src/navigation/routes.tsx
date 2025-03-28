@@ -11,6 +11,9 @@ import { EventsPage } from '@/pages/EventsPage/EventsPage.tsx';
 import { EventPage } from '@/pages/EventPage/EventPage.tsx';
 import { EventBookingPage } from '@/pages/EventBookingPage/EventBookingPage.tsx';
 import { UserProfilePage } from '@/pages/UserProfilePage/UserProfilePage.tsx';
+import { UserTicketsPage } from '@/pages/UserTicketsPage/UserTicketsPage.tsx';
+import { TicketInfoPage } from '@/pages/TicketInfoPage/TicketInfoPage.tsx';
+import { RestaurantMapPage } from '@/pages/RestaurantMapPage/RestaurantMapPage.tsx';
 
 interface Route {
     path: string;
@@ -21,6 +24,10 @@ interface Route {
 
 export const routes: Route[] = [
     { path: '/', Component: IndexPage },
+    {
+        path: '/map',
+        Component: RestaurantMapPage,
+    },
     {
         path: '/profile',
         Component: ProfilePage,
@@ -36,6 +43,14 @@ export const routes: Route[] = [
     {
         path: '/event/:id',
         Component: EventPage,
+    },
+    {
+        path: '/tickets',
+        Component: UserTicketsPage,
+    },
+    {
+        path: '/tickets/:id',
+        Component: TicketInfoPage,
     },
     {
         path: '/eventBookingScreen',

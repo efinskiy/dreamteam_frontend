@@ -22,7 +22,7 @@ export const Header = () => {
                 />
                 <RoundedButton
                     icon={<IconlyLocation color={'var(--dark-grey)'} />}
-                    action={() => alert('In dev')}
+                    action={() => navigate('/map')}
                 />
                 <RoundedButton
                     icon={<IconlyProfile color={'var(--dark-grey)'} />}
