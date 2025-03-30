@@ -9,7 +9,7 @@ import { useAtom } from 'jotai';
 import { userAtom } from '@/atoms/userAtom.ts';
 import { AppLoadingScreen } from '@/components/AppLoadingScreen/AppLoadingScreen.tsx';
 
-// import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
+import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
 
 const AppRouter = () => {
     return (
@@ -38,7 +38,7 @@ export function App() {
             platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
         >
             {}
-            {/*<RequestPermissions />*/}
+            <RequestPermissions />
             {!userState ? <AppLoadingScreen /> : <AppRouter />}
         </AppRoot>
     );
