@@ -38,6 +38,8 @@ import { useScript } from 'usehooks-ts';
 // } from '@/lib/ymaps.ts';
 // import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 import { EventCard } from '@/components/EventCard/EventCard.tsx';
+import { useAtom } from 'jotai';
+import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
 
 export const Restaurant = () => {
     const navigate = useNavigate();
@@ -51,7 +53,7 @@ export const Restaurant = () => {
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
     const [headerScrolled, setHeaderScrolled] = useState(false);
-
+    const [, setBackUrlAtom] = useAtom(backButtonAtom);
     const [menuPopupOpen, setMenuPopupOpen] = useState(
         Boolean(searchParams.get('menuOpen')) || false
     );
@@ -63,6 +65,11 @@ export const Restaurant = () => {
     const [currentGalleryPhotos, setCurrentGalleryPhotos] = useState<
         (string | string[])[]
     >([]);
+
+    const goToProfile = () => {
+        setBackUrlAtom(`/restaurant/1`);
+        navigate('/profile');
+    };
 
     useEffect(() => {
         setCurrentGalleryPhotos(getGalleryPhotos());
@@ -139,7 +146,7 @@ export const Restaurant = () => {
                         <div className={css.headerNavBlock}>
                             <RoundedButton
                                 icon={<BackIcon color={'var(--dark-grey)'} />}
-                                action={() => navigate(-1)}
+                                action={() => navigate('/')}
                             ></RoundedButton>
                         </div>
                         {headerScrolled ? (
@@ -150,7 +157,7 @@ export const Restaurant = () => {
                                 icon={
                                     <IconlyProfile color={'var(--dark-grey)'} />
                                 }
-                                action={() => navigate('/profile')}
+                                action={() => goToProfile()}
                             />
                         </div>
                     </div>
@@ -208,7 +215,7 @@ export const Restaurant = () => {
                         data-title="Вызвать такси"
                         data-use-location="false"
                         data-point-a=""
-                        data-point-b="37.625285, 55.769541"
+                        data-point-b="37.625285,55.769541"
                     ></div>
                 </div>
                 <ContentContainer>
@@ -463,12 +470,23 @@ export const Restaurant = () => {
                                 </span>
                             </div>
                             <div className={css.infoBlock}>
-                                <div className={css.socialRow}>
-                                    <InstagramIcon color={'black'} size={20} />
-                                    <span className={css.socialLink}>
-                                        poly.stpete
-                                    </span>
-                                </div>
+                                <a
+                                    href={
+                                        'https://www.instagram.com/poly.stpete/'
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <div className={css.socialRow}>
+                                        <InstagramIcon
+                                            color={'black'}
+                                            size={20}
+                                        />
+                                        <span className={css.socialLink}>
+                                            poly.stpete
+                                        </span>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </ContentBlock>

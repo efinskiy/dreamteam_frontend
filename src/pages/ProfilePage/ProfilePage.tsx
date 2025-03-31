@@ -2,19 +2,29 @@ import { Page } from '@/components/Page.tsx';
 import css from './ProfilePage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { TicketsIcon } from '@/components/Icons/TicketsIcon.tsx';
 import { BookIcon } from '@/components/Icons/BookIcon.tsx';
 import { PenIcon } from '@/components/Icons/PenIcon.tsx';
 import { UserProfileIcon } from '@/components/Icons/UserProfileIcon.tsx';
 // import { SupportIcon } from '@/components/Icons/SupportIcon.tsx';
-import { QRCodeIcon } from '@/components/Icons/QRCodeIcon.tsx';
+// import { QRCodeIcon } from '@/components/Icons/QRCodeIcon.tsx';
 import { FeedbackPopup } from '@/pages/ProfilePage/FeedbackPopup/FeedbackPopup.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
 
 export const ProfilePage = () => {
+    const [params] = useSearchParams();
+    const [feedbackPopup, setFeedbackPopup] = useState(
+        !!params.get('feedback')
+    );
     const navigate = useNavigate();
-    const [feedbackPopup, setFeedbackPopup] = useState(false);
+
+    useEffect(() => {
+        console.log(window.history);
+    }, []);
+    const [backUrlAtom] = useAtom(backButtonAtom);
     return (
         <Page back={true}>
             <FeedbackPopup
@@ -33,22 +43,10 @@ export const ProfilePage = () => {
                                     color={'var(--dark-grey)'}
                                 />
                             }
-                            action={() => navigate('/')}
+                            action={() => navigate(backUrlAtom)}
                         />
                         <span className={css.headerTitle}>Профиль</span>
-                        <RoundedButton
-                            icon={
-                                <QRCodeIcon
-                                    size={18}
-                                    color={'var(--dark-grey)'}
-                                />
-                            }
-                            action={() =>
-                                window.open(
-                                    'https://maps.yandex.ru/?ll=37.62,55.75&z=12'
-                                )
-                            }
-                        />
+                        <div className={css.spacer}></div>
                     </div>
                     <div className={css.navLinks}>
                         <Link to={'/myBookings'} className={css.navLink}>

@@ -9,7 +9,7 @@ export const RestaurantNavigation: FC = () => {
     return (
         <div className={css.navigationSlider}>
             <Swiper modules={[FreeMode]} freeMode={true} slidesPerView={'auto'}>
-                <SwiperSlide style={{ width: 'max-content' }}>
+                <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#booking" offset={64}>
                         <div
                             className={classNames(
@@ -21,22 +21,27 @@ export const RestaurantNavigation: FC = () => {
                         </div>
                     </AnchorLink>
                 </SwiperSlide>
-                <SwiperSlide style={{ width: 'max-content' }}>
+                <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#gallery" offset={128}>
                         <div className={css.navigationLink}>Галерея</div>
                     </AnchorLink>
                 </SwiperSlide>
-                <SwiperSlide style={{ width: 'max-content' }}>
+                <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#menu" offset={128}>
                         <div className={css.navigationLink}>Меню</div>
                     </AnchorLink>
                 </SwiperSlide>
-                <SwiperSlide style={{ width: 'max-content' }}>
+                <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#about" offset={128}>
                         <div className={css.navigationLink}>О месте</div>
                     </AnchorLink>
                 </SwiperSlide>
-                <SwiperSlide style={{ width: 'max-content' }}>
+                <SwiperSlide style={{ width: 'fit-content' }}>
+                    <AnchorLink href="#chef" offset={128}>
+                        <div className={css.navigationLink}>О шефе</div>
+                    </AnchorLink>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#chef" offset={128}>
                         <div className={css.navigationLink}>О шефе</div>
                     </AnchorLink>

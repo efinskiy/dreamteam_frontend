@@ -4,6 +4,7 @@ import {
 } from '@/pages/Restaurant/Restaurant.types.ts';
 import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
 import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
+import { IRestaurantShort } from '@/types/restaurant.ts';
 
 export const mockGallery: GalleryCollection[] = [
     {
@@ -365,5 +366,82 @@ export const BOOKING_DATE_VALUES = <PickerValueObj[]>[
     {
         title: '24 марта',
         value: '2025-03-24',
+    },
+];
+
+export const MOCK_RestaurantsShort = <IRestaurantShort[]>[
+    {
+        id: 1,
+        title: 'Smoke BBQ',
+        slogan: 'Бар · гриль · коптильня',
+        address: 'Москва, Трубная, 8',
+        logo_url: '/img/placeholder_3.png',
+        thumbnail_photo: '/img/placeholder_2.png',
+        photo_cards: [
+            {
+                id: 1,
+                category: 'Блюда',
+                url: '/img/placeholder_4.png',
+            },
+            {
+                id: 2,
+                category: 'Блюда',
+                url: '/img/placeholder_6.png',
+            },
+            {
+                id: 3,
+                category: 'Блюда',
+                url: '/img/placeholder_5.png',
+            },
+        ],
+        openTime: '00:00',
+        avg_cheque: 1500,
+        brand_chef: {
+            name: 'Алексей Смирнов',
+            photo_url: '/img/chef.png',
+        },
+        city: {
+            id: 1,
+            name: 'Москва',
+            name_english: 'moscow',
+            name_dative: 'Москве',
+        },
+    },
+    {
+        id: 2,
+        title: 'ANCHOVY’S CLUB',
+        slogan: 'Рыбная брассерия',
+        address: 'Москва, Колокольников пер., 3с2',
+        logo_url: '/img/placeholder_3.png',
+        thumbnail_photo: '/img/placeholder_2.png',
+        photo_cards: [
+            {
+                id: 4,
+                category: 'Блюда',
+                url: '/img/placeholder_4.png',
+            },
+            {
+                id: 5,
+                category: 'Блюда',
+                url: '/img/placeholder_6.png',
+            },
+            {
+                id: 6,
+                category: 'Блюда',
+                url: '/img/placeholder_5.png',
+            },
+        ],
+        openTime: '00:00',
+        avg_cheque: 1500,
+        brand_chef: {
+            name: 'Алексей Смирнов',
+            photo_url: '/img/chef.png',
+        },
+        city: {
+            id: 1,
+            name: 'Москва',
+            name_english: 'moscow',
+            name_dative: 'Москве',
+        },
     },
 ];

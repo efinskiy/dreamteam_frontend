@@ -22,10 +22,10 @@
 .floatingBadges {
     position: relative;
     bottom: -6px;
-    left: 15px;
+    /*left: 15px;*/
     z-index: 9999;
     width: 100%;
-    padding: 0 15px 0 0;
+    /*padding: 0 15px 0 0;*/
     box-sizing: border-box;
 }
 
@@ -45,6 +45,7 @@
     width: 36px;
     height: 36px;
     border-radius: 9999px;
+    background-size: 56px;
 }
 
 .chefInfo {

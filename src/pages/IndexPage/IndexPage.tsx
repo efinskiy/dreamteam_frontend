@@ -6,7 +6,7 @@ import { Header } from '@/components/Header/Header.tsx';
 import { OptionsNavigation } from '@/components/OptionsNavigation/OptionsNavigation.tsx';
 import { RestaurantPreview } from '@/components/RestaurantPreview/RestrauntPreview.tsx';
 import { BookingReminder } from '@/components/BookingReminder/BookingReminder.tsx';
-import { mockBookingDate } from '@/mockData.ts';
+import { MOCK_RestaurantsShort, mockBookingDate } from '@/mockData.ts';
 import { useAtom } from 'jotai';
 import {
     currentCityAtom,
@@ -72,8 +72,12 @@ export const IndexPage: FC = () => {
                         currentValue={currentCityS}
                         onChange={updateCurrentCity}
                     />
-                    <RestaurantPreview />
-                    <RestaurantPreview />
+                    {MOCK_RestaurantsShort.map((rest) => (
+                        <RestaurantPreview
+                            restaurant={rest}
+                            key={`rest-${rest.id}`}
+                        />
+                    ))}
                 </div>
             </div>
         </Page>

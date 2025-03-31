@@ -157,7 +157,7 @@ export const BookingPage: FC = () => {
                                 <div>
                                     <RoundedButton
                                         icon={<CrossIcon size={44} />}
-                                        action={() => navigate(-1)}
+                                        isBack={true}
                                     />
                                 </div>
                             </div>

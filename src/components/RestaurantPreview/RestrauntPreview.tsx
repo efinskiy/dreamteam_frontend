@@ -10,13 +10,21 @@ import { SwiperSlide } from 'swiper/react';
 import { RestaurantBadgePhoto } from '@/components/RestaurantPreview/RestaurantBadgePhoto/RestaurantBadgePhoto.tsx';
 import { InfoTag } from '@/components/InfoTag/InfoTag.tsx';
 import { Link } from 'react-router-dom';
+import { FC } from 'react';
+import { IRestaurantShort } from '@/types/restaurant.ts';
 
-export const RestaurantPreview = () => {
+interface IProps {
+    restaurant: IRestaurantShort;
+}
+
+export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
     return (
         <Link className={css.restaurant} to={'/restaurant/1'}>
             <div
                 className={classNames(css.imaged, css.bgImage)}
-                style={{ backgroundImage: `url('/img/placeholder_2.png')` }}
+                style={{
+                    backgroundImage: `url(${restaurant.thumbnail_photo})`,
+                }}
             >
                 <div className={css.floatingBadges}>
                     <Swiper
@@ -24,44 +32,22 @@ export const RestaurantPreview = () => {
                         modules={[FreeMode]}
                         freeMode={true}
                     >
+                        <SwiperSlide style={{ width: '15px' }}></SwiperSlide>
                         <SwiperSlide
                             className={css.swiperSlide}
                             style={{ width: '130px' }}
                         >
-                            <RestaurantBadge logo={'/img/placeholder_3.png'} />
+                            <RestaurantBadge logo={restaurant.logo_url} />
                         </SwiperSlide>
-                        <SwiperSlide
-                            className={css.swiperSlide}
-                            style={{ width: '130px' }}
-                        >
-                            <RestaurantBadgePhoto
-                                url={'/img/placeholder_4.png'}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide
-                            className={css.swiperSlide}
-                            style={{ width: '130px' }}
-                        >
-                            <RestaurantBadgePhoto
-                                url={'/img/placeholder_6.png'}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide
-                            className={css.swiperSlide}
-                            style={{ width: '130px' }}
-                        >
-                            <RestaurantBadgePhoto
-                                url={'/img/placeholder_4.png'}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide
-                            className={css.swiperSlide}
-                            style={{ width: '130px' }}
-                        >
-                            <RestaurantBadgePhoto
-                                url={'/img/placeholder_6.png'}
-                            />
-                        </SwiperSlide>
+                        {restaurant.photo_cards.map((card) => (
+                            <SwiperSlide
+                                className={css.swiperSlide}
+                                style={{ width: '130px' }}
+                                key={`card-${card.id}`}
+                            >
+                                <RestaurantBadgePhoto url={card.url} />
+                            </SwiperSlide>
+                        ))}
                         {/*
                             Пустой слайд для корректного отображения последнего слайда
                         */}
@@ -72,25 +58,25 @@ export const RestaurantPreview = () => {
                     <div
                         className={classNames(css.chefPhoto, css.bgImage)}
                         style={{
-                            backgroundImage: `url('/img/placeholder_5.png')`,
+                            backgroundImage: `url(${restaurant.brand_chef.photo_url})`,
                         }}
                     ></div>
                     <div className={css.chefInfo}>
                         <span className={css.chefTitle}>Бренд-шеф</span>
-                        <span className={css.chefName}>Алексей Смирнов</span>
+                        <span className={css.chefName}>
+                            {restaurant.brand_chef.name}
+                        </span>
                     </div>
                 </div>
             </div>
             <div className={css.resInfo}>
                 <div className={css.resTitleWrapper}>
-                    <h2 className={css.resTitle}>Smoke BBQ</h2>
-                    <span className={css.resSlogan}>
-                        Бар · гриль · коптильня
-                    </span>
+                    <h2 className={css.resTitle}>{restaurant.title}</h2>
+                    <span className={css.resSlogan}>{restaurant.slogan}</span>
                 </div>
                 <div className={css.tags}>
-                    <InfoTag text={'Открыто до 00:00'} />
-                    <InfoTag text={'Ср. чек 1500₽'} />
+                    <InfoTag text={`Открыто до ${restaurant.openTime}`} />
+                    <InfoTag text={`Ср. чек ${restaurant.avg_cheque}₽`} />
                 </div>
             </div>
         </Link>
