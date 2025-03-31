@@ -41,11 +41,6 @@ export const RestaurantNavigation: FC = () => {
                         <div className={css.navigationLink}>О шефе</div>
                     </AnchorLink>
                 </SwiperSlide>
-                <SwiperSlide style={{ width: 'fit-content' }}>
-                    <AnchorLink href="#chef" offset={128}>
-                        <div className={css.navigationLink}>О шефе</div>
-                    </AnchorLink>
-                </SwiperSlide>
                 <SwiperSlide style={{ width: '24px' }}></SwiperSlide>
             </Swiper>
         </div>
