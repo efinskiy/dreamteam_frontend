@@ -1,8 +1,8 @@
 .navigationSlider {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
+    /*display: flex;*/
+    /*flex-direction: row;*/
     height: 26px;
+    width: 100%;
 }
 
 .navigationLink {

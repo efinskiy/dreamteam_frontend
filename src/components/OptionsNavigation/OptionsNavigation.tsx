@@ -13,7 +13,7 @@ export const OptionsNavigation = () => {
             />
             <OptionsNavigationElement
                 icon={<ChatIcon size={20} color={'var(--light-grey)'} />}
-                title={'Отзыв'}
+                title={'Оставить отзыв'}
                 link={'/review'}
             />
         </div>

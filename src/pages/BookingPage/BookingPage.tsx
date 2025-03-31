@@ -153,9 +153,6 @@ export const BookingPage: FC = () => {
                                     <h3 className={css.headerInfo__title}>
                                         Бронирование
                                     </h3>
-                                    <p className={css.headerInfo__subtitle}>
-                                        Smoke BBQ
-                                    </p>
                                 </div>
                                 <div>
                                     <RoundedButton
@@ -232,17 +229,6 @@ export const BookingPage: FC = () => {
                                             <DownArrow></DownArrow>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <span className={css.bookingInfo}>
-                                        Для бронирования на 10+ гостей свяжитесь
-                                        с рестораном по телефону{' '}
-                                        <span
-                                            className={css.bookingInfo__phone}
-                                        >
-                                            +7 (926) 041 53 72
-                                        </span>
-                                    </span>
                                 </div>
                             </div>
                         </div>

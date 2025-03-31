@@ -197,18 +197,18 @@ export const Restaurant = () => {
                         key={'taxi1'}
                         className="ya-taxi-widget"
                         data-ref="https%3A%2F%2Fdemo.efinskiy.ru%2F"
-                        data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?start-lat={start-lat}&amp;start-lon={start-lon}&amp;end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
+                        data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
                         data-tariff="econom"
                         data-app="3"
                         data-lang="ru"
                         data-redirect="1178268795219780156"
-                        data-description="улица Льва Толстого, 19"
+                        data-description="Москва, Трубная, 18"
                         data-size="s"
                         data-theme="normal"
                         data-title="Вызвать такси"
-                        data-use-location="true"
+                        data-use-location="false"
                         data-point-a=""
-                        data-point-b="39.751934,47.227023"
+                        data-point-b="37.625285, 55.769541"
                     ></div>
                 </div>
                 <ContentContainer>
@@ -410,7 +410,7 @@ export const Restaurant = () => {
                                 onClick={() => setHideAbout((prev) => !prev)}
                             >
                                 <span className={css.text}>
-                                    {hideAbout ? 'Читать больше' : 'Меньше'}
+                                    {hideAbout ? 'Читать больше' : 'Скрыть'}
                                 </span>
                             </div>
                         </div>
@@ -478,12 +478,6 @@ export const Restaurant = () => {
                                 <span className={css.title}>Детали</span>
                             </div>
                             <div className={css.infoBlock}>
-                                <div className={css.textRow}>
-                                    <span className={css.title}>Блюда:</span>
-                                    <span className={css.value}>
-                                        Мясо, Рыба и морепродукты
-                                    </span>
-                                </div>
                                 <div className={css.textRow}>
                                     <span className={css.title}>Блюда:</span>
                                     <span className={css.value}>
@@ -560,7 +554,7 @@ export const Restaurant = () => {
                                 }
                             >
                                 <span className={css.text}>
-                                    {hideChefAbout ? 'Читать больше' : 'Меньше'}
+                                    {hideChefAbout ? 'Читать больше' : 'Скрыть'}
                                 </span>
                             </div>
                         </div>
@@ -581,6 +575,20 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
+                <div className={css.events}>
+                    <EventCard
+                        event_id={1}
+                        event_name={
+                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
+                        }
+                        event_datetime={'13.02.2025'}
+                        event_price={1500}
+                        restaurant_title={'Poly'}
+                        restaurant_img={
+                            'https://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
+                        }
+                    />
+                </div>
                 <ContentContainer>
                     <ContentBlock>
                         <HeaderContainer>
@@ -635,39 +643,6 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
-                <div className={css.yaTaxi}>
-                    <div
-                        key={'taxi2'}
-                        className="ya-taxi-widget"
-                        data-ref="https%3A%2F%2Fdemo.efinskiy.ru%2F"
-                        data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?start-lat={start-lat}&amp;start-lon={start-lon}&amp;end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
-                        data-tariff="econom"
-                        data-app="3"
-                        data-lang="ru"
-                        data-redirect="1178268795219780156"
-                        data-description="улица Льва Толстого, 19"
-                        data-size="s"
-                        data-theme="normal"
-                        data-title="Вызвать такси"
-                        data-use-location="true"
-                        data-point-a=""
-                        data-point-b="39.751934,47.227023"
-                    ></div>
-                </div>
-                <div className={css.events}>
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'https://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                </div>
             </div>
         </Page>
     );

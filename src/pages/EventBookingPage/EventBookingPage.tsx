@@ -139,11 +139,6 @@ export const EventBookingPage = () => {
                                 onChange={() => null}
                                 placeholder={'Комментарий'}
                             ></TextInput>
-                            <TextInput
-                                value={''}
-                                onChange={() => null}
-                                placeholder={'Аллергия'}
-                            ></TextInput>
                         </div>
                         <ConfirmationSelect
                             options={confirmationList}
@@ -152,19 +147,19 @@ export const EventBookingPage = () => {
                         />
                     </div>
                 </div>
-                <div className={css.contentContainer}>
-                    <div className={classNames(css.goodsItems_item, css.aic)}>
-                        <span className={css.goodsItems_item__total}>
-                            Предоплата
-                        </span>
-                        <span className={css.goodsItems_item__price}>
-                            {currentEvent?.price
-                                ? guestCount * currentEvent?.price + ' ₽'
-                                : '...'}
-                        </span>
-                    </div>
-                </div>
-                <div className={css.contentContainer}></div>
+                {/*<div className={css.contentContainer}>*/}
+                {/*    <div className={classNames(css.goodsItems_item, css.aic)}>*/}
+                {/*        <span className={css.goodsItems_item__total}>*/}
+                {/*            Предоплата*/}
+                {/*        </span>*/}
+                {/*        <span className={css.goodsItems_item__price}>*/}
+                {/*            {currentEvent?.price*/}
+                {/*                ? guestCount * currentEvent?.price + ' ₽'*/}
+                {/*                : '...'}*/}
+                {/*        </span>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className={css.contentContainer}></div>*/}
                 <div className={css.bottomButton}>
                     <UniversalButton
                         width={'full'}

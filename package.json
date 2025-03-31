@@ -33,6 +33,7 @@
     "react-collapse": "^5.1.1",
     "react-css-collapse": "^4.1.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-mobile-picker": "^1.0.1",
     "react-router-dom": "^6.23.0",
     "reactjs-popup": "^2.0.6",

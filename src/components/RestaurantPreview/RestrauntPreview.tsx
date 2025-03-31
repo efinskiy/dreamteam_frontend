@@ -91,8 +91,6 @@ export const RestaurantPreview = () => {
                 <div className={css.tags}>
                     <InfoTag text={'Открыто до 00:00'} />
                     <InfoTag text={'Ср. чек 1500₽'} />
-                    <InfoTag text={'Ср. чек 1500₽'} />
-                    <InfoTag text={'Ср. чек 1500₽'} />
                 </div>
             </div>
         </Link>
