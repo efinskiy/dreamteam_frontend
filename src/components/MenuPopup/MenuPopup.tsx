@@ -1,5 +1,5 @@
 import Popup from 'reactjs-popup';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import css from './MenuPopup.module.css';
 import 'reactjs-popup/dist/index.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
@@ -30,6 +30,17 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
     const onClose = () => p.setOpen(false);
     const [menuItems] = useState<string[]>(p.menuItems);
     const [currentImage, setCurrentImage] = useState(menuItems[0]);
+    // hack to prevent from scrolling on page
+    useEffect(() => {
+        if (p.isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'scroll';
+        }
+        return () => {
+            document.body.style.overflow = 'scroll';
+        };
+    }, [p.isOpen]);
 
     return (
         <StyledPopup open={p.isOpen} onClose={onClose} position={'top center'}>

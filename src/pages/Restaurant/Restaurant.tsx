@@ -29,14 +29,14 @@ import { mockMenu } from '@/mockData.ts';
 import { GalleryCollection } from '@/pages/Restaurant/Restaurant.types.ts';
 import { CallRestaurantPopup } from '@/components/CallRestaurantPopup/CallRestaurantPopup.tsx';
 import { useScript } from 'usehooks-ts';
-import {
-    reactify,
-    YMap,
-    YMapDefaultFeaturesLayer,
-    YMapDefaultSchemeLayer,
-    YMapMarker,
-} from '@/lib/ymaps.ts';
-import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
+// import {
+//     reactify,
+//     YMap,
+//     YMapDefaultFeaturesLayer,
+//     YMapDefaultSchemeLayer,
+//     YMapMarker,
+// } from '@/lib/ymaps.ts';
+// import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 import { EventCard } from '@/components/EventCard/EventCard.tsx';
 
 export const Restaurant = () => {
@@ -587,51 +587,51 @@ export const Restaurant = () => {
                             <HeaderContent title={'Контакты'} />
                         </HeaderContainer>
                         <div className={css.mapContainer}>
-                            <div className={css.map}>
-                                <YMap
-                                    location={reactify.useDefault({
-                                        center: [39.752053, 47.227037 - 0.0005],
-                                        // 47.226539, 39.752190
-                                        zoom: 17,
-                                    })}
-                                >
-                                    <YMapDefaultSchemeLayer />
-                                    <YMapDefaultFeaturesLayer />
+                            {/*<div className={css.map}>*/}
+                            {/*    <YMap*/}
+                            {/*        location={reactify.useDefault({*/}
+                            {/*            center: [39.752053, 47.227037 - 0.0005],*/}
+                            {/*            // 47.226539, 39.752190*/}
+                            {/*            zoom: 17,*/}
+                            {/*        })}*/}
+                            {/*    >*/}
+                            {/*        <YMapDefaultSchemeLayer />*/}
+                            {/*        <YMapDefaultFeaturesLayer />*/}
 
-                                    <YMapMarker
-                                        coordinates={reactify.useDefault([
-                                            39.752053, 47.227037,
-                                        ])}
-                                        draggable={false}
-                                        onClick={(e) => console.log(e)}
-                                    >
-                                        <LogoMapIcon size={26}></LogoMapIcon>
-                                    </YMapMarker>
-                                </YMap>
-                                <section>
-                                    <div className={css.relativeRestInfo}>
-                                        <div className={css.mapInfo}>
-                                            <div className={css.mapInfoMetro}>
-                                                <div
-                                                    className={
-                                                        css.mapInfoMetroCircle
-                                                    }
-                                                ></div>
-                                                <span
-                                                    className={
-                                                        css.mapInfoMetroText
-                                                    }
-                                                >
-                                                    м. Достоевская
-                                                </span>
-                                            </div>
-                                            <div className={css.mapInfoAddress}>
-                                                Санкт-Петербург, Рубинштейна, 11
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
+                            {/*        <YMapMarker*/}
+                            {/*            coordinates={reactify.useDefault([*/}
+                            {/*                39.752053, 47.227037,*/}
+                            {/*            ])}*/}
+                            {/*            draggable={false}*/}
+                            {/*            onClick={(e) => console.log(e)}*/}
+                            {/*        >*/}
+                            {/*            <LogoMapIcon size={26}></LogoMapIcon>*/}
+                            {/*        </YMapMarker>*/}
+                            {/*    </YMap>*/}
+                            {/*    <section>*/}
+                            {/*        <div className={css.relativeRestInfo}>*/}
+                            {/*            <div className={css.mapInfo}>*/}
+                            {/*                <div className={css.mapInfoMetro}>*/}
+                            {/*                    <div*/}
+                            {/*                        className={*/}
+                            {/*                            css.mapInfoMetroCircle*/}
+                            {/*                        }*/}
+                            {/*                    ></div>*/}
+                            {/*                    <span*/}
+                            {/*                        className={*/}
+                            {/*                            css.mapInfoMetroText*/}
+                            {/*                        }*/}
+                            {/*                    >*/}
+                            {/*                        м. Достоевская*/}
+                            {/*                    </span>*/}
+                            {/*                </div>*/}
+                            {/*                <div className={css.mapInfoAddress}>*/}
+                            {/*                    Санкт-Петербург, Рубинштейна, 11*/}
+                            {/*                </div>*/}
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+                            {/*    </section>*/}
+                            {/*</div>*/}
                         </div>
                     </ContentBlock>
                 </ContentContainer>

@@ -49,3 +49,63 @@
     width: 100%;
     height: calc(100vh - 130px);
 }
+
+.mapPoint {
+    cursor: pointer;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+}
+
+.mapPoint__selected {
+    cursor: pointer;
+    position: relative;
+    width: 35px;
+    height: 50px;
+    transform: translate(-50%, -100%);
+}
+
+.restInfoContainer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 25px 0 30px;
+    z-index: 2;
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.restInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.restInfo__title {
+    font-family: 'Heading Pro Ultracompressed', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+}
+
+.restInfo_block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.restInfo_block__payload {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.p15 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.mont {
+    font-family: 'Mont', sans-serif;
+}

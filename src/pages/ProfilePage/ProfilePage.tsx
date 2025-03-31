@@ -9,12 +9,20 @@ import { PenIcon } from '@/components/Icons/PenIcon.tsx';
 import { UserProfileIcon } from '@/components/Icons/UserProfileIcon.tsx';
 // import { SupportIcon } from '@/components/Icons/SupportIcon.tsx';
 import { QRCodeIcon } from '@/components/Icons/QRCodeIcon.tsx';
+import { FeedbackPopup } from '@/pages/ProfilePage/FeedbackPopup/FeedbackPopup.tsx';
+import { useState } from 'react';
 
 export const ProfilePage = () => {
     const navigate = useNavigate();
-
+    const [feedbackPopup, setFeedbackPopup] = useState(false);
     return (
         <Page back={true}>
+            <FeedbackPopup
+                isOpen={feedbackPopup}
+                setOpen={setFeedbackPopup}
+                booking_id={1}
+            />
+
             <div className={css.page}>
                 <div className={css.pageWrapper}>
                     <div className={css.header}>
@@ -53,12 +61,15 @@ export const ProfilePage = () => {
                             <TicketsIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>Мои билеты</span>
                         </Link>
-                        <Link to={'/review'} className={css.navLink}>
+                        <span
+                            className={css.navLink}
+                            onClick={() => setFeedbackPopup(true)}
+                        >
                             <PenIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>
                                 Оставить отзыв
                             </span>
-                        </Link>
+                        </span>
                         <Link to={'/me'} className={css.navLink}>
                             <UserProfileIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>
