@@ -6,7 +6,7 @@ import { Header } from '@/components/Header/Header.tsx';
 import { OptionsNavigation } from '@/components/OptionsNavigation/OptionsNavigation.tsx';
 import { RestaurantPreview } from '@/components/RestaurantPreview/RestrauntPreview.tsx';
 import { BookingReminder } from '@/components/BookingReminder/BookingReminder.tsx';
-import { MOCK_RestaurantsShort, mockBookingDate } from '@/mockData.ts';
+import { MOCK_Restaurants, mockBookingDate } from '@/mockData.ts';
 import { useAtom } from 'jotai';
 import {
     currentCityAtom,
@@ -15,6 +15,7 @@ import {
 import { cityListAtom, ICity } from '@/atoms/cityListAtom.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { CitySelect } from '@/components/CitySelect/CitySelect.tsx';
+import { IRestaurantShort } from '@/types/restaurant.ts';
 
 const transformToConfirmationFormat = (v: ICity): IConfirmationType => {
     return {
@@ -32,6 +33,10 @@ export const IndexPage: FC = () => {
     const [cityListConfirm] = useState<IConfirmationType[]>(
         cityListA.map((v: ICity) => transformToConfirmationFormat(v))
     );
+    const [restaurantsList, setRestaurantsList] = useState<IRestaurantShort[]>(
+        []
+    );
+
     const [currentCityS, setCurrentCityS] = useState<IConfirmationType>(
         cityListConfirm.find((v) => v.id == currentCityA) ?? {
             id: 'moscow',
@@ -48,6 +53,12 @@ export const IndexPage: FC = () => {
             }
         );
     }, [cityListA]);
+
+    useEffect(() => {
+        setRestaurantsList(
+            MOCK_Restaurants.filter((v) => v.city.name_english == currentCityA)
+        );
+    }, [currentCityA]);
 
     const updateCurrentCity = (city: IConfirmationType) => {
         setCurrentCityS(city);
@@ -72,7 +83,7 @@ export const IndexPage: FC = () => {
                         currentValue={currentCityS}
                         onChange={updateCurrentCity}
                     />
-                    {MOCK_RestaurantsShort.map((rest) => (
+                    {restaurantsList.map((rest) => (
                         <RestaurantPreview
                             restaurant={rest}
                             key={`rest-${rest.id}`}

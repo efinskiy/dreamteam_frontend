@@ -1,5 +1,6 @@
 import { App } from '../src/components/App.tsx';
 import { ErrorBoundary } from '../src/components/ErrorBoundary.tsx';
+import { StrictMode } from 'react';
 
 function ErrorBoundaryError({ error }: { error: unknown }) {
     return (
@@ -21,7 +22,9 @@ function ErrorBoundaryError({ error }: { error: unknown }) {
 export function Root() {
     return (
         <ErrorBoundary fallback={ErrorBoundaryError}>
-            <App />
+            <StrictMode>
+                <App />
+            </StrictMode>
         </ErrorBoundary>
     );
 }

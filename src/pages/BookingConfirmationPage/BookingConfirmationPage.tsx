@@ -56,9 +56,6 @@ export const BookingConfirmationPage = () => {
                             <h3 className={css.headerContent__title}>
                                 Бронирование
                             </h3>
-                            <p className={css.headerContent__subtitle}>
-                                Smoke BBQ
-                            </p>
                         </div>
                         <div
                             className={css.headerButtons}

@@ -1,4 +1,4 @@
-interface GalleryPhoto {
+export interface GalleryPhoto {
     link: string;
 }
 

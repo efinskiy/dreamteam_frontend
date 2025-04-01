@@ -15,9 +15,10 @@ interface IInputSlider {
 export const InputSlider: FC<IInputSlider> = (p) => {
     return (
         <div className={css.planSwitch}>
-            {p.itemsList.map((item) => (
+            {p.itemsList.map((item, index) => (
                 <>
                     <input
+                        key={index}
                         type="radio"
                         name="plan"
                         id={item.id}

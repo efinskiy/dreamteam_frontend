@@ -4,7 +4,7 @@ import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { UnmountClosed } from 'react-collapse';
@@ -24,9 +24,12 @@ import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/Heade
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { HeaderSubText } from '@/components/ContentBlock/HeaderContainer/HeaderSubText/HeaderContainer.tsx';
 import { MenuPopup } from '@/components/MenuPopup/MenuPopup.tsx';
-import { mockGallery } from '@/mockData.ts';
+import { MOCK_Restaurants } from '@/mockData.ts';
 import { mockMenu } from '@/mockData.ts';
-import { GalleryCollection } from '@/pages/Restaurant/Restaurant.types.ts';
+import {
+    GalleryCollection,
+    GalleryPhoto,
+} from '@/pages/Restaurant/Restaurant.types.ts';
 import { CallRestaurantPopup } from '@/components/CallRestaurantPopup/CallRestaurantPopup.tsx';
 import { useScript } from 'usehooks-ts';
 // import {
@@ -40,10 +43,45 @@ import { useScript } from 'usehooks-ts';
 import { EventCard } from '@/components/EventCard/EventCard.tsx';
 import { useAtom } from 'jotai';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
+import { IPhotoCard, IRestaurant } from '@/types/restaurant.ts';
+import {
+    YMap,
+    YMapComponentsProvider,
+    YMapDefaultFeaturesLayer,
+    YMapDefaultSchemeLayer,
+    YMapMarker,
+} from 'ymap3-components';
+import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
+
+const transformGallery = (gallery: IPhotoCard[]): GalleryCollection[] => {
+    // Создаем объект для группировки по категориям
+    const groupedByCategory: Record<string, GalleryPhoto[]> = {};
+
+    // Группируем фотографии по категориям
+    gallery.forEach((photo) => {
+        if (!groupedByCategory[photo.category]) {
+            groupedByCategory[photo.category] = [];
+        }
+        groupedByCategory[photo.category].push({ link: photo.url });
+    });
+
+    // Преобразуем объект в массив GalleryCollection
+    return Object.entries(groupedByCategory).map(([title, photos]) => ({
+        title,
+        photos,
+    }));
+};
 
 export const Restaurant = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const [searchParams] = useSearchParams();
+
+    const [restaurant, setRestaurant] = useState<IRestaurant>();
+
+    useEffect(() => {
+        setRestaurant(MOCK_Restaurants.find((v) => v.id === Number(id)));
+    }, [id]);
 
     useScript('https://yastatic.net/taxi-widget/ya-taxi-widget-v2.js', {
         removeOnUnmount: true,
@@ -59,7 +97,7 @@ export const Restaurant = () => {
     );
     const [callPopup, setCallPopup] = useState(false);
 
-    const [gallery] = useState<GalleryCollection[]>(mockGallery);
+    const [gallery, setGallery] = useState<GalleryCollection[]>([]);
     const [currentGalleryCategory, setCurrentGalleryCategory] =
         useState('Все фото');
     const [currentGalleryPhotos, setCurrentGalleryPhotos] = useState<
@@ -67,13 +105,19 @@ export const Restaurant = () => {
     >([]);
 
     const goToProfile = () => {
-        setBackUrlAtom(`/restaurant/1`);
+        setBackUrlAtom(`/restaurant/${id}`);
         navigate('/profile');
     };
 
     useEffect(() => {
+        if (restaurant?.gallery) {
+            setGallery(transformGallery(restaurant.gallery));
+        }
+    }, [restaurant]);
+
+    useEffect(() => {
         setCurrentGalleryPhotos(getGalleryPhotos());
-    }, [currentGalleryCategory]);
+    }, [currentGalleryCategory, gallery]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -150,7 +194,9 @@ export const Restaurant = () => {
                             ></RoundedButton>
                         </div>
                         {headerScrolled ? (
-                            <span className={css.headerTitle}>Smoke BBQ</span>
+                            <span className={css.headerTitle}>
+                                {restaurant?.title}
+                            </span>
                         ) : null}
                         <div className={css.headerNavBlock}>
                             <RoundedButton
@@ -168,7 +214,7 @@ export const Restaurant = () => {
                 <div className={css.floatingFooterWrapper}>
                     <div
                         className={css.bookingButton}
-                        onClick={() => navigate(`/booking/1`)}
+                        onClick={() => navigate(`/booking/${restaurant?.id}`)}
                     >
                         <span className={css.text}>Забронировать</span>
                     </div>
@@ -182,7 +228,7 @@ export const Restaurant = () => {
                         action={() =>
                             // ,
                             window.open(
-                                'https://maps.yandex.ru/?ll=37.625285,55.769541&text=Smoke BBQ&z=17'
+                                `https://maps.yandex.ru/?ll=${restaurant?.address_lonlng}&text=${restaurant?.title}&z=17`
                             )
                         }
                     />
@@ -198,7 +244,7 @@ export const Restaurant = () => {
                 </div>
             </div>
             <div className={css.pageContainer}>
-                <RestaurantTopPreview />
+                <RestaurantTopPreview rest={restaurant} />
                 <div className={css.yaTaxi}>
                     <div
                         key={'taxi1'}
@@ -209,13 +255,13 @@ export const Restaurant = () => {
                         data-app="3"
                         data-lang="ru"
                         data-redirect="1178268795219780156"
-                        data-description="Москва, Трубная, 18"
+                        data-description={restaurant?.address}
                         data-size="s"
                         data-theme="normal"
                         data-title="Вызвать такси"
                         data-use-location="false"
                         data-point-a=""
-                        data-point-b="37.625285,55.769541"
+                        data-point-b={restaurant?.address_lonlng}
                     ></div>
                 </div>
                 <ContentContainer>
@@ -278,6 +324,7 @@ export const Restaurant = () => {
                                             </div>
                                         </SwiperSlide>
                                     ))}
+                                    <SwiperSlide style={{ width: '64px' }} />
                                 </Swiper>
                             </div>
                         </HeaderContainer>
@@ -328,9 +375,7 @@ export const Restaurant = () => {
                                         )}
                                     </SwiperSlide>
                                 ))}
-                                <SwiperSlide
-                                    style={{ width: '50px' }}
-                                ></SwiperSlide>
+                                <SwiperSlide style={{ width: '128px' }} />
                             </Swiper>
                         </div>
                     </ContentBlock>
@@ -394,23 +439,7 @@ export const Restaurant = () => {
                                     hideAbout ? css.trimLines : null
                                 )}
                             >
-                                Ресторан с концепцией ultimate firewood cooking,
-                                где на огне готовится не только мясо, но и рыбу,
-                                овощи и морепродукты. Главный специалитет —
-                                брискет, говяжья грудинка, которую мы коптим в
-                                смокере в течение 14–16 часов до совершенного
-                                вкуса и текстуры. Технологию приготовления
-                                бренд-шеф Алексей Каневский привез из Остина,
-                                штат Техас. Наша винная карта — отдельный
-                                предмет гордости. В ней — свыше 100 этикеток
-                                вина, которые любим и пьем сами: от культовой
-                                классики Европы и США до трендовых регионов и
-                                редких находок. Кроме того, внушительная
-                                коллекция бурбонов и линейка пива. Каждый день
-                                готовим завтраки из печи: по будням с 09:00 до
-                                12:00, по субботам — с 09:00 до 14:00. По
-                                воскресеньям проводим бранчи для всей семьи,
-                                меню которых почти не повторяется.
+                                {restaurant?.about_text}
                             </span>
                             <div
                                 className={css.trimLinesButton}
@@ -452,12 +481,15 @@ export const Restaurant = () => {
                                 className={css.collapse}
                             >
                                 <div className={css.workHours}>
-                                    <span className={css.text}>
-                                        Вс-чт: 09:00-23:00
-                                    </span>
-                                    <span className={css.text}>
-                                        Пт-сб: 09:00-00:00
-                                    </span>
+                                    {restaurant?.worktime.map((r) => (
+                                        <span
+                                            key={`weekday-${r.weekday}`}
+                                            className={css.text}
+                                        >
+                                            {r.weekday}: {r.time_start}-
+                                            {r.time_end}
+                                        </span>
+                                    ))}
                                 </div>
                             </UnmountClosed>
                         </div>
@@ -499,7 +531,13 @@ export const Restaurant = () => {
                                 <div className={css.textRow}>
                                     <span className={css.title}>Блюда:</span>
                                     <span className={css.value}>
-                                        Мясо, Рыба и морепродукты
+                                        {restaurant?.about_dishes}
+                                    </span>
+                                </div>
+                                <div className={css.textRow}>
+                                    <span className={css.title}>Кухня:</span>
+                                    <span className={css.value}>
+                                        {restaurant?.about_kitchen}
                                     </span>
                                 </div>
                                 <div className={css.textRow}>
@@ -507,31 +545,16 @@ export const Restaurant = () => {
                                         Особенности:
                                     </span>
                                     <span className={css.value}>
-                                        Завтраки, Обеды, Бранчи, Веранда, Второй
-                                        этаж под мероприятия, Парковка
-                                    </span>
-                                </div>
-                                <div className={css.textRow}>
-                                    <span className={css.title}>С детьми:</span>
-                                    <span className={css.value}>
-                                        Дети — всегда желанные гости! Предложим
-                                        детского меню, стульчик и раскраски
-                                    </span>
-                                </div>
-                                <div className={css.textRow}>
-                                    <span className={css.title}>
-                                        С животными:
-                                    </span>
-                                    <span className={css.value}>
-                                        Мы рады гостям с воспитанными питомцами
-                                        и предложим миску с водой
+                                        {restaurant?.about_features}
                                     </span>
                                 </div>
                                 <div className={css.textRow}>
                                     <span className={css.title}>
                                         Средний чек:
                                     </span>
-                                    <span className={css.value}>1500 ₽</span>
+                                    <span className={css.value}>
+                                        {restaurant?.avg_cheque} ₽
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -549,21 +572,7 @@ export const Restaurant = () => {
                                     hideChefAbout ? css.trimLines : null
                                 )}
                             >
-                                Илья Бурнасов, шеф-повар с 17-летним опытом в
-                                ресторанной индустрии Петербурга, участник
-                                престижных гастрономических фестивалей и
-                                стажировок в Лондоне и Москве. Свои первые шаги
-                                в профессии он сделал в Ginza Project, где
-                                принимал участие в запуске новых ресторанов.
-                                Затем возглавил кухню SPA-курорта
-                                «Президент-Отель», а позже стал бренд-шефом
-                                таких известных проектов, как Hitch, Locale,
-                                «Ателье. Tapas & Bar» и концепт-шефом PioNero.
-                                Проходил стажировки в White Rabbit, а также в
-                                лондонских Beats, Zelman Meats, Burger &
-                                Lobster. Финалист всероссийского конкурса «На
-                                высоте» (2017), участник Madrid Fusion (2018).
-                                Преподавал в Novikov Space
+                                {restaurant?.brand_chef.about}
                             </span>
                             <div
                                 className={css.trimLinesButton}
@@ -583,11 +592,13 @@ export const Restaurant = () => {
                                     css.bgImage
                                 )}
                                 style={{
-                                    backgroundImage: `url(/img/chef.png)`,
+                                    backgroundImage: `url(${restaurant?.brand_chef.photo_url})`,
                                 }}
                             ></div>
                             <div className={css.chefInfo}>
-                                <span className={css.title}>Роман Клюквин</span>
+                                <span className={css.title}>
+                                    {restaurant?.brand_chef.name}
+                                </span>
                                 <span className={css.subTitle}>Бренд-шеф</span>
                             </div>
                         </div>
@@ -610,53 +621,97 @@ export const Restaurant = () => {
                 <ContentContainer>
                     <ContentBlock>
                         <HeaderContainer>
-                            <HeaderContent title={'Контакты'} />
+                            <HeaderContent title={'Адрес'} />
                         </HeaderContainer>
                         <div className={css.mapContainer}>
-                            {/*<div className={css.map}>*/}
-                            {/*    <YMap*/}
-                            {/*        location={reactify.useDefault({*/}
-                            {/*            center: [39.752053, 47.227037 - 0.0005],*/}
-                            {/*            // 47.226539, 39.752190*/}
-                            {/*            zoom: 17,*/}
-                            {/*        })}*/}
-                            {/*    >*/}
-                            {/*        <YMapDefaultSchemeLayer />*/}
-                            {/*        <YMapDefaultFeaturesLayer />*/}
+                            <div className={css.map}>
+                                <YMapComponentsProvider
+                                    apiKey={
+                                        '73a95f3b-fa74-4525-99e3-86ee1309f266'
+                                    }
+                                    lang={'ru_RU'}
+                                >
+                                    <YMap
+                                        location={{
+                                            center: [
+                                                Number(
+                                                    restaurant?.address_lonlng.split(
+                                                        ','
+                                                    )[0]
+                                                ),
+                                                Number(
+                                                    restaurant?.address_lonlng.split(
+                                                        ','
+                                                    )[1]
+                                                ) - 0.0003,
+                                            ],
+                                            // 47.226539, 39.752190
+                                            zoom: 17,
+                                        }}
+                                    >
+                                        <YMapDefaultSchemeLayer />
+                                        <YMapDefaultFeaturesLayer />
+                                        <YMapMarker
+                                            coordinates={[
+                                                Number(
+                                                    restaurant?.address_lonlng.split(
+                                                        ','
+                                                    )[0]
+                                                ),
+                                                Number(
+                                                    restaurant?.address_lonlng.split(
+                                                        ','
+                                                    )[1]
+                                                ),
+                                            ]}
+                                            draggable={false}
+                                        >
+                                            <div className={css.mapPoint}>
+                                                <LogoMapIcon
+                                                    size={26}
+                                                ></LogoMapIcon>
+                                            </div>
+                                        </YMapMarker>
+                                    </YMap>
+                                    <section>
+                                        <div className={css.relativeRestInfo}>
+                                            <div className={css.mapInfo}>
+                                                <div
+                                                    className={css.mapInfoMetro}
+                                                >
+                                                    {restaurant?.address_station_color ? (
+                                                        <div
+                                                            className={
+                                                                css.mapInfoMetroCircle
+                                                            }
+                                                            style={{
+                                                                backgroundColor: `${restaurant.address_station_color}`,
+                                                            }}
+                                                        ></div>
+                                                    ) : null}
+                                                    <span
+                                                        className={
+                                                            css.mapInfoMetroText
+                                                        }
+                                                    >
+                                                        {
+                                                            restaurant?.address_station
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        css.mapInfoAddress
+                                                    }
+                                                >
+                                                    {restaurant?.address}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </YMapComponentsProvider>
+                            </div>
 
-                            {/*        <YMapMarker*/}
-                            {/*            coordinates={reactify.useDefault([*/}
-                            {/*                39.752053, 47.227037,*/}
-                            {/*            ])}*/}
-                            {/*            draggable={false}*/}
-                            {/*            onClick={(e) => console.log(e)}*/}
-                            {/*        >*/}
-                            {/*            <LogoMapIcon size={26}></LogoMapIcon>*/}
-                            {/*        </YMapMarker>*/}
-                            {/*    </YMap>*/}
-                            {/*    <section>*/}
-                            {/*        <div className={css.relativeRestInfo}>*/}
-                            {/*            <div className={css.mapInfo}>*/}
-                            {/*                <div className={css.mapInfoMetro}>*/}
-                            {/*                    <div*/}
-                            {/*                        className={*/}
-                            {/*                            css.mapInfoMetroCircle*/}
-                            {/*                        }*/}
-                            {/*                    ></div>*/}
-                            {/*                    <span*/}
-                            {/*                        className={*/}
-                            {/*                            css.mapInfoMetroText*/}
-                            {/*                        }*/}
-                            {/*                    >*/}
-                            {/*                        м. Достоевская*/}
-                            {/*                    </span>*/}
-                            {/*                </div>*/}
-                            {/*                <div className={css.mapInfoAddress}>*/}
-                            {/*                    Санкт-Петербург, Рубинштейна, 11*/}
-                            {/*                </div>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*    </section>*/}
                             {/*</div>*/}
                         </div>
                     </ContentBlock>

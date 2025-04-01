@@ -45,9 +45,42 @@
     color: var(--red);
 }
 
-.map {
+.bottomEl {
     width: 100%;
     height: calc(100vh - 130px);
+}
+
+.restListContainer {
+    margin-top: 16px;
+    padding: 25px 15px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.restList_item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.restList_item_title {
+    font-family: "Heading Pro Ultracompressed", sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.restList_item_subtitle {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--dark-grey);
 }
 
 .mapPoint {
@@ -91,7 +124,7 @@
 
 .restInfo_block {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
 }
 
@@ -101,11 +134,79 @@
     gap: 4px;
 }
 
+.restInfo__address {
+    font-weight: 700;
+    color: var(--dark-grey);
+    font-size: 14px;
+}
+
+.restInfo_about {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
+
+.swiper_slide {
+    cursor: pointer;
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--dark-grey);
+    background-color: var(--secondary-background);
+    border-radius: 8px;
+    display: block;
+}
+
 .p15 {
     padding-left: 15px;
     padding-right: 15px;
 }
 
+.buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.roundButton {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--secondary-background);
+    min-width: 50px;
+}
+
+.redButton {
+    display: flex;
+    padding: 15px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red);
+    border-radius: 10px;
+
+    span {
+        font-weight: 700;
+        font-size: 16px;
+        color: white;
+    }
+}
 .mont {
     font-family: 'Mont', sans-serif;
+}
+
+.restInfo__metro {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.restInfo__metro_block {
+    display: flex;
+    gap: 4px;
+    align-items: center;
 }

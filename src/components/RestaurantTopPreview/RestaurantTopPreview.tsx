@@ -2,26 +2,31 @@ import { classNames } from '@telegram-apps/sdk-react';
 import css from './RestaurantTopPreview.module.css';
 import { MoneyIcon } from '@/components/Icons/MoneyIcon.tsx';
 import { TimeCircleIcon } from '@/components/Icons/TimeCircleIcon.tsx';
+import { IRestaurant } from '@/types/restaurant.ts';
 
-export const RestaurantTopPreview = () => {
+interface Props {
+    rest?: IRestaurant;
+}
+
+export const RestaurantTopPreview = ({ rest }: Props) => {
     return (
         <div
             className={classNames(css.previewContainer, css.bgImage)}
-            style={{ backgroundImage: `url('/img/placeholder_2.png')` }}
+            style={{ backgroundImage: `url(${rest?.thumbnail_photo})` }}
         >
             <div className={css.halfBlackWrapper}>
                 <div className={css.previewContainerContent}>
                     <div className={css.previewMainInfo}>
-                        <h1 className={css.title}>Smoke BBQ</h1>
-                        <span className={css.location}>
-                            Москва, Трубная, 18
-                        </span>
+                        <h1 className={css.title}>{rest?.title}</h1>
+                        <span className={css.location}>{rest?.address}</span>
                     </div>
                     <div className={css.previewExtra}>
                         <div className={css.extraItem}>
                             <MoneyIcon color={'white'} size={24} />
                             <div className={css.extraItemContent}>
-                                <span className={css.extraTop}>1500 ₽</span>
+                                <span className={css.extraTop}>
+                                    {rest?.avg_cheque} ₽
+                                </span>
                                 <span className={css.extraBottom}>
                                     Средний чек
                                 </span>
@@ -33,7 +38,7 @@ export const RestaurantTopPreview = () => {
                             <div className={css.extraItemContent}>
                                 <span className={css.extraTop}>Открыто</span>
                                 <span className={css.extraBottom}>
-                                    до 00:00
+                                    до {rest?.openTime}
                                 </span>
                             </div>
                         </div>

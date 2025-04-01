@@ -1,3 +1,5 @@
+import { IWorkTime } from '@/types/restaurant.ts';
+
 export const callPhone = (tel: string) => {
     // https://github.com/Telegram-Mini-Apps/telegram-apps/issues/677
     window.open(`tel:${tel}`, '_blank');
@@ -82,3 +84,48 @@ export const formatDateShort = (inputDate: string): string => {
 
     return `${day} ${month}`;
 };
+
+export function formatWorkTime(worktime: IWorkTime[]): string[] {
+    const result: string[] = [];
+    let currentRange: IWorkTime[] = [];
+
+    for (let i = 0; i < worktime.length; i++) {
+        if (currentRange.length === 0) {
+            currentRange.push(worktime[i]);
+            continue;
+        }
+
+        const last = currentRange[currentRange.length - 1];
+        const current = worktime[i];
+
+        if (
+            last.time_start === current.time_start &&
+            last.time_end === current.time_end
+        ) {
+            currentRange.push(current);
+        } else {
+            addToResult(currentRange, result);
+            currentRange = [current];
+        }
+    }
+
+    if (currentRange.length > 0) {
+        addToResult(currentRange, result);
+    }
+
+    return result;
+}
+
+function addToResult(range: IWorkTime[], result: string[]): void {
+    if (range.length === 1) {
+        result.push(
+            `${range[0].weekday}: ${range[0].time_start} - ${range[0].time_end}`
+        );
+    } else {
+        const first = range[0].weekday;
+        const last = range[range.length - 1].weekday;
+        result.push(
+            `${first}-${last}: ${range[0].time_start} - ${range[0].time_end}`
+        );
+    }
+}

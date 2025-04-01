@@ -19,7 +19,7 @@ interface IProps {
 
 export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
     return (
-        <Link className={css.restaurant} to={'/restaurant/1'}>
+        <Link className={css.restaurant} to={`/restaurant/${restaurant.id}`}>
             <div
                 className={classNames(css.imaged, css.bgImage)}
                 style={{
