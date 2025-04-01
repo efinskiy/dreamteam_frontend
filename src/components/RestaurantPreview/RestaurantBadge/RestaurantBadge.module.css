@@ -4,7 +4,6 @@
     background-color: var(--primary-background);
     border-radius: 16px;
     display: flex;
-    padding: 12px;
     box-sizing: border-box;
     flex-direction: column;
     justify-content: center;
@@ -16,6 +15,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+    border-radius: 16px;
 }
 
 .slogan {

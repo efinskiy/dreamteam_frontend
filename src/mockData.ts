@@ -462,6 +462,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '30.344282,59.929824',
         address_station: 'м. Достоевская',
         address_station_color: 'rgb(234, 113, 37)',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/smokebbqmoscow',
+                name: 'smokebbqmoscow',
+            },
+        ],
     },
     {
         id: 2,
@@ -650,6 +657,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '30.363308,59.941317',
         address_station: 'м. Чернышевская',
         address_station_color: 'rgb(214, 8, 59)',
+        socials: [
+            {
+                type: 'instagram',
+                name: 'selfedgejapanese.stpete',
+                url: 'https://www.instagram.com/selfedgejapanese.stpete',
+            },
+        ],
     },
     {
         id: 3,
@@ -813,6 +827,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '30.342485,59.937786',
         address_station: 'м. Гостинный двор',
         address_station_color: 'rgb(0, 154, 73)',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/blackchopspub',
+                name: 'blackchopspub',
+            },
+        ],
     },
     {
         id: 4,
@@ -973,6 +994,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '30.327626,59.942721',
         address_station: 'м. Гостинный двор',
         address_station_color: 'rgb(0, 154, 73)',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/pametaverna',
+                name: 'pametaverna',
+            },
+        ],
     },
     {
         id: 5,
@@ -1135,6 +1163,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '30.363435,59.941539',
         address_station: 'м. Чернышевская',
         address_station_color: 'rgb(214, 8, 59)',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/trappistbrasserie',
+                name: 'trappistbrasserie',
+            },
+        ],
     },
     {
         id: 6,
@@ -1308,6 +1343,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '37.587007,55.773711',
         address_station: 'м. Белорусская',
         address_station_color: '#8D5B2D',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/selfedgejapanese.moscow',
+                name: 'selfedgejapanese.moscow',
+            },
+        ],
     },
     {
         id: 7,
@@ -1496,6 +1538,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '60.609793,56.833225',
         address_station: 'м. Геологическая',
         address_station_color: 'green',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/selfedgejapanese.moscow',
+                name: 'selfedgejapanese.moscow',
+            },
+        ],
     },
     {
         id: 8,
@@ -1665,6 +1714,13 @@ export const MOCK_Restaurants = <IRestaurant[]>[
         address_lonlng: '37.625285,55.769541',
         address_station: 'м. Трубная',
         address_station_color: '#99CC00',
+        socials: [
+            {
+                type: 'instagram',
+                url: 'https://www.instagram.com/smokebbqmoscow',
+                name: 'smokebbqmoscow',
+            },
+        ],
     },
 ];
 

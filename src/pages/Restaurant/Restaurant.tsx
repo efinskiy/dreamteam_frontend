@@ -502,23 +502,24 @@ export const Restaurant = () => {
                                 </span>
                             </div>
                             <div className={css.infoBlock}>
-                                <a
-                                    href={
-                                        'https://www.instagram.com/poly.stpete/'
-                                    }
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <div className={css.socialRow}>
-                                        <InstagramIcon
-                                            color={'black'}
-                                            size={20}
-                                        />
-                                        <span className={css.socialLink}>
-                                            poly.stpete
-                                        </span>
-                                    </div>
-                                </a>
+                                {restaurant?.socials.map((social) => (
+                                    <a
+                                        key={social.name}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <div className={css.socialRow}>
+                                            <InstagramIcon
+                                                color={'black'}
+                                                size={20}
+                                            />
+                                            <span className={css.socialLink}>
+                                                {social.name}
+                                            </span>
+                                        </div>
+                                    </a>
+                                ))}
                             </div>
                         </div>
                     </ContentBlock>

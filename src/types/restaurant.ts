@@ -58,4 +58,5 @@ export interface IRestaurant extends IRestaurantShort {
     address_lonlng: string;
     address_station?: string;
     address_station_color?: string;
+    socials: ISocialnetwork[];
 }
