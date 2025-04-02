@@ -10,7 +10,7 @@ export const MyBookingsPage = () => {
     const navigate = useNavigate();
 
     const clickOnActiveBooking = (id: number) => {
-        alert(`BookingCard callback => ${id}`);
+        navigate(`/myBookings/${id}`);
     };
 
     return (

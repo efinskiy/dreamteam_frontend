@@ -3,6 +3,7 @@ import css from './BookingReminder.module.css';
 import { TimeCircle } from '@/components/Icons/TimeCircle.tsx';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
+import { useNavigate } from 'react-router-dom';
 
 interface BookingReminderProps {
     title: string;
@@ -26,8 +27,13 @@ const formatDate = (date: Date): string => {
 };
 
 export const BookingReminder: FC<BookingReminderProps> = (p) => {
+    const navigate = useNavigate();
+
     return (
-        <div className={css.bookingReminder}>
+        <div
+            className={css.bookingReminder}
+            onClick={() => navigate('/myBookings/1')}
+        >
             <div className={css.inner}>
                 <span className={css.title}>{p.title}</span>
                 <span className={css.subText}>Москва, Трубная 8</span>

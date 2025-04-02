@@ -1,4 +1,6 @@
 import { IWorkTime } from '@/types/restaurant.ts';
+import { IEventBooking } from '@/pages/EventsPage/EventsPage.tsx';
+import { Dispatch, SetStateAction } from 'react';
 
 export const callPhone = (tel: string) => {
     // https://github.com/Telegram-Mini-Apps/telegram-apps/issues/677
@@ -49,6 +51,20 @@ const MONTHS = [
     'ноя',
     'дек',
 ];
+const MONTHS_LONG = [
+    'январь',
+    'февраль',
+    'март',
+    'апрель',
+    'май',
+    'июнь',
+    'июль',
+    'август',
+    'сентябрь',
+    'октябрь',
+    'ноябрь',
+    'декабрь',
+];
 
 export const formatDate = (inputDate: string): string => {
     const today = new Date();
@@ -69,6 +85,20 @@ export const formatDate = (inputDate: string): string => {
     } else {
         return `${day} ${month}`;
     }
+};
+
+export const formatDateCalendar = (inputDate: Date): string => {
+    const month = MONTHS_LONG[inputDate.getMonth()];
+    const year = inputDate.getFullYear();
+
+    return `${month} ${year}`;
+};
+
+export const formatDateDT = (inputDate: Date): string => {
+    const day = inputDate.getDate();
+    const month = MONTHS[inputDate.getMonth()];
+
+    return `${day} ${month}`;
 };
 
 export const formatDateShort = (inputDate: string): string => {
@@ -129,3 +159,8 @@ function addToResult(range: IWorkTime[], result: string[]): void {
         );
     }
 }
+
+export type IEventBookingContext = [
+    IEventBooking,
+    Dispatch<SetStateAction<IEventBooking>>,
+];

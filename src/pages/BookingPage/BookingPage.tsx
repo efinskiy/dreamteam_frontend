@@ -70,11 +70,6 @@ export const BookingPage: FC = () => {
         text: 'В Telegram',
     });
 
-    useEffect(() => {
-        console.log(guestCount, 'guestCount');
-    }, [guestCount]);
-    //
-
     const [availableTimeslots, setAvailableTimeslots] = useState<ITimeSlot[]>(
         []
     );
@@ -293,6 +288,7 @@ export const BookingPage: FC = () => {
                                     slidesPerView="auto"
                                     modules={[FreeMode]}
                                     freeMode={true}
+                                    spaceBetween={8}
                                 >
                                     {filteredTimeslots.map((v) => (
                                         <SwiperSlide

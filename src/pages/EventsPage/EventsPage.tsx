@@ -1,12 +1,31 @@
 import { Page } from '@/components/Page.tsx';
 import css from './EventsPage.module.css';
-import { EventCard } from '@/components/EventCard/EventCard.tsx';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+
+export interface IEventBooking {
+    eventId?: string;
+    restaurantId?: string;
+    date?: Date;
+    time?: string;
+    guestCount?: number;
+}
 
 export const EventsPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const isRestaurantsPage = useMemo(() => {
+        return location.pathname.split('/').at(-1) === 'restaurant';
+    }, [location.pathname]);
+    const [bookingInfo, setBookingInfo] = useState<IEventBooking>({
+        eventId: undefined,
+        restaurantId: undefined,
+        date: undefined,
+        time: undefined,
+    });
 
     return (
         <Page back={true}>
@@ -17,71 +36,12 @@ export const EventsPage = () => {
                         icon={<BackIcon color={'var(--dark-grey)'} />}
                         action={() => navigate(-1)}
                     />
-                    <span className={css.header_title}>Мероприятия</span>
+                    <span className={css.header_title}>
+                        {isRestaurantsPage ? 'Рестораны' : 'Мероприятия'}
+                    </span>
                     <div className={css.header_spacer} />
                 </div>
-                <div className={css.cards}>
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                    <EventCard
-                        event_id={1}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                </div>
+                <Outlet context={[bookingInfo, setBookingInfo]} />
             </div>
         </Page>
     );

@@ -8,7 +8,12 @@ import { FreeMode } from 'swiper/modules';
 export const RestaurantNavigation: FC = () => {
     return (
         <div className={css.navigationSlider}>
-            <Swiper modules={[FreeMode]} freeMode={true} slidesPerView={'auto'}>
+            <Swiper
+                modules={[FreeMode]}
+                freeMode={true}
+                slidesPerView={'auto'}
+                spaceBetween={8}
+            >
                 <SwiperSlide style={{ width: 'fit-content' }}>
                     <AnchorLink href="#booking" offset={64}>
                         <div

@@ -1,0 +1,72 @@
+.frame {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.timeOfDayContainer {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.select_timeOfDay {
+    display: flex;
+    gap: 0;
+}
+
+.timeOfDay {
+    border-radius: 20px;
+    padding: 11px 16px;
+
+    span {
+        font-family: 'Mont', sans-serif;
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--grey);
+    }
+}
+
+.timeOfDay__active {
+    background-color: var(--secondary-background);
+
+    span {
+        color: var(--black);
+    }
+}
+
+.timeList {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+}
+
+.timeList_button {
+    padding: 11px 30px;
+    border: 2px solid var(--secondary-background, #F4F4F4);
+    border-radius: 20px;
+    width: min-content;
+
+    span {
+        font-family: 'Mont', sans-serif;
+        font-size: 14px;
+        font-weight: 800;
+    }
+}
+
+.timeList_button__active {
+    border-color: var(--black);
+}
+
+.absoluteBottom {
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+}
+
+.bottomWrapper {
+    padding: 0 15px;
+    display: flex;
+}

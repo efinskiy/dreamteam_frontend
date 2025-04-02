@@ -4,37 +4,11 @@
     background-color: var(--light-grey);
 }
 
-.page {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-bottom: 120px;
-}
-
-.header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header_title {
-    font-family: 'Mont', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-}
-
-.header_spacer {
-    width: 44px;
-    height: 44px;
-}
-
 .contentContainer__top {
     display: flex;
     flex-direction: column;
     background-color: var(--primary-background);
     width: 100%;
-    padding: 20px 15px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     box-sizing: border-box;
@@ -46,7 +20,7 @@
     flex-direction: column;
     background-color: var(--primary-background);
     width: 100%;
-    padding: 20px 15px;
+    padding: 20px 0;
     border-radius: 20px;
     box-sizing: border-box;
     gap: 26px;
@@ -168,9 +142,14 @@
     gap: 8px;
 }
 
-.bottomButton {
+.absoluteBottom {
     position: fixed;
     bottom: 30px;
+    left: 0;
     width: 100%;
+}
+
+.bottomWrapper {
     padding: 0 15px;
+    display: flex;
 }

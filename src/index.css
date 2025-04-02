@@ -36,8 +36,8 @@ body::-webkit-scrollbar {
 }
 
 .swiper-wrapper {
-    gap: 8px;
-    -webkit-column-gap: 8px;
+    /*gap: 8px;*/
+    /*-webkit-column-gap: 8px;*/
 }
 
 .ReactCollapse--collapse {

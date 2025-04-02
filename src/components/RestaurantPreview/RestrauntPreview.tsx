@@ -31,8 +31,10 @@ export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
                         slidesPerView="auto"
                         modules={[FreeMode]}
                         freeMode={true}
+                        spaceBetween={8}
+                        slidesOffsetBefore={15}
+                        slidesOffsetAfter={15}
                     >
-                        <SwiperSlide style={{ width: '15px' }}></SwiperSlide>
                         <SwiperSlide
                             className={css.swiperSlide}
                             style={{ width: '130px' }}
@@ -48,10 +50,6 @@ export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
                                 <RestaurantBadgePhoto url={card.url} />
                             </SwiperSlide>
                         ))}
-                        {/*
-                            Пустой слайд для корректного отображения последнего слайда
-                        */}
-                        <SwiperSlide style={{ width: '130px' }}></SwiperSlide>
                     </Swiper>
                 </div>
                 <div className={css.imagedBottom}>

@@ -31,15 +31,6 @@ import {
     GalleryPhoto,
 } from '@/pages/Restaurant/Restaurant.types.ts';
 import { CallRestaurantPopup } from '@/components/CallRestaurantPopup/CallRestaurantPopup.tsx';
-import { useScript } from 'usehooks-ts';
-// import {
-//     reactify,
-//     YMap,
-//     YMapDefaultFeaturesLayer,
-//     YMapDefaultSchemeLayer,
-//     YMapMarker,
-// } from '@/lib/ymaps.ts';
-// import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 import { EventCard } from '@/components/EventCard/EventCard.tsx';
 import { useAtom } from 'jotai';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
@@ -52,8 +43,11 @@ import {
     YMapMarker,
 } from 'ymap3-components';
 import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
+import { ImageViewerPopup } from '@/components/ImageViewerPopup/ImageViewerPopup.tsx';
 
-const transformGallery = (gallery: IPhotoCard[]): GalleryCollection[] => {
+export const transformGallery = (
+    gallery: IPhotoCard[]
+): GalleryCollection[] => {
     // Создаем объект для группировки по категориям
     const groupedByCategory: Record<string, GalleryPhoto[]> = {};
 
@@ -83,10 +77,6 @@ export const Restaurant = () => {
         setRestaurant(MOCK_Restaurants.find((v) => v.id === Number(id)));
     }, [id]);
 
-    useScript('https://yastatic.net/taxi-widget/ya-taxi-widget-v2.js', {
-        removeOnUnmount: true,
-    });
-
     const [hideAbout, setHideAbout] = useState(true);
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
@@ -96,6 +86,9 @@ export const Restaurant = () => {
         Boolean(searchParams.get('menuOpen')) || false
     );
     const [callPopup, setCallPopup] = useState(false);
+
+    const [imageViewerOpen, setImageViewerOpen] = useState(false);
+    const [currentImageViewerPhoto, setCurrentImageViewerPhoto] = useState('');
 
     const [gallery, setGallery] = useState<GalleryCollection[]>([]);
     const [currentGalleryCategory, setCurrentGalleryCategory] =
@@ -174,6 +167,15 @@ export const Restaurant = () => {
                     '/img/menu5.png',
                 ]}
             />
+            {restaurant?.gallery && (
+                <ImageViewerPopup
+                    isOpen={imageViewerOpen}
+                    setOpen={setImageViewerOpen}
+                    items={restaurant?.gallery}
+                    currentItem={currentImageViewerPhoto}
+                    setCurrentItem={setCurrentImageViewerPhoto}
+                />
+            )}
             <CallRestaurantPopup
                 isOpen={callPopup}
                 setOpen={setCallPopup}
@@ -280,6 +282,7 @@ export const Restaurant = () => {
                                     modules={[FreeMode]}
                                     freeMode={true}
                                     slidesPerView={'auto'}
+                                    spaceBetween={4}
                                 >
                                     <SwiperSlide
                                         style={{ width: 'max-content' }}
@@ -324,7 +327,6 @@ export const Restaurant = () => {
                                             </div>
                                         </SwiperSlide>
                                     ))}
-                                    <SwiperSlide style={{ width: '64px' }} />
                                 </Swiper>
                             </div>
                         </HeaderContainer>
@@ -333,6 +335,7 @@ export const Restaurant = () => {
                                 slidesPerView="auto"
                                 modules={[FreeMode]}
                                 freeMode={true}
+                                spaceBetween={8}
                             >
                                 {currentGalleryPhotos.map((photo, index) => (
                                     <SwiperSlide
@@ -359,6 +362,14 @@ export const Restaurant = () => {
                                                         style={{
                                                             backgroundImage: `url(${smallPhoto})`,
                                                         }}
+                                                        onClick={() => {
+                                                            setCurrentImageViewerPhoto(
+                                                                smallPhoto
+                                                            );
+                                                            setImageViewerOpen(
+                                                                true
+                                                            );
+                                                        }}
                                                     ></div>
                                                 ))}
                                             </div>
@@ -371,11 +382,16 @@ export const Restaurant = () => {
                                                 style={{
                                                     backgroundImage: `url(${photo})`,
                                                 }}
+                                                onClick={() => {
+                                                    setCurrentImageViewerPhoto(
+                                                        photo
+                                                    );
+                                                    setImageViewerOpen(true);
+                                                }}
                                             ></div>
                                         )}
                                     </SwiperSlide>
                                 ))}
-                                <SwiperSlide style={{ width: '128px' }} />
                             </Swiper>
                         </div>
                     </ContentBlock>
@@ -391,6 +407,7 @@ export const Restaurant = () => {
                                 slidesPerView="auto"
                                 modules={[FreeMode]}
                                 freeMode={true}
+                                spaceBetween={8}
                             >
                                 {mockMenu.map((menu, index) => (
                                     <SwiperSlide
@@ -607,15 +624,16 @@ export const Restaurant = () => {
                 </ContentContainer>
                 <div className={css.events}>
                     <EventCard
-                        event_id={1}
+                        onClick={() => navigate(`/events/1/restaurant`)}
+                        event_price={1500}
                         event_name={
                             'Винный ужин с виноделом Мануэля Морага Гутьерресом'
                         }
-                        event_datetime={'13.02.2025'}
-                        event_price={1500}
-                        restaurant_title={'Poly'}
-                        restaurant_img={
-                            'https://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
+                        event_desc={
+                            'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
+                        }
+                        event_img={
+                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
                         }
                     />
                 </div>
