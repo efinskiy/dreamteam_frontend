@@ -70,3 +70,9 @@
     padding: 0 15px;
     display: flex;
 }
+
+.calendar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

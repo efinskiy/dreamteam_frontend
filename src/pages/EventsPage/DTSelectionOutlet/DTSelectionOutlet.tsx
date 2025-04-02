@@ -18,12 +18,13 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const AvailableDates = [
-    new Date('2025.04.04'),
-    new Date('2025.04.05'),
-    new Date('2025.04.06'),
-    new Date('2025.04.07'),
+    new Date(2025, 3, 4),
+    new Date(2025, 3, 5),
+    new Date(2025, 3, 6),
+    new Date(2025, 3, 7),
+    new Date(2025, 3, 8),
 ];
-
+console.log([AvailableDates.map((d) => d.toLocaleString())]);
 export const DTSelectionOutlet = () => {
     const { id, res } = useParams();
     const navigate = useNavigate();
@@ -91,23 +92,27 @@ export const DTSelectionOutlet = () => {
 
     return (
         <div className={css.frame}>
-            <Calendar
-                onChange={onChange}
-                allowPartialRange={false}
-                selectRange={false}
-                value={value}
-                tileDisabled={({ date }) =>
-                    !AvailableDates.some((d) => d.getTime() == date.getTime())
-                }
-                showDoubleView={false}
-                formatMonthYear={(_, date) => formatDateCalendar(date)}
-                prev2Label={null}
-                next2Label={null}
-                maxDetail={'month'}
-                minDetail={'year'}
-                prevLabel={<ArrowLeft />}
-                nextLabel={<ArrowRight />}
-            />
+            <div className={css.calendar}>
+                <Calendar
+                    onChange={onChange}
+                    allowPartialRange={false}
+                    selectRange={false}
+                    value={value}
+                    tileDisabled={({ date }) =>
+                        !AvailableDates.some(
+                            (d) => d.getTime() == date.getTime()
+                        )
+                    }
+                    showDoubleView={false}
+                    formatMonthYear={(_, date) => formatDateCalendar(date)}
+                    prev2Label={null}
+                    next2Label={null}
+                    maxDetail={'month'}
+                    minDetail={'month'}
+                    prevLabel={<ArrowLeft />}
+                    nextLabel={<ArrowRight />}
+                />
+            </div>
             {value ? (
                 <div className={css.timeOfDayContainer}>
                     <div className={css.select_timeOfDay}>
