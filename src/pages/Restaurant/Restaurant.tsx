@@ -24,8 +24,6 @@ import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/Heade
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { HeaderSubText } from '@/components/ContentBlock/HeaderContainer/HeaderSubText/HeaderContainer.tsx';
 import { MenuPopup } from '@/components/MenuPopup/MenuPopup.tsx';
-import { MOCK_Restaurants } from '@/mockData.ts';
-import { mockMenu } from '@/mockData.ts';
 import {
     GalleryCollection,
     GalleryPhoto,
@@ -44,6 +42,12 @@ import {
 } from 'ymap3-components';
 import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 import { ImageViewerPopup } from '@/components/ImageViewerPopup/ImageViewerPopup.tsx';
+import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
+import {
+    getCurrentTimeShort,
+    getCurrentWeekdayShort,
+    getRestaurantStatus,
+} from '@/utils.ts';
 
 export const transformGallery = (
     gallery: IPhotoCard[]
@@ -72,9 +76,10 @@ export const Restaurant = () => {
     const [searchParams] = useSearchParams();
 
     const [restaurant, setRestaurant] = useState<IRestaurant>();
+    const [restaurants] = useAtom(restaurantsListAtom);
 
     useEffect(() => {
-        setRestaurant(MOCK_Restaurants.find((v) => v.id === Number(id)));
+        setRestaurant(restaurants.find((v) => v.id === Number(id)));
     }, [id]);
 
     const [hideAbout, setHideAbout] = useState(true);
@@ -125,6 +130,7 @@ export const Restaurant = () => {
         let photoList: string[] = [];
 
         if (currentGalleryCategory === 'Все фото') {
+            console.log(gallery);
             gallery.forEach((g) => {
                 g.photos.forEach((photo) => photoList.push(photo.link));
             });
@@ -156,17 +162,16 @@ export const Restaurant = () => {
 
     return (
         <Page back={true}>
-            <MenuPopup
-                isOpen={menuPopupOpen}
-                setOpen={setMenuPopupOpen}
-                menuItems={[
-                    '/img/menu1.png',
-                    '/img/menu2.png',
-                    '/img/menu3.png',
-                    '/img/menu4.png',
-                    '/img/menu5.png',
-                ]}
-            />
+            {restaurant?.menu_imgs ? (
+                <MenuPopup
+                    isOpen={menuPopupOpen}
+                    setOpen={setMenuPopupOpen}
+                    menuItems={restaurant.menu_imgs
+                        .sort((a, b) => (a.order > b.order ? 1 : -1))
+                        .map((v) => v.image_url)}
+                />
+            ) : null}
+
             {restaurant?.gallery && (
                 <ImageViewerPopup
                     isOpen={imageViewerOpen}
@@ -179,7 +184,7 @@ export const Restaurant = () => {
             <CallRestaurantPopup
                 isOpen={callPopup}
                 setOpen={setCallPopup}
-                phone={'+79094167269'}
+                phone={restaurant?.phone_number ? restaurant?.phone_number : ''}
             />
             <div
                 className={classNames(
@@ -409,32 +414,38 @@ export const Restaurant = () => {
                                 freeMode={true}
                                 spaceBetween={8}
                             >
-                                {mockMenu.map((menu, index) => (
-                                    <SwiperSlide
-                                        style={{ width: '162px' }}
-                                        key={`${index}${menu.photo}`}
-                                    >
-                                        <div className={css.menuItem}>
-                                            <div
-                                                className={classNames(
-                                                    css.menuItemPhoto,
-                                                    css.bgImage
-                                                )}
-                                                style={{
-                                                    backgroundImage: `url(${menu.photo})`,
-                                                }}
-                                            ></div>
-                                            <div className={css.menuItemInfo}>
-                                                <span className={css.title}>
-                                                    {menu.title}
-                                                </span>
-                                                <span className={css.subtitle}>
-                                                    {menu.price} ₽
-                                                </span>
+                                {restaurant?.menu
+                                    .sort((a, b) => (a.id > b.id ? 1 : -1))
+                                    .map((menu, index) => (
+                                        <SwiperSlide
+                                            style={{ width: '162px' }}
+                                            key={`${index}${menu.photo_url}`}
+                                        >
+                                            <div className={css.menuItem}>
+                                                <div
+                                                    className={classNames(
+                                                        css.menuItemPhoto,
+                                                        css.bgImage
+                                                    )}
+                                                    style={{
+                                                        backgroundImage: `url(${menu.photo_url})`,
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    className={css.menuItemInfo}
+                                                >
+                                                    <span className={css.title}>
+                                                        {menu.title}
+                                                    </span>
+                                                    <span
+                                                        className={css.subtitle}
+                                                    >
+                                                        {menu.price} ₽
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </SwiperSlide>
-                                ))}
+                                        </SwiperSlide>
+                                    ))}
                             </Swiper>
                         </div>
                         <UniversalButton
@@ -471,7 +482,15 @@ export const Restaurant = () => {
                     <ContentBlock>
                         <div className={css.infoBlock}>
                             <div className={css.top}>
-                                <span className={css.title}>До 00:00</span>
+                                <span className={css.title}>
+                                    {restaurant?.worktime
+                                        ? getRestaurantStatus(
+                                              restaurant.worktime,
+                                              getCurrentWeekdayShort(),
+                                              getCurrentTimeShort()
+                                          )
+                                        : ''}
+                                </span>
                                 <div
                                     className={css.right}
                                     onClick={() =>

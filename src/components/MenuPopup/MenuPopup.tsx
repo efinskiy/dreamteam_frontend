@@ -69,6 +69,7 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
                                 slidesPerView="auto"
                                 modules={[FreeMode]}
                                 freeMode={true}
+                                spaceBetween={5}
                             >
                                 {menuItems.map((slide) => (
                                     <SwiperSlide

@@ -6,7 +6,7 @@ import { Header } from '@/components/Header/Header.tsx';
 import { OptionsNavigation } from '@/components/OptionsNavigation/OptionsNavigation.tsx';
 import { RestaurantPreview } from '@/components/RestaurantPreview/RestrauntPreview.tsx';
 import { BookingReminder } from '@/components/BookingReminder/BookingReminder.tsx';
-import { MOCK_Restaurants, mockBookingDate } from '@/mockData.ts';
+import { mockBookingDate } from '@/mockData.ts';
 import { useAtom } from 'jotai';
 import {
     currentCityAtom,
@@ -15,7 +15,8 @@ import {
 import { cityListAtom, ICity } from '@/atoms/cityListAtom.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { CitySelect } from '@/components/CitySelect/CitySelect.tsx';
-import { IRestaurantShort } from '@/types/restaurant.ts';
+import { IRestaurant } from '@/types/restaurant.ts';
+import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 
 const transformToConfirmationFormat = (v: ICity): IConfirmationType => {
     return {
@@ -33,9 +34,7 @@ export const IndexPage: FC = () => {
     const [cityListConfirm] = useState<IConfirmationType[]>(
         cityListA.map((v: ICity) => transformToConfirmationFormat(v))
     );
-    const [restaurantsList, setRestaurantsList] = useState<IRestaurantShort[]>(
-        []
-    );
+    const [restaurantsList, setRestaurantsList] = useState<IRestaurant[]>([]);
 
     const [currentCityS, setCurrentCityS] = useState<IConfirmationType>(
         cityListConfirm.find((v) => v.id == currentCityA) ?? {
@@ -43,7 +42,7 @@ export const IndexPage: FC = () => {
             text: 'Москва',
         }
     );
-    //
+    const [restaurants] = useAtom(restaurantsListAtom);
 
     useEffect(() => {
         setCurrentCityS(
@@ -56,9 +55,9 @@ export const IndexPage: FC = () => {
 
     useEffect(() => {
         setRestaurantsList(
-            MOCK_Restaurants.filter((v) => v.city.name_english == currentCityA)
+            restaurants.filter((v) => v.city.name_english == currentCityA)
         );
-    }, [currentCityA]);
+    }, [currentCityA, cityListA]);
 
     const updateCurrentCity = (city: IConfirmationType) => {
         setCurrentCityS(city);

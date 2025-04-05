@@ -6,12 +6,17 @@ import { PageContainer } from '@/components/PageContainer/PageContainer.tsx';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
-import { formatDateShort, getGuestsString } from '@/utils.ts';
+import {
+    formatDate,
+    formatDateShort,
+    getGuestsString,
+    getTimeShort,
+} from '@/utils.ts';
 import { BookingGuestCountSelectorPopup } from '@/components/BookingGuestCountSelectorPopup/BookingGuestCountSelectorPopup.tsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
@@ -19,11 +24,7 @@ import { HeaderContainer } from '@/components/ContentBlock/HeaderContainer/Heade
 import { HeaderContent } from '@/components/ContentBlock/HeaderContainer/HeaderContent/HeaderContainer.tsx';
 import { TextInput } from '@/components/TextInput/TextInput.tsx';
 import { CommentaryOptionButton } from '@/components/CommentaryOptionButton/CommentaryOptionButton.tsx';
-import {
-    BOOKING_DATE_VALUES,
-    BOOKINGCOMMENTMOCK,
-    MockTimeSlots,
-} from '@/mockData.ts';
+import { BOOKINGCOMMENTMOCK } from '@/mockData.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { ConfirmationSelect } from '@/components/ConfirmationSelect/ConfirmationSelect.tsx';
 import {
@@ -32,6 +33,12 @@ import {
 } from '@/pages/BookingPage/BookingPage.types.ts';
 import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
 import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
+import {
+    APIGetAvailableDays,
+    APIGetAvailableTimeSlots,
+} from '@/api/restaurants.ts';
+import { useAtom } from 'jotai';
+import { authAtom } from '@/atoms/userAtom.ts';
 
 const confirmationList: IConfirmationType[] = [
     {
@@ -50,6 +57,9 @@ const confirmationList: IConfirmationType[] = [
 
 export const BookingPage: FC = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+
+    const [auth] = useAtom(authAtom);
 
     const [guestCount, setGuestCount] = useState<PickerValueObj>({
         title: 'unset',
@@ -61,63 +71,86 @@ export const BookingPage: FC = () => {
     });
     const [guestCountPopup, setGuestCountPopup] = useState(false);
     const [bookingDatePopup, setBookingDatePopup] = useState(false);
-
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
-
     const [confirmation, setConfirmation] = useState<IConfirmationType>({
         id: 'telegram',
         text: 'В Telegram',
     });
-
     const [availableTimeslots, setAvailableTimeslots] = useState<ITimeSlot[]>(
         []
     );
-
     const [filteredTimeslots, setFilteredTimeslots] = useState<ITimeSlot[]>([]);
-
     const [currentPartOfDay, setCurrentPartOfDay] = useState({
         morning: true,
         day: false,
         evening: false,
     });
-
     const [inputForm, setInputForm] = useState<IBookingForm>({
         commentary: undefined,
         name: undefined,
         phone: undefined,
     });
-
     const [currentSelectedTime, setCurrentSelectedTime] =
         useState<ITimeSlot | null>(null);
+    const [bookingDates, setBookingDates] = useState<PickerValueObj[]>([]);
 
     useEffect(() => {
-        setAvailableTimeslots(MockTimeSlots);
-    }, []);
+        auth?.access_token && id
+            ? APIGetAvailableDays(auth?.access_token, parseInt(id), 1).then(
+                  (res) =>
+                      setBookingDates(
+                          res.data.map((v) => ({
+                              title: formatDate(v),
+                              value: v,
+                          }))
+                      )
+              )
+            : null;
+
+        // setAvailableTimeslots(MockTimeSlots);
+    }, [guestCount]);
+
+    useEffect(() => {
+        if (
+            !id ||
+            !auth?.access_token ||
+            bookingDate.value === 'unset' ||
+            guestCount.value === 'unset'
+        ) {
+            return;
+        }
+        APIGetAvailableTimeSlots(
+            auth.access_token,
+            parseInt(id),
+            bookingDate.value,
+            parseInt(guestCount.value)
+        ).then((res) => setAvailableTimeslots(res.data));
+    }, [bookingDate, guestCount]);
 
     useEffect(() => {
         if (currentPartOfDay.morning) {
             setFilteredTimeslots(
                 availableTimeslots.filter(
                     (v) =>
-                        Number(v.time.split(':')[0]) >= 8 &&
-                        Number(v.time.split(':')[0]) < 12
+                        new Date(v.start_datetime).getHours() >= 8 &&
+                        new Date(v.start_datetime).getHours() < 12
                 )
             );
         } else if (currentPartOfDay.day) {
             setFilteredTimeslots(
                 availableTimeslots.filter(
                     (v) =>
-                        Number(v.time.split(':')[0]) >= 12 &&
-                        Number(v.time.split(':')[0]) < 18
+                        new Date(v.start_datetime).getHours() >= 12 &&
+                        new Date(v.start_datetime).getHours() < 18
                 )
             );
         } else if (currentPartOfDay.evening) {
             setFilteredTimeslots(
                 availableTimeslots.filter(
                     (v) =>
-                        Number(v.time.split(':')[0]) >= 18 &&
-                        Number(v.time.split(':')[0]) < 23
+                        new Date(v.start_datetime).getHours() >= 18 &&
+                        new Date(v.start_datetime).getHours() <= 23
                 )
             );
         }
@@ -136,7 +169,7 @@ export const BookingPage: FC = () => {
                 setOpen={setBookingDatePopup}
                 bookingDate={bookingDate}
                 setBookingDate={setBookingDate}
-                values={BOOKING_DATE_VALUES}
+                values={bookingDates}
             />
             <div className={css.page}>
                 <PageContainer>
@@ -228,93 +261,120 @@ export const BookingPage: FC = () => {
                             </div>
                         </div>
                     </ContentContainer>
-                    <ContentContainer>
-                        <div className={css.timeOfDayContainer}>
-                            <div className={css.select_timeOfDay}>
-                                <div
-                                    className={classNames(
-                                        css.timeOfDay,
-                                        currentPartOfDay.morning
-                                            ? css.timeOfDay__active
-                                            : null
-                                    )}
-                                    onClick={() =>
-                                        setCurrentPartOfDay(() => ({
-                                            morning: true,
-                                            day: false,
-                                            evening: false,
-                                        }))
-                                    }
-                                >
-                                    <span>Утро</span>
-                                </div>
-                                <div
-                                    className={classNames(
-                                        css.timeOfDay,
-                                        currentPartOfDay.day
-                                            ? css.timeOfDay__active
-                                            : null
-                                    )}
-                                    onClick={() =>
-                                        setCurrentPartOfDay(() => ({
-                                            morning: false,
-                                            day: true,
-                                            evening: false,
-                                        }))
-                                    }
-                                >
-                                    <span>День</span>
-                                </div>
-                                <div
-                                    className={classNames(
-                                        css.timeOfDay,
-                                        currentPartOfDay.evening
-                                            ? css.timeOfDay__active
-                                            : null
-                                    )}
-                                    onClick={() =>
-                                        setCurrentPartOfDay(() => ({
-                                            morning: false,
-                                            day: false,
-                                            evening: true,
-                                        }))
-                                    }
-                                >
-                                    <span>Вечер</span>
-                                </div>
-                            </div>
-                            <div className={css.timeList}>
-                                <Swiper
-                                    slidesPerView="auto"
-                                    modules={[FreeMode]}
-                                    freeMode={true}
-                                    spaceBetween={8}
-                                >
-                                    {filteredTimeslots.map((v) => (
-                                        <SwiperSlide
-                                            key={`time_${v.id}`}
-                                            style={{ width: 'max-content' }}
-                                        >
+                    {guestCount.value === 'unset' ||
+                    bookingDate.value === 'unset' ? null : (
+                        <ContentContainer>
+                            <div className={css.timeOfDayContainer}>
+                                {!availableTimeslots.length ? (
+                                    <span>
+                                        Нет доступных к бронированию столов
+                                    </span>
+                                ) : (
+                                    <>
+                                        <div className={css.select_timeOfDay}>
                                             <div
                                                 className={classNames(
-                                                    css.timeList_button,
-                                                    currentSelectedTime === v
-                                                        ? css.timeList_button__active
+                                                    css.timeOfDay,
+                                                    currentPartOfDay.morning
+                                                        ? css.timeOfDay__active
                                                         : null
                                                 )}
                                                 onClick={() =>
-                                                    setCurrentSelectedTime(v)
+                                                    setCurrentPartOfDay(() => ({
+                                                        morning: true,
+                                                        day: false,
+                                                        evening: false,
+                                                    }))
                                                 }
                                             >
-                                                <span>{v.time}</span>
+                                                <span>Утро</span>
                                             </div>
-                                        </SwiperSlide>
-                                    ))}
-                                    <SwiperSlide style={{ width: '100px' }} />
-                                </Swiper>
+                                            <div
+                                                className={classNames(
+                                                    css.timeOfDay,
+                                                    currentPartOfDay.day
+                                                        ? css.timeOfDay__active
+                                                        : null
+                                                )}
+                                                onClick={() =>
+                                                    setCurrentPartOfDay(() => ({
+                                                        morning: false,
+                                                        day: true,
+                                                        evening: false,
+                                                    }))
+                                                }
+                                            >
+                                                <span>День</span>
+                                            </div>
+                                            <div
+                                                className={classNames(
+                                                    css.timeOfDay,
+                                                    currentPartOfDay.evening
+                                                        ? css.timeOfDay__active
+                                                        : null
+                                                )}
+                                                onClick={() =>
+                                                    setCurrentPartOfDay(() => ({
+                                                        morning: false,
+                                                        day: false,
+                                                        evening: true,
+                                                    }))
+                                                }
+                                            >
+                                                <span>Вечер</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                <div className={css.timeList}>
+                                    {filteredTimeslots.length ? (
+                                        <Swiper
+                                            slidesPerView="auto"
+                                            modules={[FreeMode]}
+                                            freeMode={true}
+                                            spaceBetween={8}
+                                            style={{
+                                                width: '100%',
+                                            }}
+                                        >
+                                            {filteredTimeslots.map((v) => (
+                                                <SwiperSlide
+                                                    key={`time_${v.start_datetime}`}
+                                                    style={{
+                                                        width: 'max-content',
+                                                    }}
+                                                >
+                                                    <div
+                                                        className={classNames(
+                                                            css.timeList_button,
+                                                            currentSelectedTime ===
+                                                                v
+                                                                ? css.timeList_button__active
+                                                                : null
+                                                        )}
+                                                        onClick={() =>
+                                                            setCurrentSelectedTime(
+                                                                v
+                                                            )
+                                                        }
+                                                    >
+                                                        <span>
+                                                            {getTimeShort(
+                                                                v.start_datetime
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+                                    ) : (
+                                        <span>Нет доступных слотов</span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </ContentContainer>
+                        </ContentContainer>
+                    )}
                     <ContentContainer>
                         <HeaderContainer>
                             <HeaderContent title={'Пожелания к брони'} />

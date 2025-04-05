@@ -11,10 +11,15 @@ import { RestaurantBadgePhoto } from '@/components/RestaurantPreview/RestaurantB
 import { InfoTag } from '@/components/InfoTag/InfoTag.tsx';
 import { Link } from 'react-router-dom';
 import { FC } from 'react';
-import { IRestaurantShort } from '@/types/restaurant.ts';
+import { IRestaurant } from '@/types/restaurant.ts';
+import {
+    getCurrentTimeShort,
+    getCurrentWeekdayShort,
+    getRestaurantStatus,
+} from '@/utils.ts';
 
 interface IProps {
-    restaurant: IRestaurantShort;
+    restaurant: IRestaurant;
 }
 
 export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
@@ -73,7 +78,13 @@ export const RestaurantPreview: FC<IProps> = ({ restaurant }) => {
                     <span className={css.resSlogan}>{restaurant.slogan}</span>
                 </div>
                 <div className={css.tags}>
-                    <InfoTag text={`Открыто до ${restaurant.openTime}`} />
+                    <InfoTag
+                        text={getRestaurantStatus(
+                            restaurant.worktime,
+                            getCurrentWeekdayShort(),
+                            getCurrentTimeShort()
+                        )}
+                    />
                     <InfoTag text={`Ср. чек ${restaurant.avg_cheque}₽`} />
                 </div>
             </div>

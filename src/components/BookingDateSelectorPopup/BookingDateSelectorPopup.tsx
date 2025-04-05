@@ -43,10 +43,46 @@ export const BookingDateSelectorPopup: FC<Props> = ({
     const onClose = () => setOpen(false);
 
     useEffect(() => {
-        if (isOpen && bookingDate.value == 'unset') {
+        if (values.length && isOpen && bookingDate.value == 'unset') {
             setBookingDate(values[0]);
         }
-    }, [isOpen]);
+    }, [isOpen, values]);
+
+    const picker = (
+        <>
+            <Picker
+                value={bookingDate}
+                // @ts-expect-error broken-lib
+                onChange={setBookingDate}
+                wheelMode="natural"
+                height={120}
+            >
+                <Picker.Column name={'value'}>
+                    {values.map((option) => (
+                        <Picker.Item key={option.value} value={option}>
+                            {({ selected }) => (
+                                <div className={css.selectorItem}>
+                                    <span
+                                        className={classNames(
+                                            css.item,
+                                            selected ? css.item__selected : null
+                                        )}
+                                    >
+                                        {formatDate(option.value)}
+                                    </span>
+                                </div>
+                            )}
+                        </Picker.Item>
+                    ))}
+                </Picker.Column>
+            </Picker>
+            <div>
+                <div className={css.redButton} onClick={onClose}>
+                    <span className={css.text}>Сохранить</span>
+                </div>
+            </div>
+        </>
+    );
 
     return (
         <StyledPopup open={isOpen} onClose={onClose} modal>
@@ -54,39 +90,7 @@ export const BookingDateSelectorPopup: FC<Props> = ({
                 <div className={css.content}>
                     <h3>Выберите дату</h3>
 
-                    <Picker
-                        value={bookingDate}
-                        // @ts-expect-error broken-lib
-                        onChange={setBookingDate}
-                        wheelMode="natural"
-                        height={120}
-                    >
-                        <Picker.Column name={'value'}>
-                            {values.map((option) => (
-                                <Picker.Item key={option.value} value={option}>
-                                    {({ selected }) => (
-                                        <div className={css.selectorItem}>
-                                            <span
-                                                className={classNames(
-                                                    css.item,
-                                                    selected
-                                                        ? css.item__selected
-                                                        : null
-                                                )}
-                                            >
-                                                {formatDate(option.value)}
-                                            </span>
-                                        </div>
-                                    )}
-                                </Picker.Item>
-                            ))}
-                        </Picker.Column>
-                    </Picker>
-                    <div>
-                        <div className={css.redButton} onClick={onClose}>
-                            <span className={css.text}>Сохранить</span>
-                        </div>
-                    </div>
+                    {values.length ? picker : <h3>Загрузка</h3>}
                 </div>
             </ContentContainer>
         </StyledPopup>

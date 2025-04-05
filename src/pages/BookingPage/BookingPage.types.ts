@@ -5,6 +5,7 @@ export interface IBookingForm {
 }
 
 export interface ITimeSlot {
-    id: number;
-    time: string;
+    start_datetime: string;
+    end_datetime: string;
+    is_free: boolean;
 }

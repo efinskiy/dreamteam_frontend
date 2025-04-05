@@ -31,6 +31,12 @@ interface IMenuItem {
     price: number;
 }
 
+interface IMenuImg {
+    id: number;
+    image_url: string;
+    order: number;
+}
+
 export interface IRestaurantShort {
     id: number;
     title: string;
@@ -38,25 +44,28 @@ export interface IRestaurantShort {
     address: string;
     logo_url: string;
     thumbnail_photo: string;
-    photo_cards: IPhotoCard[];
     openTime: string;
     avg_cheque: number;
+
+    photo_cards: IPhotoCard[];
     brand_chef: IRestaurantChef;
     city: ICity;
 }
 
 export interface IRestaurant extends IRestaurantShort {
-    gallery: IPhotoCard[];
     about_text: string;
     about_dishes: string;
     about_kitchen: string;
     about_features: string;
-    menu: IMenuItem[];
-
-    worktime: IWorkTime[];
-
     address_lonlng: string;
-    address_station?: string;
-    address_station_color?: string;
+    address_station: string;
+    address_station_color: string;
+
+    phone_number: string;
+
+    gallery: IPhotoCard[];
+    menu: IMenuItem[];
+    menu_imgs: IMenuImg[];
+    worktime: IWorkTime[];
     socials: ISocialnetwork[];
 }
