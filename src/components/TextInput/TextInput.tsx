@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useRef } from 'react';
 import css from './TextInput.module.css';
 import { classNames } from '@telegram-apps/sdk-react';
 
@@ -11,12 +11,6 @@ interface ITextInput {
 
 export const TextInput: FC<ITextInput> = (p) => {
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        if (p.validation_failed && inputRef.current) {
-            inputRef.current.reportValidity();
-        }
-    }, [p.validation_failed]);
 
     return (
         <input

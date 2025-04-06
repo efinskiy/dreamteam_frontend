@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import css from './BookingPage.module.css';
 
 import { Page } from '@/components/Page.tsx';
@@ -27,18 +27,17 @@ import { CommentaryOptionButton } from '@/components/CommentaryOptionButton/Comm
 import { BOOKINGCOMMENTMOCK } from '@/mockData.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { ConfirmationSelect } from '@/components/ConfirmationSelect/ConfirmationSelect.tsx';
-import {
-    IBookingForm,
-    ITimeSlot,
-} from '@/pages/BookingPage/BookingPage.types.ts';
+import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
 import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
 import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
 import {
+    APICreateBooking,
     APIGetAvailableDays,
     APIGetAvailableTimeSlots,
 } from '@/api/restaurants.ts';
 import { useAtom } from 'jotai';
-import { authAtom } from '@/atoms/userAtom.ts';
+import { authAtom, userAtom } from '@/atoms/userAtom.ts';
+import { commAtom } from '@/atoms/bookingCommAtom.ts';
 
 const confirmationList: IConfirmationType[] = [
     {
@@ -60,6 +59,8 @@ export const BookingPage: FC = () => {
     const { id } = useParams();
 
     const [auth] = useAtom(authAtom);
+    const [user] = useAtom(userAtom);
+    const [comms] = useAtom(commAtom);
 
     const [guestCount, setGuestCount] = useState<PickerValueObj>({
         title: 'unset',
@@ -71,8 +72,15 @@ export const BookingPage: FC = () => {
     });
     const [guestCountPopup, setGuestCountPopup] = useState(false);
     const [bookingDatePopup, setBookingDatePopup] = useState(false);
-    const [userName, setUserName] = useState('');
-    const [userPhone, setUserPhone] = useState('');
+    const [userName, setUserName] = useState<string>(
+        user?.first_name ? user.first_name : ''
+    );
+    const [userPhone, setUserPhone] = useState<string>(
+        user?.phone_number ? user.phone_number : ''
+    );
+    const [userEmail, setUserEmail] = useState<string>(
+        user?.email ? user.email : ''
+    );
     const [confirmation, setConfirmation] = useState<IConfirmationType>({
         id: 'telegram',
         text: 'В Telegram',
@@ -86,16 +94,20 @@ export const BookingPage: FC = () => {
         day: false,
         evening: false,
     });
-    const [inputForm, setInputForm] = useState<IBookingForm>({
-        commentary: undefined,
-        name: undefined,
-        phone: undefined,
-    });
+    const [commentary, setCommentary] = useState('');
     const [currentSelectedTime, setCurrentSelectedTime] =
         useState<ITimeSlot | null>(null);
     const [bookingDates, setBookingDates] = useState<PickerValueObj[]>([]);
 
+    const [phoneValidated, setPhoneValidated] = useState(true);
+    const [nameValidated, setNameValidated] = useState(true);
+    const [emailValidated, setEmailValidated] = useState(true);
+    const [dateValidated, setDateValidated] = useState(true);
+    const [guestsValidated, setGuestsValidated] = useState(true);
+    const [requestLoading, setRequestLoading] = useState(false);
+
     useEffect(() => {
+        setCurrentSelectedTime(null);
         auth?.access_token && id
             ? APIGetAvailableDays(auth?.access_token, parseInt(id), 1).then(
                   (res) =>
@@ -107,8 +119,6 @@ export const BookingPage: FC = () => {
                       )
               )
             : null;
-
-        // setAvailableTimeslots(MockTimeSlots);
     }, [guestCount]);
 
     useEffect(() => {
@@ -156,6 +166,107 @@ export const BookingPage: FC = () => {
         }
     }, [availableTimeslots, currentPartOfDay]);
 
+    const nameValidate = useMemo(() => {
+        return Boolean(userName?.trim().length);
+    }, [userName]);
+    const phoneValidate = useMemo(() => {
+        return Boolean(
+            userPhone
+                .trim()
+                .match('^\\+?[78][-\\(]?\\d{3}\\)?-?\\d{3}-?\\d{2}-?\\d{2}$')
+        );
+    }, [userPhone]);
+    const emailValidate = useMemo(() => {
+        const EMAIL_REGEXP =
+            /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+        return Boolean(userEmail.trim().match(EMAIL_REGEXP));
+    }, [userEmail]);
+    const timeslotValidate = useMemo(() => {
+        return !!currentSelectedTime;
+    }, [currentSelectedTime]);
+    const guestsValidate = useMemo(() => {
+        return !(guestCount.value == 'unset');
+    }, [guestCount]);
+
+    const validateFormMemo = useMemo(() => {
+        return [
+            nameValidate,
+            phoneValidate,
+            emailValidate,
+            currentSelectedTime,
+            guestCount,
+        ].every(Boolean);
+    }, [
+        nameValidate,
+        phoneValidate,
+        emailValidate,
+        currentSelectedTime,
+        guestCount,
+    ]);
+
+    const validateForm = () => {
+        console.log('Click');
+        if (!nameValidate) {
+            setNameValidated(false);
+            setTimeout(() => {
+                setNameValidated(true);
+            }, 5000);
+        }
+        if (!phoneValidate) {
+            setPhoneValidated(false);
+            setTimeout(() => {
+                setPhoneValidated(true);
+            }, 5000);
+        }
+        if (!emailValidate) {
+            setEmailValidated(false);
+            setTimeout(() => {
+                setEmailValidated(true);
+            }, 5000);
+        }
+        if (!timeslotValidate) {
+            setDateValidated(false);
+            setTimeout(() => {
+                setDateValidated(true);
+            }, 5000);
+        }
+        if (!guestsValidate) {
+            setGuestsValidated(false);
+            setTimeout(() => {
+                setGuestsValidated(true);
+            }, 5000);
+        }
+        return validateFormMemo;
+    };
+
+    const createBooking = () => {
+        if (validateForm() && auth?.access_token && currentSelectedTime) {
+            setRequestLoading(true);
+            APICreateBooking(
+                auth.access_token,
+                Number(id),
+                bookingDate.value,
+                getTimeShort(currentSelectedTime.start_datetime),
+                Number(guestCount.value),
+                userName,
+                userPhone,
+                userEmail,
+                commentary,
+                comms,
+                confirmation.text
+            )
+                .then((res) => {
+                    navigate(`/myBookings/${res.data.id}`);
+                })
+                .catch(() => {
+                    alert(
+                        'Произошла ошибка при выполнении запроса, попробуйте еще раз.'
+                    );
+                })
+                .finally(() => setRequestLoading(false));
+        }
+    };
+
     return (
         <Page back={true}>
             <BookingGuestCountSelectorPopup
@@ -190,10 +301,13 @@ export const BookingPage: FC = () => {
                                 </div>
                             </div>
                             <div className={css.header_bottom}>
-                                <div className={css.header__selector}>
+                                <div
+                                    className={classNames(css.header__selector)}
+                                >
                                     <div
                                         className={classNames(
-                                            css.header__select
+                                            css.header__select,
+                                            !dateValidated ? css.invalid : null
                                         )}
                                         onClick={() =>
                                             setBookingDatePopup(true)
@@ -227,7 +341,10 @@ export const BookingPage: FC = () => {
                                     </div>
                                     <div
                                         className={classNames(
-                                            css.header__select
+                                            css.header__select,
+                                            !guestsValidated
+                                                ? css.invalid
+                                                : null
                                         )}
                                         onClick={() =>
                                             setGuestCountPopup(!guestCountPopup)
@@ -380,13 +497,8 @@ export const BookingPage: FC = () => {
                             <HeaderContent title={'Пожелания к брони'} />
                         </HeaderContainer>
                         <TextInput
-                            value={inputForm.name}
-                            onChange={(e) =>
-                                setInputForm((prevState) => ({
-                                    ...prevState,
-                                    name: e,
-                                }))
-                            }
+                            value={commentary}
+                            onChange={(e) => setCommentary(e)}
                             placeholder={'Комментарий к брони'}
                         />
                         <div className={css.commentary_options}>
@@ -421,11 +533,19 @@ export const BookingPage: FC = () => {
                                 value={userName}
                                 onChange={setUserName}
                                 placeholder={'Имя'}
+                                validation_failed={!nameValidated}
                             />
                             <TextInput
                                 value={userPhone}
                                 onChange={setUserPhone}
                                 placeholder={'Телефон'}
+                                validation_failed={!phoneValidated}
+                            />
+                            <TextInput
+                                value={userEmail}
+                                onChange={setUserEmail}
+                                placeholder={'Email'}
+                                validation_failed={!emailValidated}
                             />
                         </div>
                     </ContentContainer>
@@ -444,8 +564,12 @@ export const BookingPage: FC = () => {
             <div className={css.absoluteBottom}>
                 <div className={css.absoluteBottom_wrapper}>
                     <div
-                        className={css.redButton}
-                        onClick={() => navigate(`/bookingConfirmation`)}
+                        className={classNames(
+                            css.redButton,
+                            validateFormMemo ? null : css.disabledButton,
+                            requestLoading && css.loadingButton
+                        )}
+                        onClick={() => createBooking()}
                     >
                         <span className={css.text}>Забронировать</span>
                     </div>

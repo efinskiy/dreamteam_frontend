@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import css from './InformationPopup.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPopup = styled(Popup)`
     &-overlay {
@@ -26,8 +27,9 @@ interface Props {
     text?: string;
 }
 
-export const InformationPopup = ({ isOpen, setOpen, text }: Props) => {
-    const close = () => setOpen(false);
+export const InformationPopup = ({ isOpen, text }: Props) => {
+    const close = () => navigate('/myBookings');
+    const navigate = useNavigate();
     return (
         <StyledPopup open={isOpen} onClose={close}>
             <div className={css.popup}>

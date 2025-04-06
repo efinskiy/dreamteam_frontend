@@ -5,13 +5,31 @@ import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { useNavigate } from 'react-router-dom';
 import { BookingCard } from '@/components/BookingCard/BookingCard.tsx';
+import { useEffect, useState } from 'react';
+import { IBookingInfo } from '@/types/restaurant.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { useAtom } from 'jotai';
+import { authAtom } from '@/atoms/userAtom.ts';
+import { APIGetMyBookings } from '@/api/restaurants.ts';
 
 export const MyBookingsPage = () => {
     const navigate = useNavigate();
+    const [auth] = useAtom(authAtom);
+    const [bookings, setBookings] = useState<IBookingInfo[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const clickOnActiveBooking = (id: number) => {
         navigate(`/myBookings/${id}`);
     };
+
+    useEffect(() => {
+        if (!auth?.access_token) {
+            return;
+        }
+        APIGetMyBookings(auth.access_token)
+            .then((res) => setBookings(res.data))
+            .finally(() => setLoading(false));
+    }, []);
 
     return (
         <Page back={true}>
@@ -26,56 +44,45 @@ export const MyBookingsPage = () => {
                     <div className={css.wh44}></div>
                 </div>
                 <div className={css.bookingList}>
-                    <BookingCard
-                        date={''}
-                        active={true}
-                        booking_id={1}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
-
-                    <BookingCard
-                        date={''}
-                        active={false}
-                        booking_id={2}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
-
-                    <BookingCard
-                        date={''}
-                        active={false}
-                        booking_id={3}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
-                    <BookingCard
-                        date={''}
-                        active={false}
-                        booking_id={4}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
-                    <BookingCard
-                        date={''}
-                        active={false}
-                        booking_id={5}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
-                    <BookingCard
-                        date={''}
-                        active={false}
-                        booking_id={6}
-                        title={'Smoke BBQ'}
-                        address={'Трубная, 8'}
-                        click_callback={clickOnActiveBooking}
-                    />
+                    {!loading ? (
+                        <>
+                            {!bookings.length && <h2>Список пуст</h2>}
+                            {bookings.map((booking) => (
+                                <BookingCard
+                                    key={booking.id}
+                                    date={booking.booking_date}
+                                    time={booking.time}
+                                    active={[
+                                        'new',
+                                        'waiting',
+                                        'confirmed',
+                                    ].some((v) => v == booking.booking_status)}
+                                    booking_id={booking.id}
+                                    title={booking.restaurant.title}
+                                    address={booking.restaurant.address}
+                                    click_callback={clickOnActiveBooking}
+                                />
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            <PlaceholderBlock
+                                width={'100%'}
+                                aspectRatio={'3/2'}
+                                rounded={'16px'}
+                            />
+                            <PlaceholderBlock
+                                width={'100%'}
+                                aspectRatio={'3/2'}
+                                rounded={'16px'}
+                            />
+                            <PlaceholderBlock
+                                width={'100%'}
+                                aspectRatio={'3/2'}
+                                rounded={'16px'}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
         </Page>

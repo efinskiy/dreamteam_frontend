@@ -65,6 +65,20 @@ const MONTHS_LONG = [
     'ноябрь',
     'декабрь',
 ];
+const MONTHS_LONG2 = [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря',
+];
 const weekdaysMap: Record<number, string> = {
     0: 'вс',
     1: 'пн',
@@ -110,6 +124,13 @@ export const formatDateDT = (inputDate: Date): string => {
     return `${day} ${month}`;
 };
 
+export const formatDateDayMonthLong = (inputDate: string): string => {
+    const input = new Date(inputDate);
+    const day = input.getDate();
+    const month = MONTHS_LONG2[input.getMonth()];
+
+    return `${day} ${month}`;
+};
 export const formatDateShort = (inputDate: string): string => {
     const today = new Date();
     const input = new Date(inputDate);
@@ -122,6 +143,15 @@ export const formatDateShort = (inputDate: string): string => {
     const month = MONTHS[input.getMonth()];
 
     return `${day} ${month}`;
+};
+
+export const formatDateMonthShort = (inputDate: string): string => {
+    const input = new Date(inputDate);
+    return MONTHS[input.getMonth()];
+};
+export const formatDateDayShort = (inputDate: string): string => {
+    const input = new Date(inputDate);
+    return String(input.getDate());
 };
 
 export const getCurrentWeekdayShort = (): string => {

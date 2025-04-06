@@ -52,6 +52,14 @@ export interface IRestaurantShort {
     city: ICity;
 }
 
+export interface IRestaurantShortBooking {
+    id: number;
+    title: string;
+    address: string;
+    address_lonlng: string;
+    thumbnail_photo: string;
+}
+
 export interface IRestaurant extends IRestaurantShort {
     about_text: string;
     about_dishes: string;
@@ -68,4 +76,18 @@ export interface IRestaurant extends IRestaurantShort {
     menu_imgs: IMenuImg[];
     worktime: IWorkTime[];
     socials: ISocialnetwork[];
+}
+
+export interface IBookingCreate {
+    id: number;
+}
+
+export interface IBookingInfo {
+    id: number;
+    restaurant: IRestaurantShortBooking;
+    booking_date: string;
+    time: string;
+    guests_count: number;
+    booking_status: string;
+    user_comments: string;
 }

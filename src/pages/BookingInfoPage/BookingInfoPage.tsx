@@ -1,5 +1,5 @@
 import { Page } from '@/components/Page.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import css from './BookingInfoPage.module.css';
 import { classNames } from '@telegram-apps/sdk-react';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
@@ -13,11 +13,26 @@ import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalB
 import { useEffect, useState } from 'react';
 import { CancelBookingPopup } from '@/pages/BookingInfoPage/CancelBookingPopup/CancelBookingPopup.tsx';
 import { InformationPopup } from '@/components/InformationPopup/InformationPopup.tsx';
+import { IBookingInfo } from '@/types/restaurant.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { useScript } from 'usehooks-ts';
+import { APICancelBooking, APIGetBooking } from '@/api/restaurants.ts';
+import { useAtom } from 'jotai';
+import { authAtom } from '@/atoms/userAtom.ts';
+import { Taxi } from '@/components/YandexTaxi/Taxi.tsx';
+import {
+    formatDateDayMonthLong,
+    formatDateDayShort,
+    formatDateMonthShort,
+} from '@/utils.ts';
 
 export const BookingInfoPage = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [cancelPopup, setCancelPopup] = useState(false);
     const [canceledPopup, setCanceledPopup] = useState(false);
+    const [booking, setBooking] = useState<IBookingInfo>();
+    const [auth] = useAtom(authAtom);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -28,11 +43,30 @@ export const BookingInfoPage = () => {
     }, []);
 
     const onCancel = () => {
+        if (!auth?.access_token || !booking) {
+            // navigate('/');
+            return;
+        }
         setCancelPopup(false);
-        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-            setCanceledPopup(true);
-        });
+        APICancelBooking(auth.access_token, booking.id)
+            .then(() => {
+                setCanceledPopup(true);
+            })
+            .catch(() => alert('Произошла ошибка при отмене брони.'));
     };
+    useScript('https://yastatic.net/taxi-widget/ya-taxi-widget.js', {
+        removeOnUnmount: true,
+    });
+
+    useEffect(() => {
+        if (!auth?.access_token) {
+            navigate('/');
+            return;
+        }
+        APIGetBooking(auth.access_token, Number(id)).then((res) =>
+            setBooking(res.data)
+        );
+    }, []);
 
     return (
         <Page back={true}>
@@ -56,16 +90,40 @@ export const BookingInfoPage = () => {
                             css.bookingInfoDetails_item
                         )}
                     >
-                        <UniversalButton
-                            width={'full'}
-                            title={'Изменить'}
-                            action={() => alert('В разработке')}
-                        />
-                        <UniversalButton
-                            width={'full'}
-                            title={'Отменить'}
-                            action={() => setCancelPopup(true)}
-                        />
+                        {booking ? (
+                            ['new', 'waiting', 'confirmed'].some(
+                                (v) => v == booking.booking_status
+                            ) ? (
+                                <UniversalButton
+                                    width={'full'}
+                                    title={'Изменить'}
+                                    action={() => alert('В разработке')}
+                                />
+                            ) : null
+                        ) : (
+                            <PlaceholderBlock
+                                width={'100%'}
+                                height={'52px'}
+                                rounded={'15px'}
+                            />
+                        )}
+                        {booking ? (
+                            ['new', 'waiting', 'confirmed'].some(
+                                (v) => v == booking.booking_status
+                            ) ? (
+                                <UniversalButton
+                                    width={'full'}
+                                    title={'Отменить'}
+                                    action={() => setCancelPopup(true)}
+                                />
+                            ) : null
+                        ) : (
+                            <PlaceholderBlock
+                                width={'100%'}
+                                height={'52px'}
+                                rounded={'15px'}
+                            />
+                        )}
                     </div>
                     <div
                         className={classNames(
@@ -73,26 +131,47 @@ export const BookingInfoPage = () => {
                             css.bookingInfoDetails_item
                         )}
                     >
-                        <div
-                            className={css.redButton}
-                            onClick={() =>
-                                navigate('/restaurant/1?menuOpen=true')
-                            }
-                        >
-                            <span className={css.text}>Смотреть меню</span>
-                        </div>
-                        <RoundedButton
-                            radius={'50px'}
-                            action={() =>
-                                window.open('https://maps.yandex.ru/')
-                            }
-                            icon={
-                                <GoToPathIcon
-                                    size={24}
-                                    color={'var(--dark-grey)'}
-                                />
-                            }
-                        />
+                        {booking ? (
+                            <div
+                                className={css.redButton}
+                                onClick={() =>
+                                    navigate(
+                                        `/restaurant/${booking?.restaurant.id}?menuOpen=true`
+                                    )
+                                }
+                            >
+                                <span className={css.text}>Смотреть меню</span>
+                            </div>
+                        ) : (
+                            <PlaceholderBlock
+                                width={'100%'}
+                                height={'52px'}
+                                rounded={'15px'}
+                            />
+                        )}
+                        {booking ? (
+                            <RoundedButton
+                                radius={'50px'}
+                                action={() =>
+                                    window.open(
+                                        `https://yandex.ru/maps/?text=${booking?.restaurant.address}`
+                                    )
+                                }
+                                icon={
+                                    <GoToPathIcon
+                                        size={24}
+                                        color={'var(--dark-grey)'}
+                                    />
+                                }
+                            />
+                        ) : (
+                            <PlaceholderBlock
+                                width={'50px'}
+                                height={'50px'}
+                                rounded={'50%'}
+                                minWidth={'50px'}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
@@ -121,22 +200,40 @@ export const BookingInfoPage = () => {
                                 css.calendarContainer
                             )}
                         >
-                            <div
-                                className={classNames(
-                                    css.calendar,
-                                    css.calendar__month
-                                )}
-                            >
-                                <span>фев</span>
-                            </div>
-                            <div
-                                className={classNames(
-                                    css.calendar,
-                                    css.calendar__day
-                                )}
-                            >
-                                <span>14</span>
-                            </div>
+                            {booking ? (
+                                <>
+                                    <div
+                                        className={classNames(
+                                            css.calendar,
+                                            css.calendar__month
+                                        )}
+                                    >
+                                        <span>
+                                            {formatDateMonthShort(
+                                                booking.booking_date
+                                            )}
+                                        </span>
+                                    </div>
+                                    <div
+                                        className={classNames(
+                                            css.calendar,
+                                            css.calendar__day
+                                        )}
+                                    >
+                                        <span>
+                                            {formatDateDayShort(
+                                                booking.booking_date
+                                            )}
+                                        </span>
+                                    </div>
+                                </>
+                            ) : (
+                                <PlaceholderBlock
+                                    width={'45px'}
+                                    height={'59px'}
+                                    rounded={'12px'}
+                                />
+                            )}
                         </div>
                         <div
                             className={classNames(
@@ -145,12 +242,26 @@ export const BookingInfoPage = () => {
                             )}
                         >
                             <h2 className={css.bookingInfo_restaurant__title}>
-                                SMOKE BBQ
+                                {booking ? (
+                                    booking.restaurant.title
+                                ) : (
+                                    <PlaceholderBlock
+                                        width={'200px'}
+                                        height={'50px'}
+                                    />
+                                )}
                             </h2>
                             <span
                                 className={css.bookingInfo_restaurant__subtitle}
                             >
-                                Москва, Трубная 8
+                                {booking ? (
+                                    booking.restaurant.address
+                                ) : (
+                                    <PlaceholderBlock
+                                        width={'120px'}
+                                        height={'17px'}
+                                    />
+                                )}
                             </span>
                         </div>
                         <div
@@ -175,13 +286,20 @@ export const BookingInfoPage = () => {
                                         size={16}
                                         color={'var(--dark-grey)'}
                                     ></TimeCircle>
-                                    <span
-                                        className={
-                                            css.bookingInfoDetails_item__text
-                                        }
-                                    >
-                                        17:00
-                                    </span>
+                                    {booking ? (
+                                        <span
+                                            className={
+                                                css.bookingInfoDetails_item__text
+                                            }
+                                        >
+                                            {booking.time}
+                                        </span>
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'35px'}
+                                            height={'17px'}
+                                        />
+                                    )}
                                 </div>
                                 <div
                                     className={classNames(
@@ -193,13 +311,22 @@ export const BookingInfoPage = () => {
                                         size={16}
                                         color={'var(--dark-grey)'}
                                     ></CalendarIcon>
-                                    <span
-                                        className={
-                                            css.bookingInfoDetails_item__text
-                                        }
-                                    >
-                                        14 февраля
-                                    </span>
+                                    {booking ? (
+                                        <span
+                                            className={
+                                                css.bookingInfoDetails_item__text
+                                            }
+                                        >
+                                            {formatDateDayMonthLong(
+                                                booking.booking_date
+                                            )}
+                                        </span>
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'80px'}
+                                            height={'17px'}
+                                        />
+                                    )}
                                 </div>
                                 <div
                                     className={classNames(
@@ -211,13 +338,21 @@ export const BookingInfoPage = () => {
                                         size={16}
                                         color={'var(--dark-grey)'}
                                     ></UsersIcon>
-                                    <span
-                                        className={
-                                            css.bookingInfoDetails_item__text
-                                        }
-                                    >
-                                        2
-                                    </span>
+
+                                    {booking ? (
+                                        <span
+                                            className={
+                                                css.bookingInfoDetails_item__text
+                                            }
+                                        >
+                                            {booking.guests_count}
+                                        </span>
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'20px'}
+                                            height={'17px'}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -243,33 +378,31 @@ export const BookingInfoPage = () => {
                                         size={16}
                                         color={'var(--dark-grey)'}
                                     ></ChatIcon>
-                                    <span
-                                        className={
-                                            css.bookingInfoDetails_item__text
-                                        }
-                                    >
-                                        Возможно опоздаем
-                                    </span>
+                                    {booking ? (
+                                        <span
+                                            className={
+                                                css.bookingInfoDetails_item__text
+                                            }
+                                        >
+                                            {booking.user_comments}
+                                        </span>
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'120px'}
+                                            height={'17px'}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
-                        <div
-                            key={'taxi1'}
-                            className="ya-taxi-widget"
-                            data-ref="https%3A%2F%2Fdemo.efinskiy.ru%2F"
-                            data-proxy-url="https://{app}.redirect.appmetrica.yandex.com/route?start-lat={start-lat}&amp;start-lon={start-lon}&amp;end-lat={end-lat}&amp;end-lon={end-lon}&amp;tariffClass={tariff}&amp;ref={ref}&amp;appmetrica_tracking_id={redirect}&amp;lang={lang}&amp;erid={erid}"
-                            data-tariff="econom"
-                            data-app="3"
-                            data-lang="ru"
-                            data-redirect="1178268795219780156"
-                            data-description="Smoke BBQ"
-                            data-size="s"
-                            data-theme="normal"
-                            data-title="Вызвать такси"
-                            data-use-location="true"
-                            data-point-a=""
-                            data-point-b="39.751934,47.227023"
-                        ></div>
+                        {booking ? (
+                            <Taxi
+                                address={booking.restaurant.address}
+                                lonlng={booking.restaurant.address_lonlng}
+                            />
+                        ) : (
+                            <PlaceholderBlock width={'354px'} height={'64px'} />
+                        )}
                     </div>
                     <div className={classNames(css.fr, css.page)}></div>
                 </div>

@@ -9,7 +9,6 @@ import { authAtom, userAtom } from '@/atoms/userAtom.ts';
 import { AppLoadingScreen } from '@/components/AppLoadingScreen/AppLoadingScreen.tsx';
 import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
 import { useIntegration } from '@telegram-apps/react-router-integration';
-import { useScript } from 'usehooks-ts';
 import { IndexPage } from '@/pages/IndexPage/IndexPage.tsx';
 // import { RestaurantMapPage } from '@/pages/RestaurantMapPage/RestaurantMapPage.tsx';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage.tsx';
@@ -45,9 +44,6 @@ const AppRouter = () => {
 
     const [loadingComplete, setLoadingComplete] = useState<boolean>();
 
-    useScript('https://yastatic.net/taxi-widget/ya-taxi-widget-v2.js', {
-        removeOnUnmount: true,
-    });
     // Auth and preloading
     useEffect(() => {
         if (!loadingComplete && auth?.access_token) {

@@ -8,6 +8,7 @@ interface BookingCardProps {
     title: string;
     address: string;
     date: string;
+    time: string;
     click_callback: (id: number) => void;
 }
 
@@ -17,6 +18,7 @@ export const BookingCard: FC<BookingCardProps> = ({
     title,
     address,
     date,
+    time,
     click_callback,
 }) => {
     return (
@@ -35,7 +37,7 @@ export const BookingCard: FC<BookingCardProps> = ({
                     !active ? css.card_date__notActive : null
                 )}
             >
-                12.03.2025 в 12:00 {date}
+                {new Date(date).toLocaleDateString()} в {time}
             </span>
             <div className={css.footer}>
                 <span className={css.footer__title}>{title}</span>
