@@ -10,9 +10,10 @@ import { UserProfileIcon } from '@/components/Icons/UserProfileIcon.tsx';
 // import { SupportIcon } from '@/components/Icons/SupportIcon.tsx';
 // import { QRCodeIcon } from '@/components/Icons/QRCodeIcon.tsx';
 import { FeedbackPopup } from '@/pages/ProfilePage/FeedbackPopup/FeedbackPopup.tsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
+import { reviewAtom } from '@/atoms/userAtom.ts';
 
 export const ProfilePage = () => {
     const [params] = useSearchParams();
@@ -20,10 +21,8 @@ export const ProfilePage = () => {
         !!params.get('feedback')
     );
     const navigate = useNavigate();
+    const [review] = useAtom(reviewAtom);
 
-    useEffect(() => {
-        console.log(window.history);
-    }, []);
     const [backUrlAtom] = useAtom(backButtonAtom);
     return (
         <Page back={true}>
@@ -55,19 +54,24 @@ export const ProfilePage = () => {
                                 Мои бронирования
                             </span>
                         </Link>
-                        <Link to={'/tickets'} className={css.navLink}>
-                            <TicketsIcon size={24} color={'black'} />
-                            <span className={css.navLinkTitle}>Мои билеты</span>
-                        </Link>
                         <span
                             className={css.navLink}
-                            onClick={() => setFeedbackPopup(true)}
+                            onClick={() => alert('В разработке')}
                         >
-                            <PenIcon size={24} color={'black'} />
-                            <span className={css.navLinkTitle}>
-                                Оставить отзыв
-                            </span>
+                            <TicketsIcon size={24} color={'black'} />
+                            <span className={css.navLinkTitle}>Мои билеты</span>
                         </span>
+                        {review.available ? (
+                            <span
+                                className={css.navLink}
+                                onClick={() => setFeedbackPopup(true)}
+                            >
+                                <PenIcon size={24} color={'black'} />
+                                <span className={css.navLinkTitle}>
+                                    Оставить отзыв
+                                </span>
+                            </span>
+                        ) : null}
                         <Link to={'/me'} className={css.navLink}>
                             <UserProfileIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>

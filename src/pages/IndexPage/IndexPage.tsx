@@ -6,7 +6,6 @@ import { Header } from '@/components/Header/Header.tsx';
 import { OptionsNavigation } from '@/components/OptionsNavigation/OptionsNavigation.tsx';
 import { RestaurantPreview } from '@/components/RestaurantPreview/RestrauntPreview.tsx';
 import { BookingReminder } from '@/components/BookingReminder/BookingReminder.tsx';
-import { mockBookingDate } from '@/mockData.ts';
 import { useAtom } from 'jotai';
 import {
     currentCityAtom,
@@ -15,8 +14,11 @@ import {
 import { cityListAtom, ICity } from '@/atoms/cityListAtom.ts';
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { CitySelect } from '@/components/CitySelect/CitySelect.tsx';
-import { IRestaurant } from '@/types/restaurant.ts';
+import { IBookingInfo, IRestaurant } from '@/types/restaurant.ts';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
+import { APIGetCurrentBookings } from '@/api/restaurants.ts';
+import { authAtom } from '@/atoms/userAtom.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 
 const transformToConfirmationFormat = (v: ICity): IConfirmationType => {
     return {
@@ -43,6 +45,20 @@ export const IndexPage: FC = () => {
         }
     );
     const [restaurants] = useAtom(restaurantsListAtom);
+    const [auth] = useAtom(authAtom);
+
+    const [currentBookings, setCurrentBookings] = useState<IBookingInfo[]>([]);
+    const [currentBookingsLoading, setCurrentBookingsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!auth?.access_token) {
+            return;
+        }
+        setCurrentBookingsLoading(true);
+        APIGetCurrentBookings(auth.access_token)
+            .then((res) => setCurrentBookings(res.data.currentBookings))
+            .finally(() => setCurrentBookingsLoading(false));
+    }, []);
 
     useEffect(() => {
         setCurrentCityS(
@@ -68,12 +84,27 @@ export const IndexPage: FC = () => {
         <Page back={false}>
             <div className={css.pageContainer}>
                 <Header />
-                <BookingReminder
-                    title={'Smoke BBQ'}
-                    address={''}
-                    date={mockBookingDate}
-                    persons={2}
-                />
+                {currentBookingsLoading ? (
+                    <div style={{ marginRight: '15px' }}>
+                        <PlaceholderBlock
+                            width={'100%'}
+                            height={'108px'}
+                            rounded={'16px'}
+                        />
+                    </div>
+                ) : (
+                    currentBookings.map((book) => (
+                        <BookingReminder
+                            key={book.id}
+                            id={book.id}
+                            title={book.restaurant.title}
+                            address={book.restaurant.address}
+                            date={book.booking_date}
+                            time={book.time}
+                            persons={book.guests_count}
+                        />
+                    ))
+                )}
                 {/*<NewsStories />*/}
                 <OptionsNavigation />
                 <div className={css.restaurants}>

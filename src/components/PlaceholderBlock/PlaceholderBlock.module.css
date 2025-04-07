@@ -1,6 +1,6 @@
 .loadWrapper {
     position: relative;
-    background-color: rgb(211, 211, 211);
+    background-color: var(--medium-grey);
     z-index: 44;
     overflow: hidden;
     border-radius: 5px;

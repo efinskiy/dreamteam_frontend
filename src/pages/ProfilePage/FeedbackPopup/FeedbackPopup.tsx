@@ -5,6 +5,9 @@ import css from './FeedbackPopup.module.css';
 import { StarIcon } from '@/components/Icons/Star.tsx';
 import { classNames } from '@telegram-apps/sdk-react';
 import './FeedbackPopup.css';
+import { APIIsReviewAvailable, APISendReview } from '@/api/restaurants.ts';
+import { useAtom } from 'jotai';
+import { authAtom, reviewAtom } from '@/atoms/userAtom.ts';
 
 const StyledPopup = styled(Popup)`
     &-overlay {
@@ -44,6 +47,9 @@ export const FeedbackPopup: FC<Props> = (props) => {
     ]);
     const [formValidated, setFormValidated] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [commentary, setCommentary] = useState('');
+    const [auth] = useAtom(authAtom);
+    const [, setReview] = useAtom(reviewAtom);
 
     useEffect(() => {
         if (isClosing) {
@@ -76,6 +82,7 @@ export const FeedbackPopup: FC<Props> = (props) => {
             setRating(0);
             setCurrentTags([]);
             setFormValidated(false);
+            setRatingString('Выберите оценку');
         }
     }, [props.isOpen]);
 
@@ -96,8 +103,20 @@ export const FeedbackPopup: FC<Props> = (props) => {
     };
 
     const handleSendForm = () => {
-        console.log('handleSendForm');
-        setIsClosing(true);
+        if (!auth?.access_token) {
+            return;
+        }
+        APISendReview(auth.access_token, rating, tagsList, commentary)
+            .then(() => setIsClosing(true))
+            .finally(() =>
+                APIIsReviewAvailable(auth.access_token).then((res) => {
+                    setReview({
+                        loading: false,
+                        available: res.data.available,
+                    });
+                    !res.data.available ? setIsClosing(true) : null;
+                })
+            );
     };
 
     useEffect(() => {
@@ -171,6 +190,8 @@ export const FeedbackPopup: FC<Props> = (props) => {
                     className={css.feedback_text}
                     type="text"
                     placeholder={'Расскажите об опыте — для нас это важно!'}
+                    value={commentary}
+                    onChange={(e) => setCommentary(e.target.value)}
                 />
                 <button
                     className={classNames(

@@ -263,7 +263,6 @@ export const getRestaurantStatus = (
     currentWeekday: string,
     currentTimeStr: string
 ): string => {
-    console.log(currentWeekday, currentTimeStr);
     const currentDayIndex = dayIndexMap[currentWeekday];
     const currentMins = parseTimeToMinutes(currentTimeStr);
 

@@ -3,6 +3,8 @@ import { BASE_URL } from '@/api/base.ts';
 import {
     IBookingCreate,
     IBookingInfo,
+    ICurrentBookings,
+    IIsReviewAvailable,
     IRestaurant,
 } from '@/types/restaurant.ts';
 
@@ -107,4 +109,44 @@ export const APICancelBooking = (token: string, booking_id: number) => {
             Authorization: `Bearer ${token}`,
         },
     });
+};
+
+export const APIIsReviewAvailable = (token: string) => {
+    return axios.get<IIsReviewAvailable>(
+        `${BASE_URL}/booking/review/available`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};
+
+export const APIGetCurrentBookings = (token: string) => {
+    return axios.get<ICurrentBookings>(`${BASE_URL}/booking/currentBookings`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const APISendReview = (
+    token: string,
+    rate: number,
+    features: string[],
+    comment: string
+) => {
+    return axios.post(
+        `${BASE_URL}/booking/review/new`,
+        {
+            rate: rate,
+            features: features.toString(),
+            comment: comment,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
 };

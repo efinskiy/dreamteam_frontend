@@ -6,20 +6,16 @@ import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';
 import { useNavigate } from 'react-router-dom';
 
 interface BookingReminderProps {
+    id: number;
     title: string;
-    date: Date;
+    date: string;
+    time: string;
     address: string;
     persons: number;
 }
 
-const formatTime = (date: Date): string => {
-    return date.toLocaleTimeString('ru-RU', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-};
-
-const formatDate = (date: Date): string => {
+const formatDate = (dateStr: string): string => {
+    const date = new Date(dateStr);
     return date.toLocaleDateString('ru-RU', {
         day: 'numeric',
         month: 'long',
@@ -32,20 +28,18 @@ export const BookingReminder: FC<BookingReminderProps> = (p) => {
     return (
         <div
             className={css.bookingReminder}
-            onClick={() => navigate('/myBookings/1')}
+            onClick={() => navigate(`/myBookings/${p.id}`)}
         >
             <div className={css.inner}>
                 <span className={css.title}>{p.title}</span>
-                <span className={css.subText}>Москва, Трубная 8</span>
+                <span className={css.subText}>{p.address}</span>
                 <div className={css.sub}>
                     <div className={css.subItem}>
                         <TimeCircle
                             size={16}
                             color={'var(--dark-grey)'}
                         ></TimeCircle>
-                        <span className={css.subText}>
-                            {formatTime(p.date)}
-                        </span>
+                        <span className={css.subText}>{p.time}</span>
                     </div>
                     <div className={css.subItem}>
                         <CalendarIcon

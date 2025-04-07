@@ -2,14 +2,26 @@ import axios from 'axios';
 import { BASE_URL } from '@/api/base.ts';
 import { IAuthInfo, IUser } from '@/atoms/userAtom.ts';
 
-export const APIUserAuth = async (data: string | undefined) => {
+interface AuthParams {
+    data?: string;
+    code?: string;
+}
+
+export const APIUserAuth = async (
+    data: string | undefined,
+    start: string | undefined
+) => {
+    const params = <AuthParams>{
+        data: data,
+    };
+    if (start) {
+        params.code = start;
+    }
     return await axios.post<IAuthInfo>(
         `${BASE_URL}/auth/validate`,
         {},
         {
-            params: {
-                data: data,
-            },
+            params: params,
         }
     );
 };

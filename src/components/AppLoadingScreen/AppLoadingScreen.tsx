@@ -13,9 +13,10 @@ export const AppLoadingScreen = () => {
     const [, setUser] = useAtom(userAtom);
     const [, setAuth] = useAtom(authAtom);
     const lp = useLaunchParams();
+    console.log(lp.startParam);
 
     useEffect(() => {
-        APIUserAuth(lp.initDataRaw)
+        APIUserAuth(lp.initDataRaw, lp.startParam)
             .then((res) => {
                 setAuth(res.data);
                 return res.data.access_token;

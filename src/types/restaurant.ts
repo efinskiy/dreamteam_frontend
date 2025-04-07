@@ -91,3 +91,11 @@ export interface IBookingInfo {
     booking_status: string;
     user_comments: string;
 }
+
+export interface ICurrentBookings {
+    currentBookings: IBookingInfo[];
+}
+
+export interface IIsReviewAvailable {
+    available: boolean;
+}

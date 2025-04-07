@@ -5,7 +5,7 @@ import { Navigate, Route, Routes, Router } from 'react-router-dom';
 import { ScrollToTop } from '@/navigation/utills.tsx';
 import { useEffect, useMemo, useState } from 'react';
 import { useAtom } from 'jotai';
-import { authAtom, userAtom } from '@/atoms/userAtom.ts';
+import { authAtom, reviewAtom, userAtom } from '@/atoms/userAtom.ts';
 import { AppLoadingScreen } from '@/components/AppLoadingScreen/AppLoadingScreen.tsx';
 import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
 import { useIntegration } from '@telegram-apps/react-router-integration';
@@ -29,9 +29,10 @@ import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
 // import { EventBookingOutlet } from '@/pages/EventsPage/EventBookingOutlet/EventBookingOutlet.tsx';
 import { cityListAtom } from '@/atoms/cityListAtom.ts';
 import { APIGetCityList } from '@/api/city.ts';
-import { APIGetRestaurants } from '@/api/restaurants.ts';
+import { APIGetRestaurants, APIIsReviewAvailable } from '@/api/restaurants.ts';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import { APIGetEA } from '@/api/config.ts';
+import { RestaurantMapPage } from '@/pages/RestaurantMapPage/RestaurantMapPage.tsx';
 
 const AppRouter = () => {
     const [user] = useAtom(userAtom);
@@ -41,8 +42,8 @@ const AppRouter = () => {
     const navigator = useMemo(() => initNavigator('app-navigation-state'), []);
     const [location, reactNavigator] = useIntegration(navigator);
     const [earlyAccess, setEarlyAccess] = useState(false);
-
     const [loadingComplete, setLoadingComplete] = useState<boolean>();
+    const [, setReview] = useAtom(reviewAtom);
 
     // Auth and preloading
     useEffect(() => {
@@ -54,6 +55,16 @@ const AppRouter = () => {
 
     useEffect(() => {
         APIGetEA().then((res) => setEarlyAccess(res.data.result));
+    }, []);
+
+    useEffect(() => {
+        if (auth?.access_token)
+            APIIsReviewAvailable(auth.access_token).then((res) =>
+                setReview({
+                    loading: false,
+                    available: res.data.available,
+                })
+            );
     }, []);
 
     useEffect(() => {
@@ -79,7 +90,7 @@ const AppRouter = () => {
             ) : (
                 <Routes>
                     <Route path={'/'} element={<IndexPage />} />
-                    {/*<Route path={'/map'} element={<RestaurantMapPage />} />*/}
+                    <Route path={'/map'} element={<RestaurantMapPage />} />
                     <Route path={'/profile'} element={<ProfilePage />} />
                     <Route path={'/me'} element={<UserProfilePage />} />
                     {/*<Route path={'/events'} element={<EventsPage />}>*/}
