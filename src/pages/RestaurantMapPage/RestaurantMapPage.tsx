@@ -3,7 +3,7 @@ import css from './RestaurantMapPage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { useNavigate } from 'react-router-dom';
-import { classNames } from '@telegram-apps/sdk-react';
+import { classNames, openLink } from '@telegram-apps/sdk-react';
 import { useCallback, useEffect, useState } from 'react';
 import { InputSlider } from '@/pages/RestaurantMapPage/InputSlider/InputSlider.tsx';
 import { RestaurantOnMapIcon } from '@/components/Icons/RestaurantOnMapIcon.tsx';
@@ -24,6 +24,7 @@ import { IRestaurant } from '@/types/restaurant.ts';
 import { IconlyLocation } from '@/components/Icons/Location.tsx';
 import { TimeCircle } from '@/components/Icons/TimeCircle.tsx';
 import {
+    callPhone,
     formatWorkTime,
     getCurrentTimeShort,
     getCurrentWeekdayShort,
@@ -35,6 +36,7 @@ import { PhoneCallIcon } from '@/components/Icons/PhoneCallIcon.tsx';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import { Taxi } from '@/components/YandexTaxi/Taxi.tsx';
+import { Discovery } from 'react-iconly';
 
 interface IRestaurantDetails {
     selectedRest: IRestaurant;
@@ -176,7 +178,24 @@ const RestaurantDetails = ({ selectedRest }: IRestaurantDetails) => {
                         <span className={css.mont}>Забронировать</span>
                     </div>
 
-                    <div className={css.roundButton}>
+                    <div
+                        className={css.roundButton}
+                        onClick={() =>
+                            openLink(
+                                `https://maps.yandex.ru/?ll=${selectedRest.address_lonlng}&text=${selectedRest.title}&z=17`,
+                                { tryInstantView: false }
+                            )
+                        }
+                    >
+                        <Discovery
+                            size={24}
+                            primaryColor={'var(--dark-grey)'}
+                        />
+                    </div>
+                    <div
+                        className={css.roundButton}
+                        onClick={() => callPhone(selectedRest.phone_number)}
+                    >
                         <PhoneCallIcon size={24} color={'var(--dark-grey)'} />
                     </div>
                 </div>

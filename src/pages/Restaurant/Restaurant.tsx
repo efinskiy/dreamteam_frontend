@@ -29,7 +29,7 @@ import {
     GalleryPhoto,
 } from '@/pages/Restaurant/Restaurant.types.ts';
 import { CallRestaurantPopup } from '@/components/CallRestaurantPopup/CallRestaurantPopup.tsx';
-import { EventCard } from '@/components/EventCard/EventCard.tsx';
+// import { EventCard } from '@/components/EventCard/EventCard.tsx';
 import { useAtom } from 'jotai';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
 import { IPhotoCard, IRestaurant } from '@/types/restaurant.ts';
@@ -641,21 +641,21 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
-                <div className={css.events}>
-                    <EventCard
-                        onClick={() => navigate(`/events/1/restaurant`)}
-                        event_price={1500}
-                        event_name={
-                            'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                        }
-                        event_desc={
-                            'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
-                        }
-                        event_img={
-                            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                        }
-                    />
-                </div>
+                {/*<div className={css.events}>*/}
+                {/*    <EventCard*/}
+                {/*        onClick={() => navigate(`/events/1/restaurant`)}*/}
+                {/*        event_price={1500}*/}
+                {/*        event_name={*/}
+                {/*            'Винный ужин с виноделом Мануэля Морага Гутьерресом'*/}
+                {/*        }*/}
+                {/*        event_desc={*/}
+                {/*            'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'*/}
+                {/*        }*/}
+                {/*        event_img={*/}
+                {/*            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'*/}
+                {/*        }*/}
+                {/*    />*/}
+                {/*</div>*/}
                 <ContentContainer>
                     <ContentBlock>
                         <HeaderContainer>

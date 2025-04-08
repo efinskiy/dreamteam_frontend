@@ -11,19 +11,19 @@ const Loader = () => {
 
 export const AppLoadingScreen = () => {
     const [, setUser] = useAtom(userAtom);
-    const [, setAuth] = useAtom(authAtom);
+    const [auth, setAuth] = useAtom(authAtom);
     const lp = useLaunchParams();
-    console.log(lp.startParam);
-
     useEffect(() => {
-        APIUserAuth(lp.initDataRaw, lp.startParam)
-            .then((res) => {
-                setAuth(res.data);
-                return res.data.access_token;
-            })
-            .then((token) => {
-                APIUserInfo(token).then((res) => setUser(res.data));
-            });
+        if (!auth?.access_token) {
+            APIUserAuth(lp.initDataRaw, lp.startParam)
+                .then((res) => {
+                    setAuth(res.data);
+                    return res.data.access_token;
+                })
+                .then((token) => {
+                    APIUserInfo(token).then((res) => setUser(res.data));
+                });
+        }
     }, []);
 
     return (

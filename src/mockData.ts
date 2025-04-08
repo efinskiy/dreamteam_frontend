@@ -222,10 +222,6 @@ export const mockBookingDate = new Date();
 
 export const BOOKINGCOMMENTMOCK = [
     {
-        text: 'Без повода',
-        emoji: '☕️',
-    },
-    {
         text: 'День рождения',
         emoji: '🥞',
     },
