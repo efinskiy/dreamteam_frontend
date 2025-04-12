@@ -3,6 +3,11 @@ import css from './RestaurantTopPreview.module.css';
 import { MoneyIcon } from '@/components/Icons/MoneyIcon.tsx';
 import { TimeCircleIcon } from '@/components/Icons/TimeCircleIcon.tsx';
 import { IRestaurant } from '@/types/restaurant.ts';
+import {
+    getCurrentTimeShort,
+    getCurrentWeekdayShort,
+    getRestaurantStatusTyped,
+} from '@/utils.ts';
 
 interface Props {
     rest?: IRestaurant;
@@ -35,12 +40,45 @@ export const RestaurantTopPreview = ({ rest }: Props) => {
                         <div className={css.splitter}></div>
                         <div className={css.extraItem}>
                             <TimeCircleIcon color={'white'} size={24} />
-                            <div className={css.extraItemContent}>
-                                <span className={css.extraTop}>Открыто</span>
-                                <span className={css.extraBottom}>
-                                    до {rest?.openTime}
-                                </span>
-                            </div>
+                            {rest?.worktime ? (
+                                getRestaurantStatusTyped(
+                                    rest?.worktime,
+                                    getCurrentWeekdayShort(),
+                                    getCurrentTimeShort()
+                                ).status == 'open' ? (
+                                    <div className={css.extraItemContent}>
+                                        <span className={css.extraTop}>
+                                            Открыто
+                                        </span>
+                                        <span className={css.extraBottom}>
+                                            до{' '}
+                                            {
+                                                getRestaurantStatusTyped(
+                                                    rest?.worktime,
+                                                    getCurrentWeekdayShort(),
+                                                    getCurrentTimeShort()
+                                                ).interval
+                                            }
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <div className={css.extraItemContent}>
+                                        <span className={css.extraTop}>
+                                            Закрыто до
+                                        </span>
+                                        <span className={css.extraBottom}>
+                                            до{' '}
+                                            {
+                                                getRestaurantStatusTyped(
+                                                    rest?.worktime,
+                                                    getCurrentWeekdayShort(),
+                                                    getCurrentTimeShort()
+                                                ).interval
+                                            }
+                                        </span>
+                                    </div>
+                                )
+                            ) : null}
                         </div>
                     </div>
                 </div>

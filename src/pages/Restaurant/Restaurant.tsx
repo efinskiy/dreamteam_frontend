@@ -44,10 +44,29 @@ import { LogoMapIcon } from '@/components/Icons/LogoMapIcon.tsx';
 import { ImageViewerPopup } from '@/components/ImageViewerPopup/ImageViewerPopup.tsx';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import {
+    formatDate,
+    formatDateAlt,
     getCurrentTimeShort,
     getCurrentWeekdayShort,
     getRestaurantStatus,
+    getTimeShort,
 } from '@/utils.ts';
+import { Calendar } from 'react-iconly';
+import { FaAngleRight } from 'react-icons/fa';
+import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
+import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
+import { authAtom } from '@/atoms/userAtom.ts';
+import {
+    APIGetAvailableDays,
+    APIGetAvailableTimeSlots,
+} from '@/api/restaurants.ts';
+import {
+    bookingDateAtom,
+    guestCountAtom,
+    timeslotAtom,
+} from '@/atoms/bookingInfoAtom.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
 
 export const transformGallery = (
     gallery: IPhotoCard[]
@@ -74,27 +93,33 @@ export const Restaurant = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [searchParams] = useSearchParams();
+    const [auth] = useAtom(authAtom);
+    const [restaurants] = useAtom(restaurantsListAtom);
+    const [, setGuestCount] = useAtom(guestCountAtom);
+    const [bookingDate, setBookingDate] = useAtom(bookingDateAtom);
+    const [, setBackUrlAtom] = useAtom(backButtonAtom);
+    const [currentSelectedTime, setCurrentSelectedTime] =
+        useAtom<ITimeSlot | null>(timeslotAtom);
 
     const [restaurant, setRestaurant] = useState<IRestaurant>();
-    const [restaurants] = useAtom(restaurantsListAtom);
+    const [bookingDates, setBookingDates] = useState<PickerValueObj[]>([]);
+    const [availableTimeslots, setAvailableTimeslots] = useState<ITimeSlot[]>(
+        []
+    );
 
-    useEffect(() => {
-        setRestaurant(restaurants.find((v) => v.id === Number(id)));
-    }, [id]);
+    const [timeslotLoading, setTimeslotLoading] = useState(true);
 
     const [hideAbout, setHideAbout] = useState(true);
     const [hideChefAbout, setHideChefAbout] = useState(true);
     const [hideWorkHours, setHideWorkHours] = useState(true);
     const [headerScrolled, setHeaderScrolled] = useState(false);
-    const [, setBackUrlAtom] = useAtom(backButtonAtom);
     const [menuPopupOpen, setMenuPopupOpen] = useState(
         Boolean(searchParams.get('menuOpen')) || false
     );
+    const [bookingDatePopup, setBookingDatePopup] = useState<boolean>(false);
     const [callPopup, setCallPopup] = useState(false);
-
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [currentImageViewerPhoto, setCurrentImageViewerPhoto] = useState('');
-
     const [gallery, setGallery] = useState<GalleryCollection[]>([]);
     const [currentGalleryCategory, setCurrentGalleryCategory] =
         useState('Все фото');
@@ -102,10 +127,11 @@ export const Restaurant = () => {
         (string | string[])[]
     >([]);
 
-    const goToProfile = () => {
-        setBackUrlAtom(`/restaurant/${id}`);
-        navigate('/profile');
-    };
+    useEffect(() => {
+        setRestaurant(restaurants.find((v) => v.id === Number(id)));
+        setCurrentSelectedTime(null);
+        setBookingDate({ value: 'unset', title: 'unset' });
+    }, [id]);
 
     useEffect(() => {
         if (restaurant?.gallery) {
@@ -125,6 +151,47 @@ export const Restaurant = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        if (!auth?.access_token) {
+            return;
+        }
+        APIGetAvailableDays(auth?.access_token, Number(id), 1)
+            .then((res) => {
+                setBookingDates(
+                    res.data.map((v) => ({
+                        title: formatDate(v),
+                        value: v,
+                    }))
+                );
+                return res;
+            })
+            .then((res) =>
+                setBookingDate({
+                    title: formatDate(res.data[0]),
+                    value: res.data[0],
+                })
+            );
+    }, []);
+    useEffect(() => {
+        if (!auth?.access_token || bookingDate.value == 'unset') {
+            return;
+        }
+        setTimeslotLoading(true);
+        APIGetAvailableTimeSlots(
+            auth.access_token,
+            Number(id),
+            bookingDate.value,
+            1
+        )
+            .then((res) => setAvailableTimeslots(res.data))
+            .finally(() => setTimeslotLoading(false));
+    }, [bookingDate]);
+
+    const goToProfile = () => {
+        setBackUrlAtom(`/restaurant/${id}`);
+        navigate('/profile');
+    };
 
     const getGalleryPhotos = () => {
         let photoList: string[] = [];
@@ -162,6 +229,13 @@ export const Restaurant = () => {
 
     return (
         <Page back={true}>
+            <BookingDateSelectorPopup
+                isOpen={bookingDatePopup}
+                setOpen={setBookingDatePopup}
+                bookingDate={bookingDate}
+                setBookingDate={setBookingDate}
+                values={bookingDates}
+            />
             {restaurant?.menu_imgs ? (
                 <MenuPopup
                     isOpen={menuPopupOpen}
@@ -277,7 +351,101 @@ export const Restaurant = () => {
                         className={css.navSliderAndBookingContainer}
                     >
                         <RestaurantNavigation />
-                        <div className={css.bookingContaner}></div>
+                        <div className={css.bookingContaner}>
+                            <Swiper
+                                slidesPerView={'auto'}
+                                spaceBetween={8}
+                                freeMode={true}
+                                modules={[FreeMode]}
+                                style={{
+                                    marginLeft: '0',
+                                }}
+                            >
+                                {bookingDate.value == 'unset' ||
+                                !bookingDates.length ? (
+                                    <SwiperSlide
+                                        style={{ width: 'min-content' }}
+                                    >
+                                        <PlaceholderBlock
+                                            width={'150px'}
+                                            height={'41px'}
+                                            rounded={'20px'}
+                                        />
+                                    </SwiperSlide>
+                                ) : (
+                                    <SwiperSlide
+                                        style={{ width: 'min-content' }}
+                                        onClick={() =>
+                                            setBookingDatePopup(true)
+                                        }
+                                    >
+                                        <div className={css.timeItem}>
+                                            <Calendar size={18} />
+                                            {formatDateAlt(bookingDate.value)}
+                                            <FaAngleRight size={16} />
+                                        </div>
+                                    </SwiperSlide>
+                                )}
+                                {timeslotLoading ? (
+                                    <>
+                                        <SwiperSlide
+                                            style={{ width: 'min-content' }}
+                                        >
+                                            <PlaceholderBlock
+                                                width={'68px'}
+                                                height={'41px'}
+                                                rounded={'20px'}
+                                            />
+                                        </SwiperSlide>
+                                        <SwiperSlide
+                                            style={{ width: 'min-content' }}
+                                        >
+                                            <PlaceholderBlock
+                                                width={'68px'}
+                                                height={'41px'}
+                                                rounded={'20px'}
+                                            />
+                                        </SwiperSlide>
+                                        <SwiperSlide
+                                            style={{ width: 'min-content' }}
+                                        >
+                                            <PlaceholderBlock
+                                                width={'68px'}
+                                                height={'41px'}
+                                                rounded={'20px'}
+                                            />
+                                        </SwiperSlide>
+                                    </>
+                                ) : (
+                                    availableTimeslots.map((ts, i) => (
+                                        <SwiperSlide
+                                            key={i}
+                                            style={{ width: 'min-content' }}
+                                            onClick={() => {
+                                                setCurrentSelectedTime(ts);
+                                                setGuestCount({
+                                                    title: '1 гость',
+                                                    value: '1',
+                                                });
+                                            }}
+                                        >
+                                            <div
+                                                className={classNames(
+                                                    css.timeItem,
+                                                    currentSelectedTime == ts
+                                                        ? css.timeItemActive
+                                                        : null
+                                                )}
+                                            >
+                                                {getTimeShort(
+                                                    ts.start_datetime
+                                                )}
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
+                                )}
+                            </Swiper>
+                        </div>
                     </div>
                     <ContentBlock id={'gallery'}>
                         <HeaderContainer>

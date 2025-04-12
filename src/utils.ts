@@ -98,13 +98,33 @@ export const formatDate = (inputDate: string): string => {
     input.setHours(0, 0, 0, 0);
 
     const day = input.getDate();
-    const month = MONTHS[input.getMonth()];
+    const month = MONTHS_LONG2[input.getMonth()];
 
     if (input.getTime() === today.getTime()) {
         return `Сегодня, ${day} ${month}`;
     } else if (input.getTime() === today.getTime() + 86400000) {
         // 86400000 миллисекунд в одном дне
         return `Завтра, ${day} ${month}`;
+    } else {
+        return `${day} ${month}`;
+    }
+};
+export const formatDateAlt = (inputDate: string): string => {
+    const today = new Date();
+    const input = new Date(inputDate);
+
+    // Убираем время, чтобы сравнивать только даты
+    today.setHours(0, 0, 0, 0);
+    input.setHours(0, 0, 0, 0);
+
+    const day = input.getDate();
+    const month = MONTHS_LONG2[input.getMonth()];
+
+    if (input.getTime() === today.getTime()) {
+        return `Сегодня`;
+    } else if (input.getTime() === today.getTime() + 86400000) {
+        // 86400000 миллисекунд в одном дне
+        return `Завтра`;
     } else {
         return `${day} ${month}`;
     }
@@ -347,4 +367,85 @@ export const getRestaurantStatus = (
 
     // Если вообще нет рабочих слотов ни сегодня, ни завтра, вернём что-то общее:
     return 'Сегодня не работает';
+};
+
+interface RestaurantStatus {
+    status: 'open' | 'closed';
+    interval: string;
+}
+
+export const getRestaurantStatusTyped = (
+    worktime: IWorkTime[],
+    currentWeekday: string,
+    currentTimeStr: string
+): RestaurantStatus => {
+    const currentDayIndex = dayIndexMap[currentWeekday];
+    const currentMins = parseTimeToMinutes(currentTimeStr);
+
+    // Разделим расписание по дням для удобства
+    const scheduleByDay: Record<number, { start: number; end: number }[]> = {};
+    for (const wt of worktime) {
+        const dIndex = dayIndexMap[wt.weekday];
+        const start = parseTimeToMinutes(wt.time_start);
+        let end = parseTimeToMinutes(wt.time_end);
+        if (end <= start) {
+            end += 24 * 60; // +1440
+        }
+        if (!scheduleByDay[dIndex]) {
+            scheduleByDay[dIndex] = [];
+        }
+        scheduleByDay[dIndex].push({ start, end });
+    }
+
+    for (const day in scheduleByDay) {
+        scheduleByDay[day].sort((a, b) => a.start - b.start);
+    }
+
+    const prevDayIndex = (currentDayIndex + 6) % 7; // (currentDayIndex - 1) с учётом "закольцовки"
+
+    if (scheduleByDay[prevDayIndex]) {
+        // Проверим каждый слот предыдущего дня
+        for (const interval of scheduleByDay[prevDayIndex]) {
+            const { start, end } = interval;
+            if (end > 1440) {
+                const shiftedCurrent = currentMins + 1440;
+                if (shiftedCurrent >= start && shiftedCurrent < end) {
+                    return {
+                        status: 'open',
+                        interval: formatMinutesToTime(end),
+                    };
+                }
+            }
+        }
+    }
+
+    if (scheduleByDay[currentDayIndex]) {
+        for (const interval of scheduleByDay[currentDayIndex]) {
+            const { start, end } = interval;
+            if (currentMins >= start && currentMins < end) {
+                return { status: 'open', interval: formatMinutesToTime(end) };
+            }
+        }
+        const nextInterval = scheduleByDay[currentDayIndex]
+            .filter((interval) => interval.start > currentMins)
+            .sort((a, b) => a.start - b.start)[0];
+        if (nextInterval) {
+            return {
+                status: 'closed',
+                interval: formatMinutesToTime(nextInterval.start),
+            };
+        }
+    }
+
+    const nextDay = (currentDayIndex + 1) % 7;
+    if (scheduleByDay[nextDay] && scheduleByDay[nextDay].length) {
+        const earliest = scheduleByDay[nextDay].reduce((acc, interval) =>
+            interval.start < acc.start ? interval : acc
+        );
+        return {
+            status: 'closed',
+            interval: formatMinutesToTime(earliest.start),
+        };
+    }
+    return { status: 'closed', interval: '' };
 };

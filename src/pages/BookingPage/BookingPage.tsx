@@ -38,6 +38,11 @@ import {
 import { useAtom } from 'jotai';
 import { authAtom, userAtom } from '@/atoms/userAtom.ts';
 import { commAtom } from '@/atoms/bookingCommAtom.ts';
+import {
+    bookingDateAtom,
+    guestCountAtom,
+    timeslotAtom,
+} from '@/atoms/bookingInfoAtom.ts';
 
 const confirmationList: IConfirmationType[] = [
     {
@@ -61,15 +66,8 @@ export const BookingPage: FC = () => {
     const [auth] = useAtom(authAtom);
     const [user] = useAtom(userAtom);
     const [comms] = useAtom(commAtom);
-
-    const [guestCount, setGuestCount] = useState<PickerValueObj>({
-        title: 'unset',
-        value: 'unset',
-    });
-    const [bookingDate, setBookingDate] = useState<PickerValueObj>({
-        title: 'unset',
-        value: 'unset',
-    });
+    const [guestCount, setGuestCount] = useAtom(guestCountAtom);
+    const [bookingDate, setBookingDate] = useAtom(bookingDateAtom);
     const [guestCountPopup, setGuestCountPopup] = useState(false);
     const [bookingDatePopup, setBookingDatePopup] = useState(false);
     const [userName, setUserName] = useState<string>(
@@ -96,7 +94,7 @@ export const BookingPage: FC = () => {
     });
     const [commentary, setCommentary] = useState('');
     const [currentSelectedTime, setCurrentSelectedTime] =
-        useState<ITimeSlot | null>(null);
+        useAtom<ITimeSlot | null>(timeslotAtom);
     const [bookingDates, setBookingDates] = useState<PickerValueObj[]>([]);
 
     const [phoneValidated, setPhoneValidated] = useState(true);
@@ -107,7 +105,6 @@ export const BookingPage: FC = () => {
     const [requestLoading, setRequestLoading] = useState(false);
 
     useEffect(() => {
-        setCurrentSelectedTime(null);
         auth?.access_token && id
             ? APIGetAvailableDays(auth?.access_token, parseInt(id), 1).then(
                   (res) =>
@@ -120,6 +117,41 @@ export const BookingPage: FC = () => {
               )
             : null;
     }, [guestCount]);
+
+    useEffect(() => {
+        console.log(currentSelectedTime);
+    }, [currentSelectedTime]);
+
+    useEffect(() => {
+        if (currentSelectedTime) {
+            const part = findPartOfDay(
+                new Date(currentSelectedTime.start_datetime)
+            );
+            switch (part) {
+                case 'morning':
+                    setCurrentPartOfDay({
+                        morning: true,
+                        day: false,
+                        evening: false,
+                    });
+                    break;
+                case 'evening':
+                    setCurrentPartOfDay({
+                        morning: false,
+                        day: false,
+                        evening: true,
+                    });
+                    break;
+                case 'day':
+                    setCurrentPartOfDay({
+                        morning: false,
+                        day: true,
+                        evening: false,
+                    });
+                    break;
+            }
+        }
+    }, [currentSelectedTime, availableTimeslots]);
 
     useEffect(() => {
         if (
@@ -165,6 +197,20 @@ export const BookingPage: FC = () => {
             );
         }
     }, [availableTimeslots, currentPartOfDay]);
+
+    const findPartOfDay = (dt: Date): 'morning' | 'day' | 'evening' => {
+        const hours = dt.getHours();
+        if (hours >= 8 && hours < 12) {
+            return 'morning';
+        }
+        if (hours >= 12 && hours < 18) {
+            return 'day';
+        }
+        if (hours >= 18 && hours <= 23) {
+            return 'evening';
+        }
+        return 'day';
+    };
 
     const nameValidate = useMemo(() => {
         return Boolean(userName?.trim().length);
@@ -465,8 +511,8 @@ export const BookingPage: FC = () => {
                                                     <div
                                                         className={classNames(
                                                             css.timeList_button,
-                                                            currentSelectedTime ===
-                                                                v
+                                                            currentSelectedTime?.start_datetime ==
+                                                                v.start_datetime
                                                                 ? css.timeList_button__active
                                                                 : null
                                                         )}

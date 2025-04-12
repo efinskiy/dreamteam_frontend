@@ -414,3 +414,22 @@
     padding: 0 15px;
     flex-direction: column;
 }
+
+.timeItem {
+    display: flex;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 20px;
+    width: max-content;
+    font-family: "Mont", sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--black);
+    background-color: var(--secondary-background);
+    cursor: pointer;
+    align-items: center;
+}
+
+.timeItemActive {
+    border: 1px solid var(--black);
+}
