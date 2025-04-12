@@ -176,6 +176,12 @@
     gap: 0;
 }
 
+.noTimeSlotsText {
+    font-family: 'Mont', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+}
+
 .timeOfDay {
     border-radius: 20px;
     padding: 11px 16px;

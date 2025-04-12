@@ -43,6 +43,7 @@ import {
     guestCountAtom,
     timeslotAtom,
 } from '@/atoms/bookingInfoAtom.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 
 const confirmationList: IConfirmationType[] = [
     {
@@ -70,6 +71,7 @@ export const BookingPage: FC = () => {
     const [bookingDate, setBookingDate] = useAtom(bookingDateAtom);
     const [guestCountPopup, setGuestCountPopup] = useState(false);
     const [bookingDatePopup, setBookingDatePopup] = useState(false);
+    const [timeslotsLoading, setTimeslotsLoading] = useState(true);
     const [userName, setUserName] = useState<string>(
         user?.first_name ? user.first_name : ''
     );
@@ -162,12 +164,15 @@ export const BookingPage: FC = () => {
         ) {
             return;
         }
+        setTimeslotsLoading(true);
         APIGetAvailableTimeSlots(
             auth.access_token,
             parseInt(id),
             bookingDate.value,
             parseInt(guestCount.value)
-        ).then((res) => setAvailableTimeslots(res.data));
+        )
+            .then((res) => setAvailableTimeslots(res.data))
+            .finally(() => setTimeslotsLoading(false));
     }, [bookingDate, guestCount]);
 
     useEffect(() => {
@@ -425,12 +430,19 @@ export const BookingPage: FC = () => {
                         </div>
                     </ContentContainer>
                     {guestCount.value === 'unset' ||
-                    bookingDate.value === 'unset' ? null : (
+                    bookingDate.value === 'unset' ? null : timeslotsLoading ? (
+                        <PlaceholderBlock
+                            width={'100%'}
+                            height={'115px'}
+                            rounded={'20px'}
+                        />
+                    ) : (
                         <ContentContainer>
                             <div className={css.timeOfDayContainer}>
                                 {!availableTimeslots.length ? (
-                                    <span>
-                                        Нет доступных к бронированию столов
+                                    <span className={css.noTimeSlotsText}>
+                                        К сожалению, свободных столов не
+                                        осталось
                                     </span>
                                 ) : (
                                     <>
@@ -490,51 +502,58 @@ export const BookingPage: FC = () => {
                                     </>
                                 )}
 
-                                <div className={css.timeList}>
-                                    {filteredTimeslots.length ? (
-                                        <Swiper
-                                            slidesPerView="auto"
-                                            modules={[FreeMode]}
-                                            freeMode={true}
-                                            spaceBetween={8}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            {filteredTimeslots.map((v) => (
-                                                <SwiperSlide
-                                                    key={`time_${v.start_datetime}`}
-                                                    style={{
-                                                        width: 'max-content',
-                                                    }}
-                                                >
-                                                    <div
-                                                        className={classNames(
-                                                            css.timeList_button,
-                                                            currentSelectedTime?.start_datetime ==
-                                                                v.start_datetime
-                                                                ? css.timeList_button__active
-                                                                : null
-                                                        )}
-                                                        onClick={() =>
-                                                            setCurrentSelectedTime(
-                                                                v
-                                                            )
-                                                        }
+                                {availableTimeslots.length ? (
+                                    <div className={css.timeList}>
+                                        {filteredTimeslots.length ? (
+                                            <Swiper
+                                                slidesPerView="auto"
+                                                modules={[FreeMode]}
+                                                freeMode={true}
+                                                spaceBetween={8}
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                            >
+                                                {filteredTimeslots.map((v) => (
+                                                    <SwiperSlide
+                                                        key={`time_${v.start_datetime}`}
+                                                        style={{
+                                                            width: 'max-content',
+                                                        }}
                                                     >
-                                                        <span>
-                                                            {getTimeShort(
-                                                                v.start_datetime
+                                                        <div
+                                                            className={classNames(
+                                                                css.timeList_button,
+                                                                currentSelectedTime?.start_datetime ==
+                                                                    v.start_datetime
+                                                                    ? css.timeList_button__active
+                                                                    : null
                                                             )}
-                                                        </span>
-                                                    </div>
-                                                </SwiperSlide>
-                                            ))}
-                                        </Swiper>
-                                    ) : (
-                                        <span>Нет доступных слотов</span>
-                                    )}
-                                </div>
+                                                            onClick={() =>
+                                                                setCurrentSelectedTime(
+                                                                    v
+                                                                )
+                                                            }
+                                                        >
+                                                            <span>
+                                                                {getTimeShort(
+                                                                    v.start_datetime
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    </SwiperSlide>
+                                                ))}
+                                            </Swiper>
+                                        ) : (
+                                            <span
+                                                className={css.noTimeSlotsText}
+                                            >
+                                                К сожалению, доступных столов на
+                                                выбранную часть дня не осталось
+                                            </span>
+                                        )}
+                                    </div>
+                                ) : null}
                             </div>
                         </ContentContainer>
                     )}
@@ -552,6 +571,7 @@ export const BookingPage: FC = () => {
                                 slidesPerView="auto"
                                 modules={[FreeMode]}
                                 freeMode={true}
+                                spaceBetween={8}
                             >
                                 {BOOKINGCOMMENTMOCK.map((obj) => (
                                     <SwiperSlide
@@ -564,9 +584,6 @@ export const BookingPage: FC = () => {
                                         />
                                     </SwiperSlide>
                                 ))}
-                                <SwiperSlide
-                                    style={{ width: '80px' }}
-                                ></SwiperSlide>
                             </Swiper>
                         </div>
                     </ContentContainer>

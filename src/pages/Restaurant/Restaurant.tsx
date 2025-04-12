@@ -67,6 +67,7 @@ import {
 } from '@/atoms/bookingInfoAtom.ts';
 import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
+import { EventCard } from '@/components/EventCard/EventCard.tsx';
 
 export const transformGallery = (
     gallery: IPhotoCard[]
@@ -669,9 +670,13 @@ export const Restaurant = () => {
                                         График
                                     </span>
                                     <div
-                                        className={classNames(css.right, {
-                                            [css.closed]: hideWorkHours,
-                                        })}
+                                        className={classNames(
+                                            css.right,
+                                            css.opened,
+                                            {
+                                                [css.closed]: hideWorkHours,
+                                            }
+                                        )}
                                     >
                                         <DownArrow
                                             size={20}
@@ -809,21 +814,44 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
-                {/*<div className={css.events}>*/}
-                {/*    <EventCard*/}
-                {/*        onClick={() => navigate(`/events/1/restaurant`)}*/}
-                {/*        event_price={1500}*/}
-                {/*        event_name={*/}
-                {/*            'Винный ужин с виноделом Мануэля Морага Гутьерресом'*/}
-                {/*        }*/}
-                {/*        event_desc={*/}
-                {/*            'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'*/}
-                {/*        }*/}
-                {/*        event_img={*/}
-                {/*            'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*</div>*/}
+                <ContentContainer>
+                    <ContentBlock>
+                        <HeaderContainer>
+                            <HeaderContent
+                                title={'Мероприятия'}
+                                id={'events'}
+                            />
+                        </HeaderContainer>
+
+                        <EventCard
+                            onClick={() => navigate(`/events/1/restaurant`)}
+                            event_price={1500}
+                            event_name={
+                                'Винный ужин с виноделом Мануэля Морага Гутьерресом'
+                            }
+                            event_desc={
+                                'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
+                            }
+                            event_img={
+                                'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
+                            }
+                        />
+                        <EventCard
+                            onClick={() => navigate(`/events/1/restaurant`)}
+                            event_price={1500}
+                            event_name={
+                                'Винный ужин с виноделом Мануэля Морага Гутьерресом'
+                            }
+                            event_desc={
+                                'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
+                            }
+                            event_img={
+                                'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
+                            }
+                        />
+                    </ContentBlock>
+                </ContentContainer>
+
                 <ContentContainer>
                     <ContentBlock>
                         <HeaderContainer>
