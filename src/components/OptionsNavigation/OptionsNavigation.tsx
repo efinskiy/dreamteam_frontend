@@ -23,8 +23,9 @@ export const OptionsNavigation = () => {
             <OptionsNavigationElement
                 icon={<CalendarIcon size={20} color={'var(--light-grey)'} />}
                 title={'Мероприятия'}
-                // link={'/events'}
-                onClick={() => alert('В разработке')}
+                link={'/events'}
+                // onClick={() => alert('В разработке')}
+                // onClick={() => alert('В разработке')}
             />
             {review.loading ? (
                 <PlaceholderBlock

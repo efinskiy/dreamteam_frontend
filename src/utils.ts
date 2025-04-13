@@ -1,4 +1,6 @@
 import { IWorkTime } from '@/types/restaurant.ts';
+import { IEventBooking } from '@/pages/EventsPage/EventsPage.tsx';
+import { Dispatch, SetStateAction } from 'react';
 // import { IEventBooking } from '@/pages/EventsPage/EventsPage.tsx';
 // import { Dispatch, SetStateAction } from 'react';
 
@@ -449,3 +451,8 @@ export const getRestaurantStatusTyped = (
     }
     return { status: 'closed', interval: '' };
 };
+
+export type IEventBookingContext = [
+    IEventBooking,
+    Dispatch<SetStateAction<IEventBooking>>,
+];

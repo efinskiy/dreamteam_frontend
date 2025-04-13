@@ -5,7 +5,7 @@ import { FC } from 'react';
 interface IEventCard {
     event_name: string;
     event_price: number;
-    event_img: string;
+    event_img?: string;
     event_desc: string;
     onClick: () => void;
 }
@@ -20,7 +20,9 @@ export const EventCard: FC<IEventCard> = ({
     return (
         <div
             className={classNames(css.card, css.bgImage)}
-            style={{ backgroundImage: `url(${event_img})` }}
+            style={{
+                backgroundImage: `url(${event_img ? event_img : 'https://storage.yandexcloud.net/bottec-dreamteam/event_placeholder.png'})`,
+            }}
             onClick={() => onClick()}
         >
             <span className={classNames(css.card_date)}>{event_price} ₽</span>

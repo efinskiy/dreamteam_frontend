@@ -33,6 +33,11 @@ import { APIGetRestaurants, APIIsReviewAvailable } from '@/api/restaurants.ts';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import { APIGetEA } from '@/api/config.ts';
 import { RestaurantMapPage } from '@/pages/RestaurantMapPage/RestaurantMapPage.tsx';
+import { EventListOutlet } from '@/pages/EventsPage/EventListOutlet/EventListOutlet.tsx';
+import { EventsPage } from '@/pages/EventsPage/EventsPage.tsx';
+import { EventInfoOutlet } from '@/pages/EventsPage/EventInfoOutlet/EventInfoOutlet.tsx';
+import { RestaurantsListOutlet } from '@/pages/EventsPage/RestaurantsListOutlet/RestaurantsListOutlet.tsx';
+import { DTSelectionOutlet } from '@/pages/EventsPage/DTSelectionOutlet/DTSelectionOutlet.tsx';
 
 const AppRouter = () => {
     const [user] = useAtom(userAtom);
@@ -65,7 +70,7 @@ const AppRouter = () => {
                     available: res.data.available,
                 })
             );
-    }, []);
+    }, [auth]);
 
     useEffect(() => {
         if (!cities.length || !restaurants.length) {
@@ -93,29 +98,29 @@ const AppRouter = () => {
                     <Route path={'/map'} element={<RestaurantMapPage />} />
                     <Route path={'/profile'} element={<ProfilePage />} />
                     <Route path={'/me'} element={<UserProfilePage />} />
-                    {/*<Route path={'/events'} element={<EventsPage />}>*/}
-                    {/*    <Route path={'/events'} element={<EventListOutlet />} />*/}
-                    {/*    <Route*/}
-                    {/*        path={'/events/:id'}*/}
-                    {/*        element={<EventInfoOutlet />}*/}
-                    {/*    />*/}
-                    {/*    <Route*/}
-                    {/*        path={'/events/:id/restaurant'}*/}
-                    {/*        element={<RestaurantsListOutlet />}*/}
-                    {/*    />*/}
-                    {/*    <Route*/}
-                    {/*        path={'/events/:id/restaurant/:res'}*/}
-                    {/*        element={<DTSelectionOutlet />}*/}
-                    {/*    />*/}
-                    {/*    <Route*/}
-                    {/*        path={'/events/:id/restaurant/:res/guests'}*/}
-                    {/*        element={<EventConfirmationOutlet />}*/}
-                    {/*    />*/}
-                    {/*    <Route*/}
-                    {/*        path={'/events/:id/restaurant/:res/confirm'}*/}
-                    {/*        element={<EventBookingOutlet />}*/}
-                    {/*    />*/}
-                    {/*</Route>*/}
+                    <Route path={'/events'} element={<EventsPage />}>
+                        <Route path={'/events'} element={<EventListOutlet />} />
+                        <Route
+                            path={'/events/:name'}
+                            element={<EventInfoOutlet />}
+                        />
+                        <Route
+                            path={'/events/:name/restaurant'}
+                            element={<RestaurantsListOutlet />}
+                        />
+                        <Route
+                            path={'/events/:name/restaurant/:res'}
+                            element={<DTSelectionOutlet />}
+                        />
+                        {/*<Route*/}
+                        {/*    path={'/events/:id/restaurant/:res/guests'}*/}
+                        {/*    element={<EventConfirmationOutlet />}*/}
+                        {/*/>*/}
+                        {/*<Route*/}
+                        {/*    path={'/events/:id/restaurant/:res/confirm'}*/}
+                        {/*    element={<EventBookingOutlet />}*/}
+                        {/*/>*/}
+                    </Route>
                     <Route path={'/tickets'} element={<UserTicketsPage />} />
                     <Route path={'/myBookings'} element={<MyBookingsPage />} />
                     <Route
