@@ -1,17 +1,26 @@
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import { useEffect, useMemo, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
-import { formatDateCalendar, IEventBookingContext } from '@/utils.ts';
+import {
+    findCurrentDate,
+    formatDateCalendar,
+    IEventBookingContext,
+} from '@/utils.ts';
 import { ArrowLeft, ArrowRight } from 'react-iconly';
 import css from './DTSelectionOutlet.module.css';
-// import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
-// import { MockTimeSlots } from '@/mockData.ts';
 import { classNames } from '@telegram-apps/sdk-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
-// import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
+import moment from 'moment';
+import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
+import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
+import { APIGetAvailableEventTimeslots } from '@/api/events.ts';
+import { useAtom } from 'jotai';
+import { authAtom } from '@/atoms/userAtom.ts';
+import { guestCountAtom } from '@/atoms/eventBookingAtom.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 
 type ValuePiece = Date | null;
 
@@ -23,37 +32,55 @@ const createDateForCalendar = (dt: string) => {
     return date;
 };
 export const DTSelectionOutlet = () => {
-    const { res } = useParams();
-    // const navigate = useNavigate();
-    const [value, onChange] = useState<Value>();
-    const [bookingInfo] = useOutletContext<IEventBookingContext>();
-    // const [currentPartOfDay, setCurrentPartOfDay] = useState({
-    //     morning: true,
-    //     day: false,
-    //     evening: false,
-    // });
-    const [availableDates, setAvailableDates] = useState<Date[]>([]);
+    const { name, res } = useParams();
+    const navigate = useNavigate();
+    const [auth] = useAtom(authAtom);
 
-    const restaurantTimeslots = useMemo(() => {
-        const dates = bookingInfo.event?.restaurants
+    // Это value календаря - текущая выбранная дата в календаре.
+    const [value, onChange] = useState<Value>();
+    const [bookingInfo, setBookingInfo] =
+        useOutletContext<IEventBookingContext>();
+    const [availableDates, setAvailableDates] = useState<Date[]>([]);
+    const [restaurantTimeslots, setRestaurantTimeslots] = useState<ITimeSlot[]>(
+        []
+    );
+    const [timeslotsLoading, setTimeslotsLoading] = useState(false);
+    const [currentSelectedTime, setCurrentSelectedTime] = useState<ITimeSlot>();
+    const [guestCount, setGuestCount] = useAtom(guestCountAtom);
+
+    const incCounter = () => {
+        setGuestCount((prev: number) => (prev < 9 ? prev + 1 : prev));
+    };
+    const decCounter = () => {
+        setGuestCount((prev: number) => (prev - 1 >= 1 ? prev - 1 : prev));
+    };
+
+    useEffect(() => {
+        const eventId = bookingInfo.event?.restaurants
             .find((f) => f.id === Number(res))
-            ?.dates.map((date) => createDateForCalendar(date.date_start));
-        if (dates && dates.length) {
-            return bookingInfo.event?.restaurants
-                .find((f) => f.id === Number(res))
-                ?.dates.filter((d) => {
-                    if (value) {
-                        return (
-                            createDateForCalendar(
-                                d.date_start
-                            ).toLocaleDateString() ==
-                            new Date(value.toString()).toLocaleDateString()
-                        );
-                    }
-                })
-                ?.map((date) => date.date_start.split(' ')[1]);
+            ?.dates.find((d) => {
+                if (value) {
+                    return (
+                        createDateForCalendar(
+                            d.date_start
+                        ).toLocaleDateString() ==
+                        new Date(value.toString()).toLocaleDateString()
+                    );
+                }
+            })?.id;
+        if (!auth?.access_token || !eventId || !bookingInfo.restaurant?.id) {
+            return;
         }
-    }, [value]);
+        setTimeslotsLoading(true);
+        APIGetAvailableEventTimeslots(
+            eventId,
+            bookingInfo.restaurant?.id,
+            guestCount,
+            auth.access_token
+        )
+            .then((res) => setRestaurantTimeslots(res.data))
+            .finally(() => setTimeslotsLoading(false));
+    }, [value, guestCount]);
 
     useEffect(() => {
         if (bookingInfo.event) {
@@ -65,64 +92,52 @@ export const DTSelectionOutlet = () => {
             }
         }
     }, []);
-    // const [filteredTimeslots, setFilteredTimeslots] = useState<ITimeSlot[]>([]);
-    // const [availableTimeslots, setAvailableTimeslots] = useState<ITimeSlot[]>(
-    //     []
-    // );
-    const [currentSelectedTime, setCurrentSelectedTime] = useState<
-        string | null
-    >(null);
 
-    // useEffect(() => {
-    //     setAvailableTimeslots(MockTimeSlots);
-    // }, []);
+    const isValid = useMemo(() => {
+        console.log(bookingInfo);
+        return (
+            value &&
+            currentSelectedTime &&
+            bookingInfo.event &&
+            bookingInfo.restaurant
+        );
+    }, [value, currentSelectedTime]);
 
-    // useEffect(() => {
-    //     if (currentPartOfDay.morning) {
-    //         setFilteredTimeslots(
-    //             availableTimeslots.filter(
-    //                 (v) =>
-    //                     Number(v.time.split(':')[0]) >= 8 &&
-    //                     Number(v.time.split(':')[0]) < 12
-    //             )
-    //         );
-    //     } else if (currentPartOfDay.day) {
-    //         setFilteredTimeslots(
-    //             availableTimeslots.filter(
-    //                 (v) =>
-    //                     Number(v.time.split(':')[0]) >= 12 &&
-    //                     Number(v.time.split(':')[0]) < 18
-    //             )
-    //         );
-    //     } else if (currentPartOfDay.evening) {
-    //         setFilteredTimeslots(
-    //             availableTimeslots.filter(
-    //                 (v) =>
-    //                     Number(v.time.split(':')[0]) >= 18 &&
-    //                     Number(v.time.split(':')[0]) < 23
-    //             )
-    //         );
-    //     }
-    // }, [availableTimeslots, currentPartOfDay]);
+    const setTime = (time: ITimeSlot) => {
+        setBookingInfo((prev) => ({ ...prev, date: time }));
+        setCurrentSelectedTime(time);
+    };
 
-    // const isValid = useMemo(() => {
-    //     return value && currentSelectedTime;
-    // }, [value, currentSelectedTime]);
+    useEffect(() => {
+        if (!currentSelectedTime) {
+            return;
+        }
+        setBookingInfo((prev) => ({
+            ...prev,
+            event_date: findCurrentDate(bookingInfo, currentSelectedTime),
+        }));
+    }, [currentSelectedTime]);
 
-    // const next = (dt: Value | undefined, timeslot: ITimeSlot | null) => {
-    //     if (dt && typeof dt === 'object' && timeslot) {
-    //         // @ts-expect-error type
-    //         setBookingInfo((prev) => ({
-    //             ...prev,
-    //             date: dt,
-    //             time: timeslot.time,
-    //         }));
-    //         navigate(`/events/${id}/restaurant/${res}/guests`);
-    //     }
-    // };
+    const next = () => {
+        isValid ? navigate(`/events/${name}/restaurant/${res}/guests`) : null;
+    };
 
     return (
         <div className={css.frame}>
+            <div className={css.personsContainer}>
+                <span className={css.personsContainer__title}>
+                    Количество мест
+                </span>
+                <div className={css.personCounter}>
+                    <span className={css.clickableSpan} onClick={incCounter}>
+                        +
+                    </span>
+                    <span>{guestCount}</span>
+                    <span className={css.clickableSpan} onClick={decCounter}>
+                        -
+                    </span>
+                </div>
+            </div>
             <div className={css.calendar}>
                 <Calendar
                     onChange={onChange}
@@ -146,59 +161,6 @@ export const DTSelectionOutlet = () => {
             </div>
             {value ? (
                 <div className={css.timeOfDayContainer}>
-                    {/*<div className={css.select_timeOfDay}>*/}
-                    {/*    <div*/}
-                    {/*        className={classNames(*/}
-                    {/*            css.timeOfDay,*/}
-                    {/*            currentPartOfDay.morning*/}
-                    {/*                ? css.timeOfDay__active*/}
-                    {/*                : null*/}
-                    {/*        )}*/}
-                    {/*        onClick={() =>*/}
-                    {/*            setCurrentPartOfDay(() => ({*/}
-                    {/*                morning: true,*/}
-                    {/*                day: false,*/}
-                    {/*                evening: false,*/}
-                    {/*            }))*/}
-                    {/*        }*/}
-                    {/*    >*/}
-                    {/*        <span>Утро</span>*/}
-                    {/*    </div>*/}
-                    {/*    <div*/}
-                    {/*        className={classNames(*/}
-                    {/*            css.timeOfDay,*/}
-                    {/*            currentPartOfDay.day*/}
-                    {/*                ? css.timeOfDay__active*/}
-                    {/*                : null*/}
-                    {/*        )}*/}
-                    {/*        onClick={() =>*/}
-                    {/*            setCurrentPartOfDay(() => ({*/}
-                    {/*                morning: false,*/}
-                    {/*                day: true,*/}
-                    {/*                evening: false,*/}
-                    {/*            }))*/}
-                    {/*        }*/}
-                    {/*    >*/}
-                    {/*        <span>День</span>*/}
-                    {/*    </div>*/}
-                    {/*    <div*/}
-                    {/*        className={classNames(*/}
-                    {/*            css.timeOfDay,*/}
-                    {/*            currentPartOfDay.evening*/}
-                    {/*                ? css.timeOfDay__active*/}
-                    {/*                : null*/}
-                    {/*        )}*/}
-                    {/*        onClick={() =>*/}
-                    {/*            setCurrentPartOfDay(() => ({*/}
-                    {/*                morning: false,*/}
-                    {/*                day: false,*/}
-                    {/*                evening: true,*/}
-                    {/*            }))*/}
-                    {/*        }*/}
-                    {/*    >*/}
-                    {/*        <span>Вечер</span>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
                     <div className={css.timeList}>
                         <Swiper
                             slidesPerView="auto"
@@ -209,10 +171,10 @@ export const DTSelectionOutlet = () => {
                                 marginLeft: '0',
                             }}
                         >
-                            {restaurantTimeslots
+                            {!timeslotsLoading
                                 ? restaurantTimeslots.map((v) => (
                                       <SwiperSlide
-                                          key={`time_${v}`}
+                                          key={`time_${v.start_datetime}`}
                                           style={{
                                               width: 'max-content',
                                           }}
@@ -224,34 +186,54 @@ export const DTSelectionOutlet = () => {
                                                       ? css.timeList_button__active
                                                       : null
                                               )}
-                                              onClick={() =>
-                                                  setCurrentSelectedTime(v)
-                                              }
+                                              onClick={() => setTime(v)}
                                           >
-                                              <span>{v}</span>
+                                              <span>
+                                                  {moment(
+                                                      v.start_datetime
+                                                  ).format('HH:mm')}
+                                              </span>
                                           </div>
                                       </SwiperSlide>
                                   ))
-                                : null}
+                                : Array(3)
+                                      .fill(0)
+                                      .map((_, i) => (
+                                          <SwiperSlide
+                                              key={`timeslot_ph_${i}`}
+                                              style={{
+                                                  width: 'max-content',
+                                              }}
+                                          >
+                                              <PlaceholderBlock
+                                                  width={'100px'}
+                                                  height={'45px'}
+                                                  rounded={'20px'}
+                                              />
+                                          </SwiperSlide>
+                                      ))}
                         </Swiper>
                     </div>
+                    {!timeslotsLoading && !restaurantTimeslots.length ? (
+                        <span>Нет доступных столиков</span>
+                    ) : null}
                 </div>
             ) : null}
             <div className={css.absoluteBottom}>
-                {/*<div className={css.bottomWrapper}>*/}
-                {/*    <UniversalButton*/}
-                {/*        width={'full'}*/}
-                {/*        title={'Купить билет'}*/}
-                {/*        theme={isValid ? 'red' : undefined}*/}
-                {/*        action={() => {*/}
-                {/*            isValid*/}
-                {/*                ? next(value, currentSelectedTime)*/}
-                {/*                : alert(*/}
-                {/*                      'Для продолжения выберите доступную дату и время из списка.'*/}
-                {/*                  );*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                <div className={css.bottomWrapper}>
+                    <UniversalButton
+                        width={'full'}
+                        title={'Купить билет'}
+                        theme={isValid ? 'red' : undefined}
+                        action={() => {
+                            isValid
+                                ? next()
+                                : alert(
+                                      'Для продолжения выберите доступную дату и время из списка.'
+                                  );
+                        }}
+                    />
+                </div>
             </div>
         </div>
     );

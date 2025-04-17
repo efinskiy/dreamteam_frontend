@@ -30,10 +30,8 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
     const pickerActions = usePickerActions('Picker.Item');
     const { key } = useColumnData('Picker.Item');
 
+    const isSimple = typeof value === 'string' || typeof value === 'number';
     useEffect(() => {
-        console.log('pickerActions.registerOption');
-        const isSimple = typeof value === 'string' || typeof value === 'number';
-
         return pickerActions.registerOption(key, {
             value: isSimple ? value : value.value,
             element: optionRef,
@@ -51,10 +49,10 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
     );
 
     const handleClick = useCallback(() => {
-        pickerActions.change(key, value);
+        isSimple
+            ? pickerActions.change(key, value)
+            : pickerActions.change(key, value.value);
     }, [pickerActions, key, value]);
-
-    const isSimple = typeof value === 'string' || typeof value === 'number';
 
     return (
         <div

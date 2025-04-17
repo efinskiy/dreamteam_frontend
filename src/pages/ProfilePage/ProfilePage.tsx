@@ -56,7 +56,7 @@ export const ProfilePage = () => {
                         </Link>
                         <span
                             className={css.navLink}
-                            onClick={() => alert('В разработке')}
+                            onClick={() => navigate('/tickets')}
                         >
                             <TicketsIcon size={24} color={'black'} />
                             <span className={css.navLinkTitle}>Мои билеты</span>

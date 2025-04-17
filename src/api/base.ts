@@ -1,3 +1,3 @@
-// export const BASE_URL = 'https://home.efinskiy.ru/api/v1';
-export const BASE_URL = 'https://api.efinskiy.ru/api/v1';
-// export const BASE_URL = 'http://127.0.0.1:3051/api/v1';
+export const BASE_URL = import.meta.env.PROD
+    ? 'https://api.efinskiy.ru/api/v1'
+    : 'https://10.0.10.147:8010/api/v1';

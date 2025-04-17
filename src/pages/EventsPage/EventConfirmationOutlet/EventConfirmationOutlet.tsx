@@ -1,27 +1,23 @@
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { useAtom } from 'jotai/index';
-import { guestCountAtom } from '@/atoms/eventBookingAtom.ts';
 import css from './EventConfirmationOutlet.module.css';
-import { formatDateDT, IEventBookingContext } from '@/utils.ts';
+import {
+    findCurrentDate,
+    formatDateDT,
+    IEventBookingContext,
+} from '@/utils.ts';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
+import moment from 'moment';
+// import { IEventBooking, IEventDate } from '@/pages/EventsPage/EventsPage.tsx';
 
 export const EventConfirmationOutlet = () => {
     const navigate = useNavigate();
-    const { id, res } = useParams();
+    const { name, res } = useParams();
     const [bookingInfo, setBookingInfo] =
         useOutletContext<IEventBookingContext>();
-    const [guestCount, setGuestCount] = useAtom(guestCountAtom);
-
-    const incCounter = () => {
-        setGuestCount((prev: number) => (prev < 9 ? prev + 1 : prev));
-    };
-    const decCounter = () => {
-        setGuestCount((prev: number) => (prev - 1 >= 1 ? prev - 1 : prev));
-    };
 
     const next = () => {
-        setBookingInfo((prev) => ({ ...prev, guestCount: guestCount }));
-        navigate(`/events/${id}/restaurant/${res}/confirm`);
+        setBookingInfo((prev) => ({ ...prev }));
+        navigate(`/events/${name}/restaurant/${res}/confirm`);
     };
 
     return (
@@ -29,20 +25,15 @@ export const EventConfirmationOutlet = () => {
             <div
                 className={css.event_img}
                 style={{
-                    backgroundImage:
-                        'url(http://cabinet.clientomer.ru/storage/270027/advents/16.jpg)',
+                    backgroundImage: `url(${bookingInfo.event?.image_url})`,
                 }}
             />
             <div className={css.content_description}>
                 <h2 className={css.content_description__title}>
-                    Винный ужин с виноделом Мунуэлем Морага Гутьерресом
+                    {bookingInfo.event?.name}
                 </h2>
                 <span className={css.content_description__info}>
-                    13 февраля встретимся на ужине с чилийским виноделом в
-                    седьмом поколении, Мануэлем Морага Гутьерресом (Cacique
-                    Maravilla). Его семья владеет виноградником с 1776 года в
-                    городе Юмбель (долина Био-Био). Но после разрушительного
-                    землетрясения 2010 года Мануэль восстановил хозяйство
+                    {bookingInfo.event?.description}
                 </span>
             </div>
             <div className={css.event_params}>
@@ -53,7 +44,9 @@ export const EventConfirmationOutlet = () => {
                         </span>
                         <span className={css.event_params_col__data}>
                             {bookingInfo.date
-                                ? formatDateDT(bookingInfo.date)
+                                ? formatDateDT(
+                                      new Date(bookingInfo.date.start_datetime)
+                                  )
                                 : null}
                         </span>
                     </div>
@@ -62,74 +55,59 @@ export const EventConfirmationOutlet = () => {
                             Время
                         </span>
                         <span className={css.event_params_col__data}>
-                            {bookingInfo.time}
+                            {bookingInfo.date
+                                ? moment(
+                                      bookingInfo.date.start_datetime
+                                  ).format('HH:mm')
+                                : null}
                         </span>
                     </div>
                 </div>
                 <div className={css.event_params_row}>
                     <div className={css.event_params_col}>
                         <span className={css.event_params_col__title}>
-                            Ресторан
+                            Осталось мест
                         </span>
                         <span className={css.event_params_col__data}>
-                            {/*{bookingInfo.restaurantId*/}
-                            {/*    ? MOCK_Restaurants.find(*/}
-                            {/*          (v) =>*/}
-                            {/*              v.id ===*/}
-                            {/*              Number(bookingInfo.restaurantId)*/}
-                            {/*      )?.title*/}
-                            {/*    : null}*/}
+                            {bookingInfo.date
+                                ? findCurrentDate(bookingInfo, bookingInfo.date)
+                                      ?.tickets_left
+                                : null}
                         </span>
                     </div>
                 </div>
-                <div className={css.event_params_row}>
-                    <div className={css.event_params_col}>
-                        <span className={css.event_params_col__title}>
-                            Адрес
-                        </span>
-                        <span className={css.event_params_col__data}>
-                            {/*{bookingInfo.restaurantId*/}
-                            {/*    ? MOCK_Restaurants.find(*/}
-                            {/*          (v) =>*/}
-                            {/*              v.id ===*/}
-                            {/*              Number(bookingInfo.restaurantId)*/}
-                            {/*      )?.address*/}
-                            {/*    : null}*/}
-                        </span>
-                    </div>
-                </div>
+                {/*<div className={css.event_params_row}>*/}
+                {/*    <div className={css.event_params_col}>*/}
+                {/*        <span className={css.event_params_col__title}>*/}
+                {/*            Ресторан*/}
+                {/*        </span>*/}
+                {/*        <span className={css.event_params_col__data}>*/}
+                {/*            {bookingInfo.restaurant?.title}*/}
+                {/*        </span>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className={css.event_params_row}>*/}
+                {/*    <div className={css.event_params_col}>*/}
+                {/*        <span className={css.event_params_col__title}>*/}
+                {/*            Адрес*/}
+                {/*        </span>*/}
+                {/*        <span className={css.event_params_col__data}>*/}
+                {/*            {bookingInfo.restaurant?.address}*/}
+                {/*        </span>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className={css.event_params_row}>
                     <div className={css.event_params_col}>
                         <span className={css.event_params_col__title}>
                             Цена
                         </span>
                         <span className={css.event_params_col__data}>
-                            1500 ₽
+                            {bookingInfo.event?.ticket_price} ₽
                         </span>
                     </div>
                 </div>
                 <div className={css.roundedText}>
                     <span>✓ 100% предоплата</span>
-                </div>
-                <div className={css.personsContainer}>
-                    <span className={css.personsContainer__title}>
-                        Количество мест
-                    </span>
-                    <div className={css.personCounter}>
-                        <span
-                            className={css.clickableSpan}
-                            onClick={incCounter}
-                        >
-                            +
-                        </span>
-                        <span>{guestCount}</span>
-                        <span
-                            className={css.clickableSpan}
-                            onClick={decCounter}
-                        >
-                            -
-                        </span>
-                    </div>
                 </div>
             </div>
             <div className={css.absoluteBottom}>

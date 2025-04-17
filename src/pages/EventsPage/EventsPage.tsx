@@ -4,11 +4,13 @@ import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
 
 export interface IEventBooking {
     event?: IEvent;
     restaurant?: IEventRestaurant;
-    date?: Date;
+    date?: ITimeSlot;
+    event_date?: IEventDate;
     time?: string;
     guestCount?: number;
 }
@@ -29,7 +31,7 @@ export interface IEventRestaurant {
     dates: IEventDate[];
 }
 
-interface IEventDate {
+export interface IEventDate {
     id: number;
     date_start: string;
     date_end: string;

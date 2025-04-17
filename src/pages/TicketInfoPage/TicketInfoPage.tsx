@@ -2,14 +2,33 @@ import { Page } from '@/components/Page.tsx';
 import css from './TicketInfoPage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { classNames } from '@telegram-apps/sdk-react';
 import { RefundIcon } from '@/components/Icons/RefundIcon.tsx';
 import { DownloadIcon } from '@/components/Icons/DownloadIcon.tsx';
+import { useEffect, useState } from 'react';
+import { EventTicket } from '@/types/events.ts';
+import { APIGetTicket } from '@/api/events.ts';
+import { useAtom } from 'jotai';
+import { authAtom } from '@/atoms/userAtom.ts';
+import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { formatDateDT } from '@/utils.ts';
+import moment from 'moment';
 
 export const TicketInfoPage = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [auth] = useAtom(authAtom);
+    const [ticket, setTicket] = useState<EventTicket>();
 
+    useEffect(() => {
+        if (!auth?.access_token) {
+            return;
+        }
+        APIGetTicket(Number(id), auth.access_token).then((res) => {
+            setTicket(res.data);
+        });
+    }, [id]);
     return (
         <Page back={true}>
             <div className={css.body}>
@@ -22,7 +41,7 @@ export const TicketInfoPage = () => {
                                     color={'var(--dark-grey)'}
                                 />
                             }
-                            action={() => navigate(-1)}
+                            action={() => navigate('/tickets')}
                             bgColor={'var(--primary-background)'}
                         />
                         <div className={css.header_spacer} />
@@ -51,7 +70,7 @@ export const TicketInfoPage = () => {
                                 css.bgImage
                             )}
                             style={{
-                                backgroundImage: `url(/img/placeholder_1.png)`,
+                                backgroundImage: `url(${ticket?.event_img || 'https://storage.yandexcloud.net/bottec-dreamteam/event_placeholder.png'})`,
                             }}
                         />
                         <div className={css.ticket_header_details}>
@@ -61,8 +80,12 @@ export const TicketInfoPage = () => {
                                     css.ticket_header_details__title
                                 )}
                             >
-                                Винный ужин с виноделом Мунуэлем Морага
-                                Гутьерресом
+                                {ticket?.event_title || (
+                                    <PlaceholderBlock
+                                        width={'170px'}
+                                        height={'19px'}
+                                    />
+                                )}
                             </span>
                             <span
                                 className={classNames(
@@ -70,7 +93,12 @@ export const TicketInfoPage = () => {
                                     css.ticket_header_details__res
                                 )}
                             >
-                                Smoke BBQ
+                                {ticket?.restaurant.title || (
+                                    <PlaceholderBlock
+                                        width={'170px'}
+                                        height={'19px'}
+                                    />
+                                )}
                             </span>
                         </div>
                     </div>
@@ -91,7 +119,12 @@ export const TicketInfoPage = () => {
                                         css.ticket_details_row_obj_cont
                                     )}
                                 >
-                                    Москва, Трубная, 18
+                                    {ticket?.restaurant.address || (
+                                        <PlaceholderBlock
+                                            width={'170px'}
+                                            height={'19px'}
+                                        />
+                                    )}
                                 </span>
                             </div>
                         </div>
@@ -111,7 +144,16 @@ export const TicketInfoPage = () => {
                                         css.ticket_details_row_obj_cont
                                     )}
                                 >
-                                    13 фев
+                                    {ticket ? (
+                                        formatDateDT(
+                                            new Date(ticket?.date_start)
+                                        )
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'50px'}
+                                            height={'19px'}
+                                        />
+                                    )}
                                 </span>
                             </div>
                             <div className={css.ticket_details_row_obj}>
@@ -129,7 +171,16 @@ export const TicketInfoPage = () => {
                                         css.ticket_details_row_obj_cont
                                     )}
                                 >
-                                    12:00
+                                    {ticket ? (
+                                        moment(ticket?.date_start).format(
+                                            'HH:mm'
+                                        )
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'50px'}
+                                            height={'19px'}
+                                        />
+                                    )}
                                 </span>
                             </div>
                         </div>
@@ -149,7 +200,12 @@ export const TicketInfoPage = () => {
                                         css.ticket_details_row_obj_cont
                                     )}
                                 >
-                                    2
+                                    {ticket?.guest_count || (
+                                        <PlaceholderBlock
+                                            width={'50px'}
+                                            height={'19px'}
+                                        />
+                                    )}
                                 </span>
                             </div>
                             <div className={css.ticket_details_row_obj}>
@@ -167,7 +223,14 @@ export const TicketInfoPage = () => {
                                         css.ticket_details_row_obj_cont
                                     )}
                                 >
-                                    5000 ₽
+                                    {ticket ? (
+                                        `${ticket?.total} ₽`
+                                    ) : (
+                                        <PlaceholderBlock
+                                            width={'70px'}
+                                            height={'19px'}
+                                        />
+                                    )}
                                 </span>
                             </div>
                         </div>
