@@ -1,20 +1,14 @@
 import { Placeholder, AppRoot } from '@telegram-apps/telegram-ui';
-import {
-    retrieveLaunchParams,
-    isColorDark,
-    isRGB,
-} from '@telegram-apps/sdk-react';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { useMemo } from 'react';
 
 export function EnvUnsupported() {
     const [platform, isDark] = useMemo(() => {
         let platform = 'base';
-        let isDark = false;
+        const isDark = false;
         try {
             const lp = retrieveLaunchParams();
-            const { bgColor } = lp.themeParams;
-            platform = lp.platform;
-            isDark = bgColor && isRGB(bgColor) ? isColorDark(bgColor) : false;
+            platform = lp.tgWebAppPlatform;
         } catch {
             /* empty */
         }

@@ -5,7 +5,7 @@ import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { IconlyProfile } from '@/components/Icons/Profile.tsx';
 import { RestaurantTopPreview } from '@/components/RestaurantTopPreview/RestaurantTopPreview.tsx';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { UnmountClosed } from 'react-collapse';
 import 'swiper/css/bundle';
@@ -59,6 +59,7 @@ import { authAtom } from '@/atoms/userAtom.ts';
 import {
     APIGetAvailableDays,
     APIGetAvailableTimeSlots,
+    APIGetEventsInRestaurant,
 } from '@/api/restaurants.ts';
 import {
     bookingDateAtom,
@@ -68,6 +69,7 @@ import {
 import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 import { BookingDateSelectorPopup } from '@/components/BookingDateSelectorPopup/BookingDateSelectorPopup.tsx';
 import { EventCard } from '@/components/EventCard/EventCard.tsx';
+import { IEventInRestaurant } from '@/types/events.ts';
 
 export const transformGallery = (
     gallery: IPhotoCard[]
@@ -127,11 +129,13 @@ export const Restaurant = () => {
     const [currentGalleryPhotos, setCurrentGalleryPhotos] = useState<
         (string | string[])[]
     >([]);
+    const [events, setEvents] = useState<IEventInRestaurant[]>([]);
 
     useEffect(() => {
         setRestaurant(restaurants.find((v) => v.id === Number(id)));
         setCurrentSelectedTime(null);
         setBookingDate({ value: 'unset', title: 'unset' });
+        APIGetEventsInRestaurant(Number(id)).then((res) => setEvents(res.data));
     }, [id]);
 
     useEffect(() => {
@@ -814,43 +818,35 @@ export const Restaurant = () => {
                         </div>
                     </ContentBlock>
                 </ContentContainer>
-                <ContentContainer>
-                    <ContentBlock>
-                        <HeaderContainer>
-                            <HeaderContent
-                                title={'Мероприятия'}
-                                id={'events'}
-                            />
-                        </HeaderContainer>
+                {events.length ? (
+                    <>
+                        <ContentContainer>
+                            <ContentBlock>
+                                <HeaderContainer>
+                                    <HeaderContent
+                                        title={'Мероприятия'}
+                                        id={'events'}
+                                    />
+                                </HeaderContainer>
 
-                        <EventCard
-                            onClick={() => navigate(`/events/1/restaurant`)}
-                            event_price={1500}
-                            event_name={
-                                'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                            }
-                            event_desc={
-                                'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
-                            }
-                            event_img={
-                                'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                            }
-                        />
-                        <EventCard
-                            onClick={() => navigate(`/events/1/restaurant`)}
-                            event_price={1500}
-                            event_name={
-                                'Винный ужин с виноделом Мануэля Морага Гутьерресом'
-                            }
-                            event_desc={
-                                'Встретимся на ужине с чилийским виноделом в седьмом поколении, Мануэлем Морага Гутьерресом (Cacique Maravilla). Его семья владеет виноградником с 1776 года в городе Юмбель (долина Био-Био)'
-                            }
-                            event_img={
-                                'http://cabinet.clientomer.ru/storage/270027/advents/16.jpg'
-                            }
-                        />
-                    </ContentBlock>
-                </ContentContainer>
+                                {events.map((e) => (
+                                    <EventCard
+                                        key={e.name}
+                                        onClick={() =>
+                                            navigate(
+                                                `/events/${e.name}/restaurant/${restaurant?.id}`
+                                            )
+                                        }
+                                        event_price={e.ticket_price}
+                                        event_name={e.name}
+                                        event_desc={e.description}
+                                        event_img={e.image_url}
+                                    />
+                                ))}
+                            </ContentBlock>
+                        </ContentContainer>
+                    </>
+                ) : null}
 
                 <ContentContainer>
                     <ContentBlock>

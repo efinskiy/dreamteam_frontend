@@ -7,6 +7,7 @@ import {
     IIsReviewAvailable,
     IRestaurant,
 } from '@/types/restaurant.ts';
+import { IEventInRestaurant } from '@/types/events.ts';
 
 export const APIGetRestaurants = () => {
     return axios.get<IRestaurant[]>(`${BASE_URL}/restaurant/list`);
@@ -148,5 +149,11 @@ export const APISendReview = (
                 Authorization: `Bearer ${token}`,
             },
         }
+    );
+};
+
+export const APIGetEventsInRestaurant = async (restaurant_id: number) => {
+    return await axios.get<IEventInRestaurant[]>(
+        `${BASE_URL}/restaurant/${restaurant_id}/events`
     );
 };

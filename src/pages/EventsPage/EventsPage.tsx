@@ -3,8 +3,11 @@ import css from './EventsPage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
+import { useAtom } from 'jotai/index';
+import { eventsListAtom } from '@/atoms/eventBookingAtom.ts';
+import { APIGetEvents } from '@/api/events.ts';
 
 export interface IEventBooking {
     event?: IEvent;
@@ -43,10 +46,20 @@ export const EventsPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [, setEvents] = useAtom<IEvent[]>(eventsListAtom);
+
+    useEffect(() => {
+        APIGetEvents().then((res) => setEvents(res.data));
+    }, []);
+
     const isRestaurantsPage = useMemo(() => {
         return location.pathname.split('/').at(-1) === 'restaurant';
     }, [location.pathname]);
     const [bookingInfo, setBookingInfo] = useState<IEventBooking>({});
+
+    useEffect(() => {
+        console.log(bookingInfo);
+    }, [bookingInfo]);
 
     return (
         <Page back={true}>

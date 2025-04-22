@@ -1,4 +1,4 @@
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import css from './Ticket.module.css';
 import { useNavigate } from 'react-router-dom';
 import { EventTicket } from '@/types/events.ts';
@@ -19,13 +19,14 @@ export const Ticket = ({ ticket }: Props) => {
             onClick={() => navigate(`/tickets/${ticket.id}`)}
         >
             <span className={classNames(css.card_date)}>
-                {moment(ticket.date_start).format('DD.MM.YYYY')} в 12:00
+                {moment(ticket.date_start).format('DD.MM.YYYY')} в{' '}
+                {moment(ticket.date_start).format('HH:mm')}
             </span>
             <div className={css.footer}>
-                <span className={css.footer__title}>
-                    Винный ужин с виноделом Мунуэлем Морага Гутьерресом
+                <span className={css.footer__title}>{ticket.event_title}</span>
+                <span className={css.footer__address}>
+                    {ticket.restaurant.title}
                 </span>
-                <span className={css.footer__address}>Smoke BBQ</span>
             </div>
         </div>
     );

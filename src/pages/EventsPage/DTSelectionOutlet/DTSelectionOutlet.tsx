@@ -10,7 +10,7 @@ import {
 } from '@/utils.ts';
 import { ArrowLeft, ArrowRight } from 'react-iconly';
 import css from './DTSelectionOutlet.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import moment from 'moment';
@@ -19,8 +19,9 @@ import { ITimeSlot } from '@/pages/BookingPage/BookingPage.types.ts';
 import { APIGetAvailableEventTimeslots } from '@/api/events.ts';
 import { useAtom } from 'jotai';
 import { authAtom } from '@/atoms/userAtom.ts';
-import { guestCountAtom } from '@/atoms/eventBookingAtom.ts';
+import { eventsListAtom, guestCountAtom } from '@/atoms/eventBookingAtom.ts';
 import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { IEvent } from '@/pages/EventsPage/EventsPage.tsx';
 
 type ValuePiece = Date | null;
 
@@ -47,6 +48,7 @@ export const DTSelectionOutlet = () => {
     const [timeslotsLoading, setTimeslotsLoading] = useState(false);
     const [currentSelectedTime, setCurrentSelectedTime] = useState<ITimeSlot>();
     const [guestCount, setGuestCount] = useAtom(guestCountAtom);
+    const [events] = useAtom<IEvent[]>(eventsListAtom);
 
     const incCounter = () => {
         setGuestCount((prev: number) => (prev < 9 ? prev + 1 : prev));
@@ -54,6 +56,26 @@ export const DTSelectionOutlet = () => {
     const decCounter = () => {
         setGuestCount((prev: number) => (prev - 1 >= 1 ? prev - 1 : prev));
     };
+
+    useEffect(() => {
+        if (!bookingInfo.event) {
+            const ev = events.find((e) => e.name == name);
+            if (ev) {
+                setBookingInfo((prevState) => ({ ...prevState, event: ev }));
+            }
+        }
+        if (!bookingInfo.restaurant) {
+            const rest = events
+                .find((e) => e.name == name)
+                ?.restaurants.find((r) => r.id == Number(res));
+            if (rest) {
+                setBookingInfo((prevState) => ({
+                    ...prevState,
+                    restaurant: rest,
+                }));
+            }
+        }
+    }, [name, res, events]);
 
     useEffect(() => {
         const eventId = bookingInfo.event?.restaurants
@@ -91,7 +113,7 @@ export const DTSelectionOutlet = () => {
                 setAvailableDates(dates);
             }
         }
-    }, []);
+    }, [bookingInfo.event]);
 
     const isValid = useMemo(() => {
         console.log(bookingInfo);

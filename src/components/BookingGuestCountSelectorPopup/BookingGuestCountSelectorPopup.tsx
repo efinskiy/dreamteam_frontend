@@ -3,12 +3,12 @@ import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
 import css from './BookingGuestCountSelector.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
 import Picker from '@/lib/react-mobile-picker';
 import {
     PickerValueData,
     PickerValueObj,
 } from '@/lib/react-mobile-picker/components/Picker.tsx';
+import classNames from 'classnames';
 
 interface Props {
     isOpen: boolean;

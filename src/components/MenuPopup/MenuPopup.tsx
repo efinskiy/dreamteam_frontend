@@ -4,10 +4,11 @@ import css from './MenuPopup.module.css';
 import 'reactjs-popup/dist/index.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import styled from 'styled-components';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface IFullScreenPopup {
     isOpen: boolean;
@@ -33,6 +34,7 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
     // hack to prevent from scrolling on page
     useEffect(() => {
         if (p.isOpen) {
+            console.log('');
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'scroll';
@@ -56,14 +58,34 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
                     </div>
                     <div className={css.imageViewer}>
                         <div
-                            className={classNames(
-                                css.bgImage,
-                                css.currentImage
-                            )}
                             style={{
-                                backgroundImage: `url(${currentImage})`,
+                                height: '100%',
+                                width: '100%',
                             }}
-                        ></div>
+                        >
+                            <TransformWrapper initialScale={1}>
+                                <TransformComponent
+                                    wrapperStyle={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                    contentStyle={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <div
+                                        className={classNames(
+                                            css.bgImage,
+                                            css.currentImage
+                                        )}
+                                        style={{
+                                            backgroundImage: `url(${currentImage})`,
+                                        }}
+                                    ></div>
+                                </TransformComponent>
+                            </TransformWrapper>
+                        </div>
                         <div className={css.imageSelector}>
                             <Swiper
                                 slidesPerView="auto"
@@ -77,7 +99,6 @@ export const MenuPopup: FC<IFullScreenPopup> = (p) => {
                                         key={slide}
                                         onClick={() => {
                                             setCurrentImage(slide);
-                                            console.log(slide);
                                         }}
                                     >
                                         <div

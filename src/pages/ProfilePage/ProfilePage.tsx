@@ -13,7 +13,7 @@ import { FeedbackPopup } from '@/pages/ProfilePage/FeedbackPopup/FeedbackPopup.t
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
-import { reviewAtom } from '@/atoms/userAtom.ts';
+import { reviewAtom, userAtom } from '@/atoms/userAtom.ts';
 
 export const ProfilePage = () => {
     const [params] = useSearchParams();
@@ -22,7 +22,7 @@ export const ProfilePage = () => {
     );
     const navigate = useNavigate();
     const [review] = useAtom(reviewAtom);
-
+    const [user] = useAtom(userAtom);
     const [backUrlAtom] = useAtom(backButtonAtom);
     return (
         <Page back={true}>
@@ -78,6 +78,14 @@ export const ProfilePage = () => {
                                 Личные данные
                             </span>
                         </Link>
+                        {user?.administrator?.is_active ? (
+                            <Link to={'/scanner'} className={css.navLink}>
+                                <UserProfileIcon size={24} color={'black'} />
+                                <span className={css.navLinkTitle}>
+                                    Сканер билетов
+                                </span>
+                            </Link>
+                        ) : null}
                         {/*<Link to={'/support'} className={css.navLink}>*/}
                         {/*    <SupportIcon size={24} color={'black'} />*/}
                         {/*    <span className={css.navLinkTitle}>Поддержка</span>*/}

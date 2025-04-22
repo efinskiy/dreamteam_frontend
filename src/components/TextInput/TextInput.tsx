@@ -1,6 +1,6 @@
 import { FC, useRef } from 'react';
 import css from './TextInput.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 
 interface ITextInput {
     placeholder?: string;

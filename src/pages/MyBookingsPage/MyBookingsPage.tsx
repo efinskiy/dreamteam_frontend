@@ -1,6 +1,6 @@
 import { Page } from '@/components/Page.tsx';
 import css from './MyBookingsPage.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { useNavigate } from 'react-router-dom';

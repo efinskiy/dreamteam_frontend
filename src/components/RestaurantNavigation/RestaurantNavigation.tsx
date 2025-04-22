@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import css from './RestaurantNavigation.module.css';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 

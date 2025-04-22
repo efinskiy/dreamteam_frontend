@@ -1,5 +1,9 @@
 import { atom } from 'jotai';
 
+interface IUserAdmin {
+    is_active: boolean;
+}
+
 export interface IUser {
     email?: string;
     first_name: string;
@@ -11,6 +15,7 @@ export interface IUser {
     advertisement_agreement: boolean;
     gdpr_agreement: boolean;
     date_of_birth?: string;
+    administrator?: IUserAdmin;
 }
 
 interface IReviewAtom {

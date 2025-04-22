@@ -3,10 +3,10 @@ import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { ContentContainer } from '@/components/ContentContainer/ContentContainer.tsx';
 import css from './BookingDateSelector.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
 import Picker, { PickerValue } from '@/lib/react-mobile-picker';
 import { PickerValueObj } from '@/lib/react-mobile-picker/components/Picker.tsx';
 import { formatDate } from '@/utils.ts';
+import classNames from 'classnames';
 
 interface Props {
     isOpen: boolean;

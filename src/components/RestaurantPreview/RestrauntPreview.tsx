@@ -1,5 +1,5 @@
 import css from './RestrauntPreview.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { RestaurantBadge } from '@/components/RestaurantPreview/RestaurantBadge/RestaurantBadge.tsx';
 import { Swiper } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';

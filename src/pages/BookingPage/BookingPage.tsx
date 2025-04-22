@@ -7,7 +7,7 @@ import { ContentContainer } from '@/components/ContentContainer/ContentContainer
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';

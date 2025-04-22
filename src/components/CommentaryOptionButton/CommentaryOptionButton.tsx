@@ -2,7 +2,7 @@ import { FC } from 'react';
 import css from './CommentaryOptionButton.module.css';
 import { useAtom } from 'jotai';
 import { commAtom } from '@/atoms/bookingCommAtom.ts';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 
 interface ICommentaryOptionButton {
     text: string;

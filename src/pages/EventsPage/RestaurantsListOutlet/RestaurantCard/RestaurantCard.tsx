@@ -1,4 +1,4 @@
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import css from '@/components/EventCard/EventCard.module.css';
 
 interface Props {

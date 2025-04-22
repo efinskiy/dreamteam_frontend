@@ -3,7 +3,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import css from './ConfirmationSelect.module.css';
 import { DownArrow } from '@/components/Icons/DownArrow.tsx';
 import { Collapse } from 'react-collapse';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 
 interface IConfirmationSelect {
     options: IConfirmationType[];

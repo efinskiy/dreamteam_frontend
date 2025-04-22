@@ -1,6 +1,6 @@
-import { classNames } from '@telegram-apps/sdk-react';
 import css from './BookingCard.module.css';
 import { FC } from 'react';
+import classNames from 'classnames';
 
 interface BookingCardProps {
     booking_id: number;

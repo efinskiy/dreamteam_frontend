@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import css from './UniversalButton.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 interface UniversalButtonProps {
     width: number | 'full';

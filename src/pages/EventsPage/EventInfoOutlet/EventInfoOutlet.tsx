@@ -1,4 +1,4 @@
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import css from './EventInfoOutlet.module.css';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';

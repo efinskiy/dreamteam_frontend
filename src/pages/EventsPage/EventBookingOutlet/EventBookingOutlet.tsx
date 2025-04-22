@@ -1,6 +1,6 @@
 import { IConfirmationType } from '@/components/ConfirmationSelect/ConfirmationSelect.types.ts';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { TextInput } from '@/components/TextInput/TextInput.tsx';
 import { ConfirmationSelect } from '@/components/ConfirmationSelect/ConfirmationSelect.tsx';
 import { UniversalButton } from '@/components/Buttons/UniversalButton/UniversalButton.tsx';

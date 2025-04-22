@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FC, useEffect, useState } from 'react';
 import css from './FeedbackPopup.module.css';
 import { StarIcon } from '@/components/Icons/Star.tsx';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import './FeedbackPopup.css';
 import { APIIsReviewAvailable, APISendReview } from '@/api/restaurants.ts';
 import { useAtom } from 'jotai';

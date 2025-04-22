@@ -1,20 +1,11 @@
 import { swipeBehavior, useLaunchParams } from '@telegram-apps/sdk-react';
-// import { initNavigator } from '@telegram-apps/sdk';
 import { AppRoot } from '@telegram-apps/telegram-ui';
-import {
-    Navigate,
-    Route,
-    Routes,
-    // Router,
-    BrowserRouter,
-} from 'react-router-dom';
+import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ScrollToTop } from '@/navigation/utills.tsx';
 import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { authAtom, reviewAtom, userAtom } from '@/atoms/userAtom.ts';
 import { AppLoadingScreen } from '@/components/AppLoadingScreen/AppLoadingScreen.tsx';
-import { RequestPermissions } from '@/components/RequestPermissions/RequestPermissions.tsx';
-// import { useIntegration } from '@telegram-apps/react-router-integration';
 import { IndexPage } from '@/pages/IndexPage/IndexPage.tsx';
 import { ProfilePage } from '@/pages/ProfilePage/ProfilePage.tsx';
 import { UserProfilePage } from '@/pages/UserProfilePage/UserProfilePage.tsx';
@@ -40,14 +31,15 @@ import { EventConfirmationOutlet } from '@/pages/EventsPage/EventConfirmationOut
 import { EventBookingOutlet } from '@/pages/EventsPage/EventBookingOutlet/EventBookingOutlet.tsx';
 import { PaymentReturnPage } from '@/pages/PaymentReturnPage/PaymentReturnPage.tsx';
 import { TicketInfoPage } from '@/pages/TicketInfoPage/TicketInfoPage.tsx';
+import { Redirecter } from '@/components/Redirecter/Redirecter.tsx';
+import { UserPhoneConfirmationPage } from '@/pages/UserPhoneConfirmation/UserPhoneConfirmationPage.tsx';
+import { AdminScannerPage } from '@/pages/AdminScannerPage/AdminScannerPage.tsx';
 
 const AppRouter = () => {
     const [user] = useAtom(userAtom);
     const [auth] = useAtom(authAtom);
     const [cities, setCities] = useAtom(cityListAtom);
     const [restaurants, setRestaurants] = useAtom(restaurantsListAtom);
-    // const navigator = useMemo(() => initNavigator('app-navigation-state'), []);
-    // const [location, reactNavigator] = useIntegration(navigator);
     const [earlyAccess, setEarlyAccess] = useState(false);
     const [loadingComplete, setLoadingComplete] = useState<boolean>();
     const [, setReview] = useAtom(reviewAtom);
@@ -86,6 +78,7 @@ const AppRouter = () => {
     return (
         <BrowserRouter>
             <ScrollToTop />
+            <Redirecter />
             {earlyAccess && !user?.early_access ? (
                 <div>
                     <span>
@@ -141,6 +134,12 @@ const AppRouter = () => {
                         path={'/paymentReturn'}
                         element={<PaymentReturnPage />}
                     />
+                    <Route
+                        path={'/phoneConfirmation'}
+                        element={<UserPhoneConfirmationPage />}
+                    />
+                    <Route path={'/scanner'} element={<AdminScannerPage />} />
+
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             )}
@@ -158,10 +157,10 @@ export function App() {
     return (
         <AppRoot
             appearance={'light'}
-            platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
+            platform={
+                ['macos', 'ios'].includes(lp.tgWebAppPlatform) ? 'ios' : 'base'
+            }
         >
-            {}
-            <RequestPermissions />
             {!userState ? <AppLoadingScreen /> : <AppRouter />}
         </AppRoot>
     );

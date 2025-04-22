@@ -1,7 +1,7 @@
 import { Page } from '@/components/Page.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import css from './BookingInfoPage.module.css';
-import { classNames, openLink } from '@telegram-apps/sdk-react';
+import { openLink } from '@telegram-apps/sdk-react';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { TimeCircle } from '@/components/Icons/TimeCircle.tsx';
@@ -25,6 +25,7 @@ import {
     formatDateDayShort,
     formatDateMonthShort,
 } from '@/utils.ts';
+import classNames from 'classnames';
 
 export const BookingInfoPage = () => {
     const { id } = useParams();

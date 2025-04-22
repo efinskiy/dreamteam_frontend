@@ -1,5 +1,5 @@
 import css from './EventCard.module.css';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { FC } from 'react';
 
 interface IEventCard {

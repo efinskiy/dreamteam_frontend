@@ -5,7 +5,7 @@ import { bookingAtom } from '@/atoms/bookingInfoAtom.ts';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
 import { useNavigate } from 'react-router-dom';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { TimeCircle } from '@/components/Icons/TimeCircle.tsx';
 import { CalendarIcon } from '@/components/Icons/CalendarIcon.tsx';
 import { UsersIcon } from '@/components/Icons/UsersIcon.tsx';

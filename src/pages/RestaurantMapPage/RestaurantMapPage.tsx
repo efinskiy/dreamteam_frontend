@@ -2,8 +2,8 @@ import { Page } from '@/components/Page.tsx';
 import css from './RestaurantMapPage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
-import { useNavigate } from 'react-router-dom';
-import { classNames, openLink } from '@telegram-apps/sdk-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import { InputSlider } from '@/pages/RestaurantMapPage/InputSlider/InputSlider.tsx';
 import { RestaurantOnMapIcon } from '@/components/Icons/RestaurantOnMapIcon.tsx';
@@ -37,6 +37,7 @@ import { backButtonAtom } from '@/atoms/backButtonAtom.ts';
 import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import { Taxi } from '@/components/YandexTaxi/Taxi.tsx';
 import { Discovery } from 'react-iconly';
+import { openLink } from '@telegram-apps/sdk-react';
 
 interface IRestaurantDetails {
     selectedRest: IRestaurant;
@@ -104,15 +105,15 @@ const RestaurantDetails = ({ selectedRest }: IRestaurantDetails) => {
                                 : null}
                         </div>
                     </div>
-                    <span
-                        className={classNames(
-                            css.mont,
-                            css.restInfo__address,
-                            css.restInfo_about
-                        )}
-                    >
-                        {selectedRest?.about_text}
-                    </span>
+                    {/*<span*/}
+                    {/*    className={classNames(*/}
+                    {/*        css.mont,*/}
+                    {/*        css.restInfo__address,*/}
+                    {/*        css.restInfo_about*/}
+                    {/*    )}*/}
+                    {/*>*/}
+                    {/*    {selectedRest?.about_text}*/}
+                    {/*</span>*/}
                 </div>
                 <div>
                     <Swiper
@@ -214,10 +215,35 @@ export const RestaurantMapPage = () => {
     const [, setYmap] = useState<YMaps.YMap>();
     const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
     const [city] = useAtom(getCurrentCity);
-    const [selectedRest, setSelectedRest] = useState<IRestaurant>();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [switchCurrent, setSwitchCurrent] = useState('map');
     const [, setBackButton] = useAtom(backButtonAtom);
     const [restaurants] = useAtom(restaurantsListAtom);
+    const [selectedRest, setSelectedRest] = useState<IRestaurant>();
+
+    useEffect(() => {
+        const search_id = searchParams.get('restaurant');
+        console.log('search_id :', search_id);
+        if (!search_id) {
+            return;
+        }
+
+        const res = restaurants.find((v) => v.id == Number(search_id));
+        if (res) {
+            console.log('set rest', res);
+            setSelectedRest(res);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedRest) {
+            setSearchParams(() => ({
+                restaurant: String(selectedRest.id),
+            }));
+        }
+
+        console.log('selected rest', selectedRest?.id);
+    }, [selectedRest]);
 
     useEffect(() => {
         setFeatures(
@@ -272,7 +298,7 @@ export const RestaurantMapPage = () => {
     }, [selectedPoint]);
 
     useEffect(() => {
-        setSelectedRest(undefined);
+        // setSelectedRest(undefined);
         setSelectedPoint(null);
     }, [switchCurrent]);
 

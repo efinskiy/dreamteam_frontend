@@ -3,7 +3,7 @@ import css from './TicketInfoPage.module.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { BackIcon } from '@/components/Icons/BackIcon.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { RefundIcon } from '@/components/Icons/RefundIcon.tsx';
 import { DownloadIcon } from '@/components/Icons/DownloadIcon.tsx';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import { authAtom } from '@/atoms/userAtom.ts';
 import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
 import { formatDateDT } from '@/utils.ts';
 import moment from 'moment';
+import QRCode from 'react-qr-code';
 
 export const TicketInfoPage = () => {
     const navigate = useNavigate();
@@ -234,6 +235,21 @@ export const TicketInfoPage = () => {
                                 </span>
                             </div>
                         </div>
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {ticket ? (
+                            <QRCode size={128} value={String(`${ticket.id}`)} />
+                        ) : (
+                            <PlaceholderBlock
+                                width={'128px'}
+                                height={'128px'}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import css from './ImageViewerPopup.module.css';
 import 'reactjs-popup/dist/index.css';
 import { RoundedButton } from '@/components/RoundedButton/RoundedButton.tsx';
 import { CrossIcon } from '@/components/Icons/CrossIcon.tsx';
-import { classNames } from '@telegram-apps/sdk-react';
+import classNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styled from 'styled-components';
 import { IPhotoCard } from '@/types/restaurant.ts';
