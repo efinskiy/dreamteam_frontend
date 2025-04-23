@@ -19,6 +19,7 @@ import { restaurantsListAtom } from '@/atoms/restaurantsListAtom.ts';
 import { APIGetCurrentBookings } from '@/api/restaurants.ts';
 import { authAtom } from '@/atoms/userAtom.ts';
 import { PlaceholderBlock } from '@/components/PlaceholderBlock/PlaceholderBlock.tsx';
+import { Link } from 'react-router-dom';
 
 const transformToConfirmationFormat = (v: ICity): IConfirmationType => {
     return {
@@ -84,6 +85,7 @@ export const IndexPage: FC = () => {
         <Page back={false}>
             <div className={css.pageContainer}>
                 <Header />
+                <Link to={'/onboarding'}>Onboarding</Link>
                 {currentBookingsLoading ? (
                     <div style={{ marginRight: '15px' }}>
                         <PlaceholderBlock

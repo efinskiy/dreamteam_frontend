@@ -36,3 +36,17 @@ export const APIUpdateUserInfo = async (
         },
     });
 };
+
+export const APICompleteOnboarding = async (token: string, agree: boolean) => {
+    return await axios.patch<IUser>(
+        `${BASE_URL}/user/agreement`,
+        {
+            agree: agree,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};

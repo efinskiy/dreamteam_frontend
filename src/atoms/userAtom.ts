@@ -16,6 +16,7 @@ export interface IUser {
     gdpr_agreement: boolean;
     date_of_birth?: string;
     administrator?: IUserAdmin;
+    complete_onboarding: boolean;
 }
 
 interface IReviewAtom {

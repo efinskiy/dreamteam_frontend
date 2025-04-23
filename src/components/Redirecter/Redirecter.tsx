@@ -10,6 +10,16 @@ export const Redirecter = () => {
     const [auth] = useAtom(authAtom);
 
     const EXCLUDED_URLS = ['/phoneConfirmation', '/onboarding', '/gdpr'];
+    const ONBOARDING_EXCLUDED = [
+        '/onboarding',
+        '/onboarding/1',
+        '/onboarding/2',
+        '/onboarding/3',
+        '/onboarding/4',
+        '/onboarding/5',
+        '/onboarding/6',
+        '/onboarding/7',
+    ];
 
     useEffect(() => {
         if (
@@ -18,6 +28,13 @@ export const Redirecter = () => {
             !EXCLUDED_URLS.includes(location.pathname)
         ) {
             navigate('/phoneConfirmation');
+        }
+        if (
+            auth?.access_token &&
+            (!user?.license_agreement || !user.complete_onboarding) &&
+            !ONBOARDING_EXCLUDED.includes(location.pathname)
+        ) {
+            navigate('/onboarding');
         }
     }, [auth, user, location.pathname]);
 

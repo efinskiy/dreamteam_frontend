@@ -34,6 +34,13 @@ import { TicketInfoPage } from '@/pages/TicketInfoPage/TicketInfoPage.tsx';
 import { Redirecter } from '@/components/Redirecter/Redirecter.tsx';
 import { UserPhoneConfirmationPage } from '@/pages/UserPhoneConfirmation/UserPhoneConfirmationPage.tsx';
 import { AdminScannerPage } from '@/pages/AdminScannerPage/AdminScannerPage.tsx';
+import { OnboardingPage } from '@/pages/OnboardingPage/OnboardingPage.tsx';
+import { StageOne } from '@/pages/OnboardingPage/stages/StageOne.tsx';
+import { StageTwo } from '@/pages/OnboardingPage/stages/StageTwo.tsx';
+import { StageThree } from '@/pages/OnboardingPage/stages/StageThree.tsx';
+import { StageFour } from '@/pages/OnboardingPage/stages/StageFour.tsx';
+import { StageFive } from '@/pages/OnboardingPage/stages/StageFive.tsx';
+import { StageSix } from '@/pages/OnboardingPage/stages/StageSix.tsx';
 
 const AppRouter = () => {
     const [user] = useAtom(userAtom);
@@ -139,6 +146,17 @@ const AppRouter = () => {
                         element={<UserPhoneConfirmationPage />}
                     />
                     <Route path={'/scanner'} element={<AdminScannerPage />} />
+                    <Route path={'/onboarding'} element={<OnboardingPage />}>
+                        <Route path={'/onboarding/1'} element={<StageOne />} />
+                        <Route path={'/onboarding/2'} element={<StageTwo />} />
+                        <Route
+                            path={'/onboarding/3'}
+                            element={<StageThree />}
+                        />
+                        <Route path={'/onboarding/4'} element={<StageFour />} />
+                        <Route path={'/onboarding/5'} element={<StageFive />} />
+                        <Route path={'/onboarding/6'} element={<StageSix />} />
+                    </Route>
 
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
