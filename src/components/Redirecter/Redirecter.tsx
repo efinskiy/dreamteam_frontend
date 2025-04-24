@@ -25,6 +25,7 @@ export const Redirecter = () => {
         if (
             auth?.access_token &&
             !user?.phone_number &&
+            user?.complete_onboarding &&
             !EXCLUDED_URLS.includes(location.pathname)
         ) {
             navigate('/phoneConfirmation');
